@@ -54,8 +54,8 @@ export const navBarConfig: NavBarConfig = {
 
 // 个人资料配置
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-	name: "Lorem Ipsum",
+	avatar: "assets/images/avatar.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	name: "蓝珂",
 	bio: "请为一切不真实之物骄傲，因为我们高于这个世界！",
 	links: [
 		// {
