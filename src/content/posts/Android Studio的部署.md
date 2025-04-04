@@ -5,9 +5,8 @@ categories:
   - 计算机
 tags:
   - 笔记
-cover: 'http://www.98qy.com/sjbz/api.php'
+cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
-abbrlink: 63055
 date: 2025-03-11 19:26:51
 updated: 2025-03-22 20:36:41
 ---

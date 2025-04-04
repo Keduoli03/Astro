@@ -8,9 +8,8 @@ tags:
   - SpringBoot
   - Java
   - Vue
-cover: 'https://api.mtyqx.cn/tapi/random.php'
+cover: https://api.mtyqx.cn/tapi/random.php
 status: 已完成
-abbrlink: 11453
 date: 2025-03-22 19:17:02
 updated: 2025-03-31 21:32:55
 ---

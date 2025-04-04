@@ -1,13 +1,12 @@
 ---
 profileName: 博客
-postId: '278'
+postId: "278"
 categories:
   - Obsidian
 description: 最近在酷安看到有伙伴分享了自己的笔记软件分享，我也就借花献佛，来推荐下我觉得很好用的 Obsidian 插件，也欢迎各位交流分享
+date: 2024-09-24 12:32
+updated: 2025-04-04 01:17
 title: 我推的Ob插件
-abbrlink: 24594
-date: 2024-09-24 12:32:40
-updated: 2024-11-19 13:19:12
 ---
 ## 前言
 最近在酷安看到有伙伴分享了自己的笔记软件分享，我也就借花献佛，来推荐下我觉得很好用的 Obsidian 插件，也欢迎各位交流分享

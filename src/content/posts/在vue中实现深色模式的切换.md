@@ -5,11 +5,10 @@ categories:
   - 大杂烩
 tags:
   - 大杂烩
-cover: 'http://www.98qy.com/sjbz/api.php'
+cover: http://www.98qy.com/sjbz/api.php
 status: 未完成
-abbrlink: 62788
-date: 2025-03-25 17:55:44
-updated: 2025-03-31 23:45:29
+date: 2025-03-25 17:55
+updated: 2025-04-04 01:17
 ---
 <!--more-->
 1. 在根组件定义深色模式

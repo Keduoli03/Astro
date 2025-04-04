@@ -6,9 +6,8 @@ categories:
 tags:
   - 数据库
   - 笔记
-cover: 'https://api.miaomc.cn/image/get'
+cover: https://api.miaomc.cn/image/get
 status: 未完成
-abbrlink: 49810
 date: 2025-03-21 11:31:32
 updated: 2025-03-22 20:32:59
 ---

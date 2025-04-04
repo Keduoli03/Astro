@@ -7,11 +7,10 @@ tags:
   - 笔记
   - 前端
   - Vue
+cover: 
 status: 未完成
-abbrlink: 1284
-date: 2025-03-23 14:39:23
-updated: 2025-03-31 21:33:13
-cover:
+date: 2025-03-23 14:39
+updated: 2025-04-04 16:02
 ---
 
 ## 一、为什么选择 Pinia？
