@@ -145,10 +145,20 @@ const jsonLd = {
       el: '#waline',
       serverURL: 'https://waline.blueke.top/',
       dark: isDark ? 'html.dark' : false, // 关键配置
+      comment: true, // 评论数统计
+      reaction: [
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatattentionreverse.png',//注意
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
+     ],
       emoji: [
         // 必须使用有效的CDN地址
         'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
-        'https://unpkg.com/@waline/emojis@1.2.0/qq'
+        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
+
       ],
 
     });
