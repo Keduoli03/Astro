@@ -132,4 +132,42 @@ const jsonLd = {
         </a>
     </div>
 
+<!-- 引入评论区 -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  // 监听主题变化
+  function initWaline() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    init({
+      el: '#waline',
+      serverURL: 'https://waline.blueke.top/',
+      dark: isDark ? 'html.dark' : false, // 关键配置
+      emoji: [
+        // 必须使用有效的CDN地址
+        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
+        'https://unpkg.com/@waline/emojis@1.2.0/qq'
+      ],
+
+    });
+  }
+  // 初始化
+  initWaline();
+
+  // 监听主题切换（根据你的主题实现方式调整）
+  const observer = new MutationObserver(() => {
+    const container = document.getElementById('waline');
+    if (container && container.innerHTML) {
+      container.innerHTML = ''; // 清空重新初始化
+      initWaline();
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+</script>
+
 </MainGridLayout>
