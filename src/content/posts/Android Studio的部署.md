@@ -7,8 +7,8 @@ tags:
   - 笔记
 cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
-date: 2025-03-11 19:26:51
-updated: 2025-03-22 20:36:41
+date: 2025-03-11 19:26
+updated: 2025-04-04 19:22
 ---
 简单记录一下，现在都比较人性化了，安装很方便
 <!--more-->

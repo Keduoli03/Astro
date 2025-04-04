@@ -8,13 +8,9 @@ tags:
   - 前端
 status: 已完成
 date: 2024-11-19 20:47
-updated: 2025-04-04 01:17
+updated: 2025-04-04 19:22
 slug: obsidianshi-xian-bi-ji-zi-dong-qian-yi-bing-tong-bu-tui-song-dao-hexo
 cover: https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/img/%E8%83%8C%E8%BA%AB%E5%A6%B9%E5%A6%B9.jpg
-halo:
-  site: https://www.blueke.top
-  name: 14a95b1d-f78a-4213-9319-77a866d393d8
-  publish: true
 ---
 编写了一个插件，将文件自动复制到 Hexo 的文件夹里，并自动 git push
 <!--more-->
