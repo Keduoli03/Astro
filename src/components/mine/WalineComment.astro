@@ -1,5 +1,15 @@
 
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline-info">
+  <!--阅读量 -->
+  <div style="display: flex; align-items: center;">
+      阅读量: <span class="waline-pageview-count" data-path="/" style="margin-left: 5px;"></span>
+  </div>
+  <!--评论数 -->
+  <div style="display: flex; align-items: center;">
+      评论数：<span class="waline-comment-count" style="margin-left: 5px;"></span>
+  </div>
+</div>
 <div id="waline"></div>
 <script is:inline type="module">
   import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
@@ -7,11 +17,13 @@
   function initWaline() {
     const isDark = document.documentElement.classList.contains('dark');
     
+    
     init({
       el: '#waline',
       serverURL: 'https://waline.blueke.top/',
       dark: isDark ? 'html.dark' : false, // 适配夜间模式
-      comment: false, // 评论数统计
+      pageview: true, // 浏览量统计
+      comment: true, // 评论数统计
     //   reaction: [
     // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
     // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
@@ -47,5 +59,15 @@
 </script>
 
 <style>
-  
+  /* 为了确保waline-info和waline之间有间隔，添加margin-bottom */
+  #waline-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+  }
+  /* 确保waline独占一行 */
+  #waline {
+      clear: both;
+  }
 </style>
