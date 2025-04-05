@@ -8,7 +8,7 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 未完成
 date: 2025-04-03 11:40
-updated: 2025-04-04 16:26
+updated: 2025-04-05 17:52
 ---
 **参考文章**
 官方网站 [Astro](https://astro.build/)
@@ -27,11 +27,9 @@ updated: 2025-04-04 16:26
 ## 本章目标
 1. 本地部署 Astro
 2. 部署到 Vercel 或 GitHub Pages
-3. 配置主题
+3. 配置主题并优化
 
-
-
-## 所需环境
+### 所需环境
 - node >= 18.14.1
 - 文本编辑器(VsCode)
   
@@ -64,11 +62,14 @@ pnpm add sharp
 > PS：如果你 pnpm install 失败，可能是`.pnpm - store` 目录的权限不允许用户进行读写操作，去把对应的. pnpm-store 文件夹=>属性，将权限全开即可
 >  
 
-![[使用Astro搭建博客-202504031552.png|575]]
+![权限不足导致下载失败|575](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/%E6%9D%83%E9%99%90%E4%B8%8D%E8%B6%B3%E5%AF%BC%E8%87%B4%E4%B8%8B%E8%BD%BD%E5%A4%B1%E8%B4%A5.png)
 
 安装好所需依赖后，在终端执行 `npm run dev` 即可本地构建运行
 
-### 基础配置
+### Vercel 部署
+进入 Vercel，选择自己 fork 的仓库，一路确认即可
+
+## 主题配置
 在 `src/config.ts` 进行站点配置
 
 ### 关于页面
@@ -77,8 +78,6 @@ pnpm add sharp
 不想配图... 参考别人的叭
 **参考文章**
 - [给你的Fuwari添加一个友链页面 - AULyPc](https://blog.aulypc0x0.online/posts/add_friendspage_in_fuwari/)
-### 部署到 Vercel
-进入 vercel，在Vercel里选择import from GitHub，然后选择你的项目，直接部署即可
 
 ### 日期修改
 我 Obsidian使用的日期是 date, 但是主题用的是 published，得替换一下
@@ -126,17 +125,17 @@ export const collections = {
 在 `src\components\Footer.astro`，我们可以看到底部信息并进行编辑。这里我用的是不蒜子加上日期计数器
 ```html
 <div class="framework-info">
-            Powered by: 🪐 <a href="https://astro.build/">Astro</a> + <a href="https://github.com/saicaca/fuwari">Fuwari</a>✨
-            <br>
-            <!--不蒜子计数器-->
-            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-            <!--添加一个访问量-->
-            <span>本"<span style=" color: hsl(192 98% 55%); font-weight: bold; ">页面</span>"访问 <span id="busuanzi_value_page_pv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 次 | 👀总访问 <span id="busuanzi_value_site_pv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 次 | 总访客 <span id="busuanzi_value_site_uv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 人</span>
-            <br>
-             <!--运行时间 -->
-            <script type="text/javascript">function runtime(){const t=new Date("09/01/2024 08:00:00"),n=new Date,s=n-t,e=Math.floor(s/1e3),o=Math.floor(e/86400),i=Math.floor(e%86400/3600),a=Math.floor(e%3600/60),r=e%60;document.getElementById("runningtime").innerHTML=`⏱️本站已运行: ${o}天${i}小时${a}分${r}秒 ☁️`}setInterval(runtime,1e3)</script>
-            <div class="transition text-50 text-sm text-center hidden md:block"><p id="runningtime"> </p></div>
-          </div>
+         Powered by: 🪐 <a href="https://astro.build/">Astro</a> + <a href="https://github.com/saicaca/fuwari">Fuwari</a>✨
+        <br>
+        <!--不蒜子计数器-->
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <!--添加一个访问量-->
+        <span>本"<span style=" color: hsl(192 98% 55%); font-weight: bold; ">页面</span>"访问 <span id="busuanzi_value_page_pv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 次 | 👀总访问 <span id="busuanzi_value_site_pv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 次 | 总访客 <span id="busuanzi_value_site_uv" style=" color: hsl(192 98% 55%); font-weight: bold; "></span> 人</span>
+        <br>
+        <!--运行时间 -->
+        <script type="text/javascript">function runtime(){const t=new Date("09/01/2024 08:00:00"),n=new Date,s=n-t,e=Math.floor(s/1e3),o=Math.floor(e/86400),i=Math.floor(e%86400/3600),a=Math.floor(e%3600/60),r=e%60;document.getElementById("runningtime").innerHTML=`⏱️本站已运行: ${o}天${i}小时${a}分${r}秒 ☁️`}setInterval(runtime,1e3)</script>
+        <div class="transition text-50 text-sm text-center hidden md:block"><p id="runningtime"> </p></div>
+        </div>
 ```
 
 ### 自定义字体
@@ -155,3 +154,64 @@ export const collections = {
 ```
 
 然后保存，就能看见站点字体已发生改变
+
+### 添加 Waline 评论
+根据官方指南进行修改，为了适配主题的夜间模式，所以多写了几个方法
+```html
+<!-- 引入Waline评论 -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  // 监听主题变化
+  function initWaline() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    init({
+      el: '#waline',
+      serverURL: 'your serverURL',
+      dark: isDark ? 'html.dark' : false, // 关键配置
+      comment: true, // 评论数统计
+      reaction: [ // 反馈表情，使用默认的也可以
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatwave.png',//打招呼
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
+    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
+     ],
+      emoji: [
+        // 必须使用有效的CDN地址
+        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
+        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
+
+      ],
+
+    });
+  }
+  // 初始化
+  initWaline();
+
+  // 监听主题切换（根据你的主题实现方式调整）
+  const observer = new MutationObserver(() => {
+    const container = document.getElementById('waline');
+    if (container && container.innerHTML) {
+      container.innerHTML = ''; // 清空重新初始化
+      initWaline();
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+</script>
+```
+
+#### 使用方法
+在想要加入的页面，比如文章页面 `src\pages\posts\[...slug].astro` 倒数第二行加入
+
+```html
+//你的代码
+</MainGridLayout>
+```
+更推荐将这这些代码单独弄到一个组件里，然后进行调用，不然不好管理
