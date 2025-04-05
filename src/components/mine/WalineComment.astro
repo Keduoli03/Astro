@@ -1,0 +1,47 @@
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline"></div>
+<script is:inline type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  // 监听主题变化
+  function initWaline() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    init({
+      el: '#waline',
+      serverURL: 'https://waline.blueke.top/',
+      dark: isDark ? 'html.dark' : false, // 适配夜间模式
+      comment: false, // 评论数统计
+    //   reaction: [
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatwave.png',//打招呼
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
+    //  ],
+      emoji: [
+        // 必须使用有效的CDN地址
+        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
+        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
+
+      ],
+
+    });
+  }
+  // 初始化
+  initWaline();
+
+  // 监听主题切换（根据你的主题实现方式调整）
+  const observer = new MutationObserver(() => {
+    const container = document.getElementById('waline');
+    if (container && container.innerHTML) {
+      container.innerHTML = ''; // 清空重新初始化
+      initWaline();
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+</script>

@@ -5,6 +5,7 @@ import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getEntry } from "astro:content";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
+import WalineComment from "@components/mine/WalineComment.astro";
 import Markdown from "@components/misc/Markdown.astro";
 
 const friendsPost = await getEntry("spec", "friends");
@@ -58,4 +59,7 @@ const items = [
             </Markdown>
         </div>
     </div>
+
+    // 评论区
+    <WalineComment />
 </MainGridLayout>
