@@ -8,7 +8,7 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 未完成
 date: 2025-04-03 11:40
-updated: 2025-04-05 17:52
+updated: 2025-04-07 22:25
 ---
 **参考文章**
 官方网站 [Astro](https://astro.build/)
@@ -72,13 +72,17 @@ pnpm add sharp
 ## 主题配置
 在 `src/config.ts` 进行站点配置
 
-### 关于页面
+### 页面配置
+#### 关于页面
 在 `src\content\spec\about.md` 进行配置
-### 创建页面
+由于 Astro 使用的是 MDx，所以你可以一边写 md 一边写 html，感觉挺有意思
+#### 创建页面
 不想配图... 参考别人的叭
 **参考文章**
 - [给你的Fuwari添加一个友链页面 - AULyPc](https://blog.aulypc0x0.online/posts/add_friendspage_in_fuwari/)
-
+### 添加一个系列页面
+**参考文章**
+- [在Fuwari中添加系列栏 - 伊卡的记事本](https://ikamusume7.org/posts/frontend/add_series_field/)
 ### 日期修改
 我 Obsidian使用的日期是 date, 但是主题用的是 published，得替换一下
 修改 `src\content\config.ts`
@@ -215,3 +219,79 @@ export const collections = {
 </MainGridLayout>
 ```
 更推荐将这这些代码单独弄到一个组件里，然后进行调用，不然不好管理
+
+组件完整代码
+```html
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline-info">
+  <!--阅读量 -->
+  <div style="display: flex; align-items: center;">
+      阅读量: <span class="waline-pageview-count" style="margin-left: 5px;"></span>
+  </div>
+  <!--评论数 -->
+  <div style="display: flex; align-items: center;">
+      评论数：<span class="waline-comment-count" style="margin-left: 5px;"></span>
+  </div>
+</div>
+<div id="waline"></div>
+<script is:inline type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  // 监听主题变化
+  function initWaline() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    
+    init({
+      el: '#waline',
+      serverURL: 'https://waline.blueke.top/',
+      dark: isDark ? 'html.dark' : false, // 适配夜间模式
+      pageview: true, // 浏览量统计,可选项
+      comment: true, // 评论数统计,可选项
+    //   reaction: [
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatwave.png',//打招呼
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
+    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
+    //  ],
+      emoji: [
+        // 必须使用有效的CDN地址
+        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
+        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
+
+      ],
+
+    });
+  }
+  // 初始化
+  initWaline();
+
+  // 监听主题切换（根据你的主题实现方式调整）
+  const observer = new MutationObserver(() => {
+    const container = document.getElementById('waline');
+    if (container && container.innerHTML) {
+      container.innerHTML = ''; // 清空重新初始化
+      initWaline();
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+</script>
+
+<style>
+  /* 为了确保waline-info和waline之间有间隔，添加margin-bottom */
+  #waline-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+  }
+  /* 确保waline独占一行 */
+  #waline {
+      clear: both;
+  }
+</style>
+```

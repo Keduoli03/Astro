@@ -10,7 +10,8 @@ tags:
 cover: 
 status: 未完成
 date: 2025-03-23 14:39
-updated: 2025-04-04 16:02
+updated: 2025-04-07 22:33
+series: SpringBoot
 ---
 
 ## 一、为什么选择 Pinia？
