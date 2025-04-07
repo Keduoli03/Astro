@@ -20,8 +20,21 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 
 ### 未来的目标
 
-目前肯定是多想着写几个前后端的项目，虽然跟着别人完成了几个，但很多框架不同、使用工具不同，感觉真的很不好受，一直在学习中...(专业写bug)
+目前，我最主要的目标就是能够独立完成几个前后端项目。虽然之前写过几个项目，但由于不同项目所使用的框架和工具各不相同，这给我的学习和实践带来了很大的挑战。感觉一直在不断地学习和适应新的东西，AI写代码，我“写bug”
 
-- 主题来源于 [Fuwari](https://github.com/saicaca/fuwari).
+<!-- 分栏 -->
+<div style="display: flex; justify-content: space-between;">
+<div style="width: 48%;">
+
+框架基于 Astro
+
+::github{repo="withastro/astro"}
+</div>
+
+<div style="width: 48%;">
+
+主题基于 Fuwari
 
 ::github{repo="saicaca/fuwari"}
+</div>
+</div>
