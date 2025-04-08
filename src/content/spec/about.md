@@ -3,6 +3,24 @@
 > ## 吾等金碧辉煌的王国，是狭小又禁忌的乐土
 >
 
+博客基于 [Astro](https://astro.build/) && [Fuwari](https://github.com/saicaca/fuwari)
+::github{repo="withastro/astro"}
+
+::github{repo="saicaca/fuwari"}
+
+<!-- 分栏 -->
+<div style="display: flex; justify-content: space-between;">
+
+<div style="width: 48%;">
+
+  </div>
+<div style="width: 48%;">
+
+</div>
+</div>
+
+## 关于我
+
 我是什么样的人？我自己也不太清楚，至少在写这篇介绍的时候
 
 时常有很多奇奇怪怪的想法，或激昂，或阴郁
@@ -21,7 +39,9 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 ### 未来的目标
 
 目前，我最主要的目标就是能够独立完成几个前后端项目。虽然之前写过几个项目，但由于不同项目所使用的框架和工具各不相同，这给我的学习和实践带来了很大的挑战。感觉一直在不断地学习和适应新的东西，AI写代码，我“写bug”
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- 社交 -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <div class="unique-wrapper" style="text-align: center; margin-bottom: 20px;">
         <div class="unique-button">
             <div class="unique-icon"><i class="fab fa-facebook-f"></i></div>
@@ -87,7 +107,7 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 }
 
 .unique-wrapper .unique-button:nth-child(1):hover .unique-icon {
-    background: #1150ff;
+    background: #4F5A77;
 }
 
 .unique-wrapper .unique-button:nth-child(2):hover .unique-icon {
@@ -99,7 +119,7 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 }
 
 .unique-wrapper .unique-button:nth-child(4):hover .unique-icon {
-    background: #565a66;
+    background: rgb(240,191,76);
 }
 
 .unique-wrapper .unique-button:nth-child(5):hover .unique-icon {
@@ -125,21 +145,4 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 .unique-wrapper .unique-button:nth-child(5) span {
     color: #f32929;
 }
-</style>
-
-<!-- 分栏 -->
-<div style="display: flex; justify-content: space-between;">
-<div style="width: 48%;">
-
-框架基于 Astro
-
-::github{repo="withastro/astro"}
-</div>
-
-<div style="width: 48%;">
-
-主题基于 Fuwari
-
-::github{repo="saicaca/fuwari"}
-</div>
-</div>
+</style> -->
