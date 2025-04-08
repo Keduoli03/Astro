@@ -21,7 +21,7 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://astro.blueke.top/",
+	site: "https://www.blueke.top/",
 	base: "/",
 	trailingSlash: "always",
 	integrations: [
