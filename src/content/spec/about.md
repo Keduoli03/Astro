@@ -8,50 +8,21 @@
 
 ::github{repo="saicaca/fuwari"}
 
-<!-- 分栏 -->
-<div style="display: flex; justify-content: space-between;">
-
-<div style="width: 48%;">
-
-  </div>
-<div style="width: 48%;">
-
-</div>
-</div>
-
-## 关于我
-
-我是什么样的人？我自己也不太清楚，至少在写这篇介绍的时候
-
-时常有很多奇奇怪怪的想法，或激昂，或阴郁
-
-迷茫始终伴我左右
-
-born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不过的高山
-
-我喜欢计算机可能源自于对Minecraft的热爱，一个小小的沙盒游戏，但是能玩出那么多的花样！红石、生电，更不必说各种令人眼花缭乱的mod，这款游戏带给我的不仅是快乐，更是游玩时的探索未知，创造一切的乐趣。
-
-但很可惜，我对学习不是很热衷，虽然高中时候成绩还可以，但我很讨厌高中的埋头苦卷的氛围，所以不出意外的“堕落”了，哈哈，最后考上了三非的软件工程专业。未来怎样，现在还不得而知
-目前主学Java、Vue，也就是前后端这方面的东西
-
-说实话，我现在的知识90%来源于自学，我们的老师基本上都是新毕业来教学的，不是说怎么不好，但是就那书本内容加上中译中的水平，也是比较绝望哈，这方面言尽于此吧
-
-### 未来的目标
-
-目前，我最主要的目标就是能够独立完成几个前后端项目。虽然之前写过几个项目，但由于不同项目所使用的框架和工具各不相同，这给我的学习和实践带来了很大的挑战。感觉一直在不断地学习和适应新的东西，AI写代码，我“写bug”
-
+### 其他支持
 <!-- 社交 -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <div class="unique-wrapper" style="text-align: center; margin-bottom: 20px;">
+    <a href="https://www.travellings.cn/" target="_blank">
         <div class="unique-button">
-            <div class="unique-icon"><i class="fab fa-facebook-f"></i></div>
-            <span>Facebook</span>
+            <div class="unique-icon"><i class="fa fa-train"></i></div>
+            <span>开往</span>
         </div>
+        <a href="https://waline.js.org/" target="_blank">
         <div class="unique-button">
-            <div class="unique-icon"><i class="fab fa-qq"></i></div>
-            <span>QQ</span>
+            <div class="unique-icon"><i class="fa fa-commenting"></i></div>
+            <span>Waline</span>
         </div>
-        <div class="unique-button">
+        <!-- <div class="unique-button">
             <div class="unique-icon"><i class="fab fa-instagram"></i></div>
             <span>Instagram</span>
         </div>
@@ -63,7 +34,7 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
             <div class="unique-icon"><i class="fab fa-youtube"></i></div>
             <span>YouTube</span>
         </div>
-    </div>
+    </div> -->
 
 <style>
     @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -145,4 +116,40 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 .unique-wrapper .unique-button:nth-child(5) span {
     color: #f32929;
 }
-</style> -->
+</style>
+
+<!-- 分栏 -->
+<!-- <div style="display: flex; justify-content: space-between;">
+
+<div style="width: 48%;">
+
+  </div>
+<div style="width: 48%;">
+
+</div>
+</div> -->
+
+## 关于我
+
+我是什么样的人？我自己也不太清楚，至少在写这篇介绍的时候
+
+时常有很多奇奇怪怪的想法，或激昂，或阴郁
+
+迷茫始终伴我左右
+
+born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不过的高山
+
+我喜欢计算机可能源自于对Minecraft的热爱，一个小小的沙盒游戏，但是能玩出那么多的花样！红石、生电，更不必说各种令人眼花缭乱的mod，这款游戏带给我的不仅是快乐，更是游玩时的探索未知，创造一切的乐趣。
+
+但很可惜，我对学习不是很热衷，虽然高中时候成绩还可以，但我很讨厌高中的埋头苦卷的氛围，所以不出意外的“堕落”了，哈哈，最后考上了三非的软件工程专业。未来怎样，现在还不得而知
+目前主学Java、Vue，也就是前后端这方面的东西
+
+说实话，我现在的知识90%来源于自学，我们的老师基本上都是新毕业来教学的，不是说怎么不好，但是就那书本内容加上中译中的水平，也是比较绝望哈，这方面言尽于此吧
+
+### 未来的目标
+
+目前，我最主要的目标就是能够独立完成几个前后端项目。虽然之前写过几个项目，但由于不同项目所使用的框架和工具各不相同，这给我的学习和实践带来了很大的挑战。感觉一直在不断地学习和适应新的东西，AI写代码，我“写bug”
+
+### 大事记
+
+- 2025/4/15 申请加入[开往](https://www.travellings.cn/)
