@@ -16,6 +16,12 @@ let mode: LIGHT_DARK_MODE = $state(AUTO_MODE)
 
 onMount(() => {
   mode = getStoredTheme()
+  if (mode === DARK_MODE) {
+    document.documentElement.setAttribute("data-theme", "catppuccin-frappe");
+  } else {
+    document.documentElement.setAttribute("data-theme", "light-plus");
+  }
+
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
   const changeThemeWhenSchemeChanged: Parameters<
     typeof darkModePreference.addEventListener<'change'>
@@ -34,6 +40,13 @@ onMount(() => {
 function switchScheme(newMode: LIGHT_DARK_MODE) {
   mode = newMode
   setTheme(newMode)
+
+  if (mode === DARK_MODE) {
+    document.documentElement.setAttribute("data-theme", "catppuccin-frappe");
+  } else {
+    document.documentElement.setAttribute("data-theme", "light-plus");
+  }
+  
 }
 
 function toggleScheme() {
