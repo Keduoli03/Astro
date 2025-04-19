@@ -1,6 +1,6 @@
 ---
 title: 使用Astro搭建博客
-excerpt: 简单记录Astro的部署
+description: 简单记录Astro的部署以及主题自定义配置
 categories:
   - 计算机
 tags:
@@ -8,12 +8,9 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 未完成
 date: 2025-04-03 11:40
-updated: 2025-04-07 22:25
+updated: 2025-04-17 13:17
 ---
-**参考文章**
-官方网站 [Astro](https://astro.build/)
-指南：[为什么是 Astro? | Docs](https://docs.astro.build/zh-cn/concepts/why-astro/)
-[新一代静态博客框架Astro的部署优化指南与使用体验 - 时歌的博客](https://www.lapis.cafe/posts/technicaltutorials/%E6%96%B0%E4%B8%80%E4%BB%A3%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6astro%E7%9A%84%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/#1%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C)
+
 
 ## 为什么选择 Astro
 **Astro** 是一个现代化的静态站点生成框架，其核心目标是帮助开发者创建 **快速、轻量、且以内容为核心** 的网站。它于 2021 年首次发布，由于其独特的设计理念和对性能的极致追求，迅速在开发者社区中崭露头角。
@@ -87,6 +84,7 @@ pnpm add sharp
 我 Obsidian使用的日期是 date, 但是主题用的是 published，得替换一下
 修改 `src\content\config.ts`
 ```ts
+//src\content\config.ts
 import { defineCollection, z } from "astro:content";
 
 const postsCollection = defineCollection({
@@ -158,6 +156,9 @@ export const collections = {
 ```
 
 然后保存，就能看见站点字体已发生改变
+### 修改代码块样式
+教程来源[伊卡](https://ikamusume7.org/)大佬
+参考于[伊卡-增强Fuwari的代码块功能]( https://ikamusume7.org/posts/frontend/code_block_ex/ )
 
 ### 添加 Waline 评论
 根据官方指南进行修改，为了适配主题的夜间模式，所以多写了几个方法
@@ -295,3 +296,9 @@ export const collections = {
   }
 </style>
 ```
+
+
+### **参考文章**
+官方网站 [Astro](https://astro.build/)
+指南：[为什么是 Astro? | Docs](https://docs.astro.build/zh-cn/concepts/why-astro/)
+[新一代静态博客框架Astro的部署优化指南与使用体验 - 时歌的博客](https://www.lapis.cafe/posts/technicaltutorials/%E6%96%B0%E4%B8%80%E4%BB%A3%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6astro%E7%9A%84%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/#1%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C)
