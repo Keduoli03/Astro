@@ -27,7 +27,6 @@ export default defineConfig({
 	site: "https://www.blueke.top/",
 	base: "/",
 	trailingSlash: "always",
-	plugins: [pluginCollapsibleSections()], //代码块折叠
 	integrations: [
 		expressiveCode({
 			themes: ["catppuccin-frappe", "light-plus"],
