@@ -10,7 +10,7 @@ series: 博客
 cover: 
 status: 未完成
 date: 2025-04-23 00:47
-updated: 2025-04-23 02:22
+updated: 2025-04-23 02:27
 ---
 <!--more-->
 ## 内容块
@@ -218,7 +218,7 @@ document.querySelectorAll('.md-tab-label').forEach(label => {
 
 备选二
 
-````html title="需要手动维护css"
+````html collapse={4-55} title="需要手动维护css"
 <div class="tab-container"> <!-- 添加container类 -->
   <input type="radio" id="tab1" name="tabs" checked>
   <label for="tab1">选项卡 1</label>
