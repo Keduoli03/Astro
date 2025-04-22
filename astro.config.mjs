@@ -1,6 +1,7 @@
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import swup from "@swup/astro";
 import Compress from "astro-compress";
 import icon from "astro-icon";
@@ -26,6 +27,7 @@ export default defineConfig({
 	site: "https://www.blueke.top/",
 	base: "/",
 	trailingSlash: "always",
+	plugins: [pluginCollapsibleSections()], //代码块折叠
 	integrations: [
 		expressiveCode({
 			themes: ["catppuccin-frappe", "light-plus"],

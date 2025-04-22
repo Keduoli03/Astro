@@ -11,17 +11,23 @@
 ### 其他支持
 <!-- 社交 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 <div class="unique-wrapper" style="text-align: center; margin-bottom: 20px;">
-    <a href="https://www.travellings.cn/" target="_blank">
-        <div class="unique-button">
-            <div class="unique-icon"><i class="fa fa-train"></i></div>
-            <span>开往</span>
-        </div>
-        <a href="https://waline.js.org/" target="_blank">
-        <div class="unique-button">
-            <div class="unique-icon"><i class="fa fa-commenting"></i></div>
-            <span>Waline</span>
-        </div>
+    <!-- 第一个链接：开往 -->
+  <a href="https://www.travellings.cn/" target="_blank">
+    <div class="unique-button">
+      <div class="unique-icon"><i class="fa fa-train"></i></div>
+      <span>开往</span>
+    </div>
+  </a> <!-- 闭合第一个a标签 -->
+
+  <!-- 第二个链接：Waline -->
+  <a href="https://waline.js.org/" target="_blank">
+    <div class="unique-button">
+      <div class="unique-icon"><i class="fa fa-commenting"></i></div>
+      <span>Waline</span>
+    </div>
+  </a> <!-- 闭合第二个a标签 -->
         <!-- <div class="unique-button">
             <div class="unique-icon"><i class="fab fa-instagram"></i></div>
             <span>Instagram</span>
@@ -129,22 +135,46 @@
 </div>
 </div> -->
 
+## 关于本站
+
+目前博客的主要方向有：
+
+- 技术性博客，包括Java、Vue、Html等
+
+- 生活向文章，记录所见所感(这两年没咋写过，文笔拉的一批，希望能拾起来)
+
+### 规划
+
+暂时想保持一月至少五篇文章更新，且字数达到1000字以上，拒绝繁琐枯燥的纯“干货”
+
 ## 关于我
 
-我是什么样的人？我自己也不太清楚，至少在写这篇介绍的时候
+> [!TIP]
+> 提示：请不要以下文推测本人，尽管这是我自己书写的，但它不代表完整的我
 
-时常有很多奇奇怪怪的想法，或激昂，或阴郁
+born in 河南
 
-迷茫始终伴我左右
+目前在一所不知名学校读软件工程专业，大三摸鱼ing
 
-born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不过的高山
+### 喜好
 
-我喜欢计算机可能源自于对Minecraft的热爱，一个小小的沙盒游戏，但是能玩出那么多的花样！红石、生电，更不必说各种令人眼花缭乱的mod，这款游戏带给我的不仅是快乐，更是游玩时的探索未知，创造一切的乐趣。
+目前沉迷于三角洲，喜欢折腾博客，偶尔也打打王者
 
-但很可惜，我对学习不是很热衷，虽然高中时候成绩还可以，但我很讨厌高中的埋头苦卷的氛围，所以不出意外的“堕落”了，哈哈，最后考上了三非的软件工程专业。未来怎样，现在还不得而知
-目前主学Java、Vue，也就是前后端这方面的东西
+喜欢玄幻小说，喜欢日常番
 
-说实话，我现在的知识90%来源于自学，我们的老师基本上都是新毕业来教学的，不是说怎么不好，但是就那书本内容加上中译中的水平，也是比较绝望哈，这方面言尽于此吧
+不喜欢运动
+
+### 规划
+
+目前想要一个稳定的生活
+
+想要去龙泉，看看崖刻的“天开神秀”
+
+<!-- 折叠文本 -->
+<details>
+<summary></summary>
+
+</details>
 
 ### 未来的目标
 
@@ -154,3 +184,4 @@ born in 河南，这里一望无际的绿色平原，是我们祖祖辈辈翻不
 
 - 2025/4/15 申请加入[开往](https://www.travellings.cn/)
 - 2025/4/15 修改Fuwari主题的默认代码块样式，更加美观了
+- 2025/4/23 继续修改关于页面，持续打磨ing(最新更新时间：2025/4/23)
