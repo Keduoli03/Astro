@@ -10,11 +10,13 @@ series: 博客
 cover: 
 status: 未完成
 date: 2025-04-23 00:47
-updated: 2025-04-23 01:47
+updated: 2025-04-23 01:50
 ---
 <!--more-->
 ## 内容块
+
 一个合适的内容块可以吸引读者注意，给予更好的阅读体验
+
 ```markdown title="参考Github"
 > [!NOTE]  
 > 强调用户在浏览时应考虑的信息。
@@ -31,6 +33,7 @@ updated: 2025-04-23 01:47
 > [!CAUTION]
 > 行动的负面潜在后果。
 ```
+
 **示例**
 > [!NOTE]  
 > 强调用户在浏览时应考虑的信息。
@@ -47,13 +50,12 @@ updated: 2025-04-23 01:47
 > [!CAUTION]
 > 行动的负面潜在后果。
 
-
-
-
+---
 
 ## html 实现
 
 ### 选项卡
+
 ````html title="推荐"
 <!-- 将此代码块直接粘贴到你的Markdown文件中 -->
 <div class="md-tabs">
@@ -136,7 +138,7 @@ document.querySelectorAll('.md-tab-label').forEach(label => {
 
 <details>
 <summary>备选二</summary>
-```html title="需要手动维护css"
+````html
 <div class="tab-container"> <!-- 添加container类 -->
   <input type="radio" id="tab1" name="tabs" checked>
   <label for="tab1">选项卡 1</label>
@@ -151,151 +153,150 @@ document.querySelectorAll('.md-tab-label').forEach(label => {
   <label for="4">选项卡 4</label>
   <!-- 内容区域必须放在所有radio之后 -->
   <div class="tab-content" data-tab="tab1">
-	<p>这是选项卡 1 的内容。</p>
+ <p>这是选项卡 1 的内容。</p>
   </div>
 
   <div class="tab-content" data-tab="tab2">
-	<p>这是选项卡 2 的内容。</p>
+ <p>这是选项卡 2 的内容。</p>
   </div>
 
   <div class="tab-content" data-tab="tab3">
-	<p>这是选项卡 3 的内容。</p>
+ <p>这是选项卡 3 的内容。</p>
   </div>
 
   <div class="tab-content" data-tab="tab4">
-	<p>这是选项卡 4 的内容。</p>
+ <p>这是选项卡 4 的内容。</p>
   </div>
-</div>
-
-<style>
-  /* 基础样式保持不变 */
-  input[type="radio"] {
-	display: none;
-  }
-  
-  /* 灰色配色 */
-  /* label {
-	display: inline-block;
-	padding: 12px 24px;
-	background: #e9e9e9;
-	cursor: pointer;
-	border-radius: 8px 8px 0 0;
-	transition: background 0.3s;
-  }
-  
-  input[type="radio"]:checked + label {
-	background: #f3f3f3;
-	box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .tab-content {
-	display: none;
-	padding: 20px;
-	background: #f3f3f3;
-	border-radius: 0 8px 8px 8px;
-  } */
-
-/* 柔和渐变 */
-/* 柔白 */
-/*
-label {
+  </div>
+  <style>
+    /* 基础样式保持不变 */
+    input[type="radio"] {
+  display: none;
+    }
+    /* 灰色配色 */
+    /* label {
   display: inline-block;
   padding: 12px 24px;
-  margin-right: 8px;  
-  background: #f7f7f7;
-  color: #484848;
-  border-radius: 8px 8px 0 0;
-  border: 1px solid #ebebeb;
-  border-bottom: none;
+  background: #e9e9e9;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 15px;
-}
-
-label:hover {
-  background: #f0f0f0;
-}
-
-input[type="radio"]:checked + label {
-  background: white;
-  color: #ff5a5f;
-  box-shadow: 0 -3px 0 #ff5a5f inset;
-  border-color: #ddd;
-  font-weight: 500;
-}
-
-.tab-content {
-  padding: 24px;
-  background: white;
-  border: 1px solid #ebebeb;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-  margin-top: -1px;
-}
-*/
-/* 浅蓝 */
-/* label {
-  padding: 12px 24px;
-  margin-right: 6px;
-  background: #f5f8ff;
-  color: #4a6baf;
   border-radius: 8px 8px 0 0;
-  transition: all 0.2s;
-}
+  transition: background 0.3s;
+    }
 
-input[type="radio"]:checked + label {
-  background: white;
-  color: #1a56db;
-  box-shadow: 0 0 0 1px #e0e7ff,
-			  0 2px 4px rgba(0,0,0,0.05);
-}
+    input[type="radio"]:checked + label {
+  background: #f3f3f3;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    }
 
-.tab-content {
-  padding: 24px;
-  background: white;
+    .tab-content {
+  display: none;
+  padding: 20px;
+  background: #f3f3f3;
   border-radius: 0 8px 8px 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-} */
+    } */
 
-/* 浅色Material You */
-label {
-  padding: 12px 24px;
-  margin-right: 4px;
-  background: #f3edf7;
-  color: #49454f;
-  border-radius: 16px 16px 0 0;
-  font-family: 'Roboto', sans-serif;
-  transition: all 0.2s;
-}
-
-input[type="radio"]:checked + label {
-  background: #e8def8;
-  color: #6750a4;
-  box-shadow: 0 -2px 0 #6750a4 inset;
-}
-
-.tab-content {
-  padding: 24px;
-  background: #f3edf7;
-  border-radius: 0 0 16px 16px;
-  margin-top: 4px;
-}
-
-  .tab-container input[type="radio"]:checked ~ .tab-content {
-	display: none;
-  }
-  
-  #tab1:checked ~ [data-tab="tab1"],
-  #tab2:checked ~ [data-tab="tab2"],
-  #tab3:checked ~ [data-tab="tab3"] {
-	display: block;
-	animation: fadeIn 0.3s;
+  /* 柔和渐变 */
+  /* 柔白 */
+  /*
+  label {
+    display: inline-block;
+    padding: 12px 24px;
+    margin-right: 8px;  
+    background: #f7f7f7;
+    color: #484848;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid #ebebeb;
+    border-bottom: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 15px;
   }
 
-  @keyframes fadeIn {
-	from { opacity: 0; }
-	to { opacity: 1; }
+  label:hover {
+    background: #f0f0f0;
   }
-</style>
-```
+
+  input[type="radio"]:checked + label {
+    background: white;
+    color: #ff5a5f;
+    box-shadow: 0 -3px 0 #ff5a5f inset;
+    border-color: #ddd;
+    font-weight: 500;
+  }
+
+  .tab-content {
+    padding: 24px;
+    background: white;
+    border: 1px solid #ebebeb;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -1px;
+  }
+  */
+  /* 浅蓝 */
+  /* label {
+    padding: 12px 24px;
+    margin-right: 6px;
+    background: #f5f8ff;
+    color: #4a6baf;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+  }
+
+  input[type="radio"]:checked + label {
+    background: white;
+    color: #1a56db;
+    box-shadow: 0 0 0 1px #e0e7ff,
+    0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .tab-content {
+    padding: 24px;
+    background: white;
+    border-radius: 0 8px 8px 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  } */
+
+  /*浅色Material You*/
+  label {
+    padding: 12px 24px;
+    margin-right: 4px;
+    background: #f3edf7;
+    color: #49454f;
+    border-radius: 16px 16px 0 0;
+    font-family: 'Roboto', sans-serif;
+    transition: all 0.2s;
+  }
+
+  input[type="radio"]:checked + label {
+    background: #e8def8;
+    color: #6750a4;
+    box-shadow: 0 -2px 0 #6750a4 inset;
+  }
+
+  .tab-content {
+    padding: 24px;
+    background: #f3edf7;
+    border-radius: 0 0 16px 16px;
+    margin-top: 4px;
+  }
+
+    .tab-container input[type="radio"]:checked ~ .tab-content {
+  display: none;
+    }
+
+    #tab1:checked ~ [data-tab="tab1"],
+    #tab2:checked ~ [data-tab="tab2"],
+    #tab3:checked ~ [data-tab="tab3"] {
+  display: block;
+  animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+    }
+  </style>
+
+````
 </details>
