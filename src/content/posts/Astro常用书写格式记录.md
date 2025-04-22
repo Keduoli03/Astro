@@ -10,7 +10,7 @@ series: 博客
 cover: 
 status: 未完成
 date: 2025-04-23 00:47
-updated: 2025-04-23 01:50
+updated: 2025-04-23 01:53
 ---
 <!--more-->
 ## 内容块
@@ -136,9 +136,88 @@ document.querySelectorAll('.md-tab-label').forEach(label => {
 </script>
 ````
 
-<details>
-<summary>备选二</summary>
-````html
+**效果**
+<!-- 将此代码块直接粘贴到你的Markdown文件中 -->
+<div class="md-tabs">
+  <div class="md-tab-labels">
+	<button class="md-tab-label active" data-tab="tab1">Tab 1</button>
+	<button class="md-tab-label" data-tab="tab2">Tab 2</button>
+	<button class="md-tab-label" data-tab="tab3">Tab 3</button>
+	<!-- 添加更多标签只需复制button行 -->
+  </div>
+  <div class="md-tab-contents">
+	<div id="tab1" class="md-tab-content active">
+	  **这里是 Tab 1 的内容**  
+	  支持 Markdown 语法：
+	  - 列表项
+	  - `代码高亮`
+	  ```python
+	  print ("Hello Tabs!")
+	  ```
+	</div>
+	<div id="tab2" class="md-tab-content">
+	  ## Tab 2 标题  
+	  表格示例：
+	  | 名称 | 值 |
+	  |---|---|
+	  | A | 1 |
+	</div>
+	<div id="tab3" class="md-tab-content">
+	  > 引用块也能正常显示  
+	  图片示例：  
+	  ![示例](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/E8uWFJnVcAIMcOB.jpg)
+	</div>
+	<!-- 添加更多内容需保持id与data-tab对应 -->
+  </div>
+</div>
+
+<style>
+.md-tabs {
+  margin: 1 em 0;
+  border: 1 px solid #e1e4e8 ;
+  border-radius: 6 px;
+}
+.md-tab-labels {
+  display: flex;
+  background: #f6f8fa ;
+  border-bottom: 1 px solid #e1e4e8 ;
+}
+.md-tab-label {
+  padding: 8 px 16 px;
+  background: none;
+  border: none;
+  border-bottom: 2 px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+.md-tab-label. active {
+  border-bottom-color: #f9826c ;
+  font-weight: 600;
+}
+.md-tab-content {
+  display: none;
+  padding: 16 px;
+}
+.md-tab-content. active {
+  display: block;
+}
+</style>
+
+<script>
+document.querySelectorAll ('. md-tab-label'). forEach (label => {
+  label.addEventListener ('click', () => {
+	document.querySelectorAll ('. md-tab-label, .md-tab-content'). forEach (el => {
+	  el.classList.remove ('active');
+	});
+	label.classList.add ('active');
+	document.getElementById (label. dataset. tab). classList.add ('active');
+  });
+});
+</script>
+
+备选二
+
+````html title="需要手动维护css"
 <div class="tab-container"> <!-- 添加container类 -->
   <input type="radio" id="tab1" name="tabs" checked>
   <label for="tab1">选项卡 1</label>
@@ -299,4 +378,3 @@ document.querySelectorAll('.md-tab-label').forEach(label => {
   </style>
 
 ````
-</details>
