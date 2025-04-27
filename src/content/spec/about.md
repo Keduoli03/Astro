@@ -144,16 +144,32 @@
 born in 河南
 
 目前在一所不知名学校读软件工程专业，大三摸鱼ing
+
+---
 <!-- 分栏 -->
 <div style="display: flex; justify-content: space-between;">
-
 <div style="width: 48%;">
-    性格：INFP
+    <p class="text-lg font-bold">性格：INFP</p>
+    <img src="https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/infp.jpg" alt="INFP相关图片" class="mt-2 w-full max-w-xs rounded-md shadow-md">
+    <p class="mt-4 text-gray-700">总想以温柔对待他人，但常施予友人恶意...</p>
   </div>
 <div style="width: 48%;">
+    <p class="text-lg font-bold">技能：</p>
+            <ul class="mt-2 text-gray-700 list-disc list-inside">
+                <li><i class="fa-brands fa-java text-yellow-500"></i> Java</li>
+                <li><i class="fa-brands fa-vuejs text-green-500"></i> Vue3</li>
+                <li><i class="fa-solid fa-database text-blue-500"></i> MySQL</li>
+                <li><i class="fa-brands fa-html5 text-orange-500"></i> HTML</li>
+                <li><i class="fa-brands fa-css3-alt text-blue-400"></i> CSS</li>
+            </ul>
+            <p class="text-lg font-bold mt-4">To Do：</p>
+            <ul class="text-gray-700 list-disc list-inside">
+                <li>成为后端技术人员</li>
+                <li>写出几个有趣的项目</li>
+            </ul>
+</div>
+</div>
 
-</div>
-</div>
 ### 喜好
 
 目前沉迷于三角洲，喜欢折腾博客，偶尔也打打王者
@@ -182,4 +198,5 @@ born in 河南
 
 - 2025/4/15 申请加入[开往](https://www.travellings.cn/)
 - 2025/4/15 修改Fuwari主题的默认代码块样式，更加美观了
-- 2025/4/23 继续修改关于页面，持续打磨ing(最新更新时间：2025/4/23)
+- 2025/4/23 继续修改关于页面，持续打磨ing(最新更新时间：2025/4/27)
+- 2025/4/27 关于页面增加性格，和技术栈，有待优化
