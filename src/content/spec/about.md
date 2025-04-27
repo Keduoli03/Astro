@@ -124,17 +124,6 @@
 }
 </style>
 
-<!-- 分栏 -->
-<!-- <div style="display: flex; justify-content: space-between;">
-
-<div style="width: 48%;">
-
-  </div>
-<div style="width: 48%;">
-
-</div>
-</div> -->
-
 ## 关于本站
 
 目前博客的主要方向有：
@@ -155,7 +144,16 @@
 born in 河南
 
 目前在一所不知名学校读软件工程专业，大三摸鱼ing
+<!-- 分栏 -->
+<div style="display: flex; justify-content: space-between;">
 
+<div style="width: 48%;">
+    性格：INFP
+  </div>
+<div style="width: 48%;">
+
+</div>
+</div>
 ### 喜好
 
 目前沉迷于三角洲，喜欢折腾博客，偶尔也打打王者
