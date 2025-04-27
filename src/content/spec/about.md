@@ -149,10 +149,163 @@ born in 河南
 <!-- 分栏 -->
 <div style="display: flex; justify-content: space-between;">
 <div style="width: 48%;">
-    <p class="text-lg font-bold">性格：INFP</p>
+    <p class="text-lg font-bold">性格：INFP-T</p>
     <img src="https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/infp.jpg" alt="INFP相关图片" class="mt-2 w-full max-w-xs rounded-md shadow-md">
-    <p class="mt-4 text-gray-700">总想以温柔对待他人，但常施予友人恶意...</p>
+    <p>数据来自于<a href="https://www.16personalities.com/ch/" target="_blank" rel="noopener noreferrer" style="color: #4b5563; text-decoration: none; border-bottom: 1px dotted currentColor;">16Personalities</a></p>
   </div>
+<div style="width: 48%;">
+<p class="text-lg font-bold">人格特征</p>
+    <div class="personality">
+        <div class="personality-container">
+            <!-- 能量 - 内向83% -->
+            <div class="trait-container" data-trait="energy">
+                <h3>能量:<span class="title-percentage">83%</span> 内向</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 83%">
+                        <span class="percentage">83%</span>
+                    </div>
+                </div>
+                <div class="trait-labels">
+                    <span>外向</span>
+                    <span>内向</span>
+                </div>
+            </div>
+            <!-- 心智 -->
+            <div class="trait-container" data-trait="mind">
+                <h3>心智:<span class="title-percentage">70%</span> 天马行空</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%">
+                        <span class="percentage">70%</span>
+                    </div>
+                </div>
+                <div class="trait-labels">
+                    <span>天马行空</span>
+                    <span>求真务实</span>
+                </div>
+            </div>
+            <!-- 天性 -->
+            <div class="trait-container" data-trait="nature">
+                <h3>天性:<span class="title-percentage">71%</span> 情感细腻</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 71%">
+                        <span class="percentage">71%</span>
+                    </div>
+                </div>
+                <div class="trait-labels">
+                    <span>理性思考</span>
+                    <span>情感细腻</span>
+                </div>
+            </div>
+            <!-- 应对方式 -->
+            <div class="trait-container" data-trait="tactics">
+                <h3>应对方式:<span class="title-percentage">60%</span> 随机应变</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%">
+                        <span class="percentage">60%</span>
+                    </div>
+                </div>
+                <div class="trait-labels">
+                    <span>运筹帷幄</span>
+                    <span>随机应变</span>
+                </div>
+            </div>
+            <!-- 身份特征 -->
+            <div class="trait-container" data-trait="identity">
+                <h3>身份特征:<span class="title-percentage">88%</span> 情绪易波动</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 88%">
+                        <span class="percentage">88%</span>
+                    </div>
+                </div>
+                <div class="trait-labels">
+                    <span>自信果断</span>
+                    <span>情绪易波动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        /* 基础样式 */
+        .personality-container {
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        .trait-container {
+            margin: 1.3rem 0;
+        }
+        .trait-container h3 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1em;
+        }
+        .trait-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .progress-bar {
+            height: 18px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 15px;
+            position: relative;
+        }
+        /*不同维度的颜色*/
+        [data-trait="energy"] .progress-fill {
+            background: #7EB3B0;
+        }
+        [data-trait="mind"] .progress-fill {
+            background: #C89595;
+        }
+        [data-trait="nature"] .progress-fill {
+            background: #9FBD8F;
+        }
+        [data-trait="tactics"] .progress-fill {
+            background: #E6A985;
+        }
+        [data-trait="identity"] .progress-fill {
+            background: #B39EB5;
+        }
+        .percentage {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        /* 设置标题中百分比的颜色 */
+        [data-trait="energy"] .title-percentage {
+            color: #7EB3B0;
+        }
+        [data-trait="mind"] .title-percentage {
+            color: #C89595;
+        }
+        [data-trait="nature"] .title-percentage {
+            color: #9FBD8F;
+        }
+        [data-trait="tactics"] .title-percentage {
+            color: #E6A985;
+        }
+        [data-trait="identity"] .title-percentage {
+            color: #B39EB5;
+        }
+    </style>
+    </div>
+</div>
+
+总想以温柔对待他人，但常施予友人恶意...
+
+---
+<!-- 分栏 -->
+<div style="display: flex; justify-content: space-between;">
 <div style="width: 48%;">
     <p class="text-lg font-bold">技能：</p>
             <ul class="mt-2 text-gray-700 list-disc list-inside">
@@ -162,11 +315,23 @@ born in 河南
                 <li><i class="fa-brands fa-html5 text-orange-500"></i> HTML</li>
                 <li><i class="fa-brands fa-css3-alt text-blue-400"></i> CSS</li>
             </ul>
-            <p class="text-lg font-bold mt-4">To Do：</p>
-            <ul class="text-gray-700 list-disc list-inside">
-                <li>成为后端技术人员</li>
-                <li>写出几个有趣的项目</li>
-            </ul>
+  </div>
+<div style="width: 48%;">
+    <p class="text-lg font-bold mt-4">To Do：</p>
+    <ul class="mt-2 text-gray-700 list-none"> <!-- 去掉默认列表标记 -->
+      <li class="flex items-center gap-2">
+        <span class="text-green-500"><i class="fa-solid fa-check-circle"></i></span> <!-- 已完成 -->
+        学习
+      </li>
+      <li class="flex items-center gap-2">
+        <span class="text-green-500"><i class="fa-regular fa-circle"></i></span> <!-- 已完成 -->
+        成为后端技术人员
+      </li>
+      <li class="flex items-center gap-2">
+        <span class="text-gray-400"><i class="fa-regular fa-circle"></i></span> <!-- 未完成 -->
+        写出几个有趣的项目
+      </li>
+    </ul>
 </div>
 </div>
 
@@ -178,7 +343,7 @@ born in 河南
 
 不喜欢运动
 
-### 规划
+### 生活规划
 
 目前想要一个稳定的生活
 
@@ -186,17 +351,13 @@ born in 河南
 
 <!-- 折叠文本 -->
 <details>
-<summary></summary>
-
+<summary>更多</summary>
+还没有想好呢~
 </details>
-
-### 未来的目标
-
-目前，我最主要的目标就是能够独立完成几个前后端项目。虽然之前写过几个项目，但由于不同项目所使用的框架和工具各不相同，这给我的学习和实践带来了很大的挑战。感觉一直在不断地学习和适应新的东西，AI写代码，我“写bug”
 
 ### 博客运营记录
 
 - 2025/4/15 申请加入[开往](https://www.travellings.cn/)
 - 2025/4/15 修改Fuwari主题的默认代码块样式，更加美观了
-- 2025/4/23 继续修改关于页面，持续打磨ing(最新更新时间：2025/4/27)
+- 2025/4/23 继续修改关于页面，持续打磨ing
 - 2025/4/27 关于页面增加性格，和技术栈，有待优化

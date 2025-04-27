@@ -23,4 +23,8 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		name: i18n(I18nKey.series),
 		url: "/series/",
 	},
+	[LinkPreset.ChronoBox]: {
+		name: i18n(I18nKey.chronobox),
+		url: "/chronobox/",
+	},
 };
