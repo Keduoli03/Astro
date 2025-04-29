@@ -8,7 +8,7 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 未完成
 date: 2025-04-03 11:40
-updated: 2025-04-17 13:17
+updated: 2025-04-29 17:46
 ---
 
 
@@ -77,9 +77,10 @@ pnpm add sharp
 不想配图... 参考别人的叭
 **参考文章**
 - [给你的Fuwari添加一个友链页面 - AULyPc](https://blog.aulypc0x0.online/posts/add_friendspage_in_fuwari/)
-### 添加一个系列页面
+####  添加一个系列页面
 **参考文章**
 - [在Fuwari中添加系列栏 - 伊卡的记事本](https://ikamusume7.org/posts/frontend/add_series_field/)
+  
 ### 日期修改
 我 Obsidian使用的日期是 date, 但是主题用的是 published，得替换一下
 修改 `src\content\config.ts`
