@@ -1,0 +1,80 @@
+---
+// MusicList.astro
+export interface Props {
+	timelineItems: {
+		type: string;
+		title: string;
+		artist: string;
+		cover: string;
+		album: string;
+		date: string;
+		platform: {
+			[key: string]: string;
+		};
+	}[];
+}
+
+const { timelineItems } = Astro.props;
+---
+
+<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {timelineItems
+    .filter(item => item.type ==='music')
+    .map((item) => (
+      <div class="music-card group relative overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:shadow-lg">
+        <div class="aspect-[1/1] w-full bg-gray-200 relative">
+          <img
+            src={item.cover}
+            alt={`${item.title} - ${item.artist}`}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
+            <svg class="w-12 h-12 text-white/90 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent transition-all duration-300">
+          <h3 class="text-white font-semibold truncate">{item.title}</h3>
+          <p class="text-white font-semibold truncate ">{item.artist}</p>
+          <div class="hidden group-hover:block"> <!-- 这里控制专辑和其他信息的显示 -->
+            <p class="text-gray-300 text-250 mt-1">{item.album} • {new Date(item.date).getFullYear()}</p>
+            <div class="flex gap-2 mt-3">
+              {Object.entries(item.platform).map(([platform, link]) => (
+                link && (
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  >
+                    {/* 内联Spotify图标 */}
+                    {platform ==='spotify' && (
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.56 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                      </svg>
+                    )}
+                    {/* 内联网易云图标 */}
+                    {platform === 'netease' && (
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm3.5-11.5h-7c-.276 0-.5.224-.5.5v7c0 .276.224.5.5.5h7c.276 0 .5-.224.5-.5v-7c0-.276-.224-.5-.5-.5z"/>
+                      </svg>
+                    )}
+                    {/* 内联QQ音乐图标 */}
+                    {platform === 'qqmusic' && (
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm-2.5-8h5c.276 0 .5-.224.5-.5v-4c0-.276-.224-.5-.5-.5h-5c-.276 0-.5.224-.5.5v4c0 .276.224.5.5.5z"/>
+                      </svg>
+                    )}
+                    <span class="text-white/90 text-xs">
+                      {platform ==='spotify' ? 'Spotify' : platform === 'netease' ? '网易云音乐' : 'QQ音乐'}
+                    </span>
+                  </a>
+                )
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+</div>

@@ -1,0 +1,220 @@
+---
+// PhotoList.astro
+export interface Props {
+	timelineItems: {
+		type: string;
+		title: string;
+		image: string;
+		date: string;
+		location: string;
+		camera: string;
+		tags: string[];
+	}[];
+}
+const { timelineItems } = Astro.props;
+---
+<div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    {timelineItems
+      .filter(item => item.type === 'photo')
+      .map((item) => (
+            <div 
+                class="photo-card relative overflow-hidden rounded-xl shadow-lg transition-shadow duration-300 group cursor-pointer"
+                data-image={item.image}
+                data-title={item.title}
+                data-camera={item.camera}
+                data-tags={JSON.stringify(item.tags)}
+            >
+                <div class="aspect-w-2 aspect-h-3 w-full">
+                    <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                </div>
+                <!-- 信息蒙版 -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
+                    <!-- 左侧基础信息 -->
+                    <div class="flex flex-col justify-end h-full">
+                        <h3 class="text-white text-sm font-semibold mb-1">{item.title}</h3>
+                        <div class="flex items-center gap-1 text-gray-300 text-xs">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span>{item.location}</span>
+                        </div>
+                        <time class="text-gray-400 text-xs">{new Date(item.date).toLocaleDateString()}</time>
+                    </div>
+
+                    <!-- 右侧信息（悬浮显示） -->
+                    <div class="absolute bottom-4 right-4 flex flex-col items-end space-y-2 opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto">
+                        <!-- 相机信息 -->
+                        <div class="flex items-center gap-1.5 text-white/80 text-xs">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span>{item.camera}</span>
+                        </div>
+
+                        <!-- 标签组 -->
+                        <div class="flex flex-wrap gap-2 justify-end">
+                            {item.tags.map(tag => (
+                                <span class="px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-xs font-medium transition-colors hover:bg-white/20">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ))}
+</div>
+
+<script is:inline>
+    function openModal(imageUrl, title, camera, tags) {
+        let modal = document.getElementById('modal');
+        if (!modal) {
+            // 创建模态框元素
+            modal = document.createElement('div');
+            modal.id = 'modal';
+            modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50';
+
+            // 获取 --primary 的值
+            const rootStyles = getComputedStyle(document.documentElement);
+            const primaryColor = rootStyles.getPropertyValue('--primary').trim();
+
+            modal.innerHTML = `
+                <div class="rounded-xl max-w-6xl w-full md:max-w-5xl lg:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl relative" style="background:var(--page-bg);">
+                    <button 
+                        onclick="closeModal()"
+                        class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/30 rounded-full p-2 transition-colors backdrop-blur-sm z-10"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 id="modal-title" class="text-2xl font-bold text-gray-900 mb-2" style="color: ${primaryColor};">${title}</h2>
+                        <div class="flex items-center gap-4 text-gray-600">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                </svg>
+                                <span id="modal-camera"></span>
+                            </div>
+                            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                    <div class="relative p-4">
+                        <img 
+                            id="modal-image"
+                            class="w-full h-auto max-h-[70vh] object-contain"
+                            loading="lazy"
+                        />
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        modal.classList.remove('hidden');
+
+        document.getElementById('modal-image').src = imageUrl;
+        document.getElementById('modal-camera').textContent = camera;
+
+        const tagsContainer = document.getElementById('modal-tags');
+        tagsContainer.innerHTML = tags.map(tag => `
+            <span class="px-3 py-1 bg-white rounded-full text-sm shadow-sm border" style="background:var(--btn-regular-bg-active);">
+                ${tag}
+            </span>
+        `).join('');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+
+    // 绑定点击事件
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modal');
+        document.querySelectorAll('.photo-card').forEach(card => {
+            card.addEventListener('click', () => {
+                openModal(
+                    card.dataset.image,
+                    card.dataset.title,
+                    card.dataset.camera,
+                    JSON.parse(card.dataset.tags)
+                );
+            });
+        });
+
+        // 点击背景关闭
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        }
+
+        // ESC键关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    });
+</script>
+<style>
+    .photo-card {
+        @apply relative overflow-hidden rounded-xl shadow-lg transition-shadow duration-300;
+        /* 移除所有宽度计算，完全依赖网格系统 */
+    }
+
+    .photo-card img {
+        @apply w-full h-full object-cover transition-transform duration-300 group-hover:scale-105;
+    }
+
+    /* 右侧信息悬浮效果 */
+    .photo-card .right-info {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .photo-card:hover .right-info {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* 强制小屏幕单栏，中屏幕双栏，大屏幕三栏（可按需调整） */
+    @media (min-width: 640px) {
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .md:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .lg:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* 仅在模态框非隐藏时应用居中样式 */
+    #modal:not(.hidden) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 确保隐藏时完全隐藏（覆盖可能的样式冲突） */
+    #modal.hidden {
+        display: none !important;
+    }
+
+    #modal-title {
+        color: var(--primary)!important; /* 使用主题主色 */
+        /* 响应式调整（可选） */
+        @media (max-width: 768px) {
+            font-size: 1.25rem !important; /* 小屏幕缩小字体 */
+        }
+    }
+
+    /* 模态内容居中（保持不变） */
+    #modal > div {
+        margin: auto;
+    }
+</style>
