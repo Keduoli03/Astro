@@ -1,0 +1,62 @@
+---
+import WidgetLayout from "@/components/widget/WidgetLayout.astro";
+
+const websiteData = [
+	{
+		title: "🚆开往",
+		url: "https://www.travellings.cn/go.html",
+		badge: "友链接力",
+	},
+	// 你可以继续添加更多的网页数据
+];
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const COLLAPSED_HEIGHT = "7.5rem";
+const COLLAPSE_THRESHOLD = 5;
+const isCollapsed = websiteData.length >= COLLAPSE_THRESHOLD;
+const className = Astro.props.class;
+const style = Astro.props.style;
+---
+
+<WidgetLayout name={"更多"} id="categories" class={className} isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} style={style}>
+    {websiteData.map((data) => (
+        <a href={data.url} target="_blank" rel="noopener noreferrer" aria-label={data.title}>
+            <button
+                class:list={`
+                    w-full
+                    h-10
+                    rounded-lg
+                    bg-none
+                    hover:bg-[var(--btn-plain-bg-hover)]
+                    active:bg-[var(--btn-plain-bg-active)]
+                    transition-all
+                    pl-2
+                    hover:pl-3
+                    
+                    text-neutral-700
+                    hover:text-[var(--primary)]
+                    dark:text-neutral-300
+                    dark:hover:text-[var(--primary)]
+                `}
+            >
+                <div class="flex items-center justify-between relative mr-2">
+                    <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  ">
+                        {data.title}
+                    </div>
+                    {data.badge && (
+                        <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-light
+                            text-[var(--btn-content)] dark:text-[var(--deep-text)]
+                            bg-[oklch(0.95_0.025_var(--hue))] dark:bg-[var(--primary)]
+                            flex items-center justify-center">
+                            {data.badge}
+                        </div>
+                    )}
+                </div>
+            </button>
+        </a>
+    ))}
+</WidgetLayout>    

@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import More from "../mine/more.astro";
 import Categories from "./Categories.astro";
 import Profile from "./Profile.astro";
 import Series from "./Series.astro";
@@ -26,5 +27,6 @@ const series = Astro.props.series;
         </div>
         <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
         <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
+        <More class="onload-animation" style="animation-delay: 250ms"></More>
     </div>
 </div>
