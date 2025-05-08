@@ -3,7 +3,6 @@ import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import swup from "@swup/astro";
-import Compress from "astro-compress";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -58,13 +57,6 @@ export default defineConfig({
 		}),
 		svelte(),
 		sitemap(),
-		Compress({
-			CSS: false,
-			Image: false,
-			Action: {
-				Passed: async () => true, // https://github.com/PlayForm/Compress/issues/376
-			},
-		}),
 	],
 	markdown: {
 		remarkPlugins: [
