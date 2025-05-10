@@ -73,7 +73,7 @@ const groups: { category: string; series: Series[] }[] = (() => {
                     <div class="w-[15%] md:w-[10%]">
                         <div class="h-3 w-3 bg-none rounded-full outline outline-[var(--primary)] mx-auto -outline-offset-[2px] z-50 outline-3"></div>
                     </div>
-                    <div class="w-[65%] md:w-[75%] transition text-left text-50">{group.series.length} 个{i18n(I18nKey.series)}</div>
+                    <div class="w-[65%] md:w-[75%] transition text-left text-50">{group.series.length} 个{"系列"}</div>
                 </div>
                 {group.series.map(series => (
                     <a href={getPostUrlBySlug(series.posts[series.posts.length-1].slug)}
