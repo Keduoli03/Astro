@@ -141,48 +141,45 @@ const timelineItems = [
           <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
         </button>
           </div>
-          <!-- 动漫内容 -->
-          <div id="anime-content" class="tab-content active">
-              <AnimeList timelineItems={timelineItems} />
-          </div>
-          <!-- 音乐内容 -->
-          <div id="music-content" class="tab-content hidden">
-              <MusicList timelineItems={timelineItems} />
-          </div>
-          <!-- 照片内容 -->
-          <div id="photo-content" class="tab-content hidden">
-              <PhotoList timelineItems={timelineItems} />
-          </div>
+          <div id="anime-content" class="tab-content">
+  <AnimeList timelineItems={timelineItems} />
+</div>
+<div id="music-content" class="tab-content hidden">
+  <MusicList timelineItems={timelineItems} />
+</div>
+<div id="photo-content" class="tab-content hidden">
+  <PhotoList timelineItems={timelineItems} />
+</div>
       </div>
   </div>
 
   <!-- 选项卡交互脚本 -->
   <script is:inline>
-  (function() {
-    const tabs = document.querySelectorAll('.tab-button');
-    const contents = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        // 移除所有标签的激活状态
-        tabs.forEach(t => {
-          t.classList.remove('active');
-          t.querySelector('.active-indicator').style.opacity = '0';
-        });
-        
-        // 隐藏所有内容
-        contents.forEach(c => {
-          c.classList.add('hidden');
-        });
-        // 添加当前标签的激活状态
-        tab.classList.add('active');
-        tab.querySelector('.active-indicator').style.opacity = '1';
-        // 显示对应内容
-        const targetContentId = `${tab.dataset.tab}-content`;
-        const targetContent = document.getElementById(targetContentId);
-        targetContent.classList.remove('hidden');
+(function() {
+  const tabs = document.querySelectorAll('.tab-button');
+  const contents = document.querySelectorAll('.tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // 移除所有标签的激活状态
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.querySelector('.active-indicator').style.opacity = '0';
       });
+      
+      // 隐藏所有内容
+      contents.forEach(c => {
+        c.classList.add('hidden');
+      });
+      // 添加当前标签的激活状态
+      tab.classList.add('active');
+      tab.querySelector('.active-indicator').style.opacity = '1';
+      // 显示对应内容
+      const targetContentId = `${tab.dataset.tab}-content`;
+      document.getElementById(targetContentId).classList.remove('hidden');
     });
-  })();
+  });
+})();
 </script>
 
   <style is:global>
@@ -212,13 +209,6 @@ const timelineItems = [
     display: block;
     animation: fadeIn 0.3s ease-out;
   }
-
-    .tab-content.active {
-      display: block;
-      @apply opacity-100;
-      animation: fadeIn 0.3s ease-out;
-    }
-
     @keyframes fadeIn {
       from {
         opacity: 0;
