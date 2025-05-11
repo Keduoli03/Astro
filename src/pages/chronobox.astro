@@ -158,36 +158,32 @@ const timelineItems = [
 
   <!-- 选项卡交互脚本 -->
   <script is:inline>
-      document.addEventListener('DOMContentLoaded', () => {
-          const tabs = document.querySelectorAll('.tab-button');
-          const contents = document.querySelectorAll('.tab-content');
-
-          tabs.forEach(tab => {
-              tab.addEventListener('click', () => {
-                  // 移除所有标签的激活状态
-                  tabs.forEach(t => {
-                      t.classList.remove('active');
-                      t.querySelector('.active-indicator').style.opacity = '0';
-                  });
-                  // 隐藏所有内容
-                  contents.forEach(c => {
-                      c.classList.remove('active');
-                      c.classList.add('hidden');
-                  });
-
-                  // 添加当前标签的激活状态
-                  tab.classList.add('active');
-                  tab.querySelector('.active-indicator').style.opacity = '1';
-
-                  // 显示对应内容
-                  const targetContentId = `${tab.dataset.tab}-content`;
-                  const targetContent = document.getElementById(targetContentId);
-                  targetContent.classList.remove('hidden');
-                  targetContent.classList.add('active');
-              });
-          });
+  (function() {
+    const tabs = document.querySelectorAll('.tab-button');
+    const contents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // 移除所有标签的激活状态
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.querySelector('.active-indicator').style.opacity = '0';
+        });
+        
+        // 隐藏所有内容
+        contents.forEach(c => {
+          c.classList.add('hidden');
+        });
+        // 添加当前标签的激活状态
+        tab.classList.add('active');
+        tab.querySelector('.active-indicator').style.opacity = '1';
+        // 显示对应内容
+        const targetContentId = `${tab.dataset.tab}-content`;
+        const targetContent = document.getElementById(targetContentId);
+        targetContent.classList.remove('hidden');
       });
-  </script>
+    });
+  })();
+</script>
 
   <style is:global>
     /* 新增选项卡样式 */
@@ -209,9 +205,13 @@ const timelineItems = [
     }
 
     .tab-content {
-      display: none;
-      @apply transition-opacity duration-300 ease-in-out;
-    }
+    @apply hidden;
+  }
+  
+  .tab-content:not(.hidden) {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+  }
 
     .tab-content.active {
       display: block;
