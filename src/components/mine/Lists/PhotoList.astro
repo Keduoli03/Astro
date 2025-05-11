@@ -72,98 +72,126 @@ const { timelineItems } = Astro.props;
 </div>
 
 <script is:inline>
-    function openModal(imageUrl, title, camera, tags) {
-        let modal = document.getElementById('modal');
-        if (!modal) {
-            // 创建模态框元素
-            modal = document.createElement('div');
-            modal.id = 'modal';
-            modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50';
-
-            // 获取 --primary 的值
-            const rootStyles = getComputedStyle(document.documentElement);
-            const primaryColor = rootStyles.getPropertyValue('--primary').trim();
-
-            modal.innerHTML = `
-                <div class="rounded-xl max-w-6xl w-full md:max-w-5xl lg:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl relative" style="background:var(--page-bg);">
-                    <button 
-                        onclick="closeModal()"
-                        class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/30 rounded-full p-2 transition-colors backdrop-blur-sm z-10"
-                    >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <div class="p-6 border-b border-gray-200">
-                        <h2 id="modal-title" class="text-2xl font-bold text-gray-900 mb-2" style="color: ${primaryColor};">${title}</h2>
-                        <div class="flex items-center gap-4 text-gray-600">
-                            <div class="flex items-center gap-1">
-                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                </svg>
-                                <span id="modal-camera"></span>
-                            </div>
-                            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
-                        </div>
-                    </div>
-                    <div class="relative p-4">
-                        <img 
-                            id="modal-image"
-                            class="w-full h-auto max-h-[70vh] object-contain"
-                            loading="lazy"
-                        />
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-        modal.classList.remove('hidden');
-
-        document.getElementById('modal-image').src = imageUrl;
-        document.getElementById('modal-camera').textContent = camera;
-
-        const tagsContainer = document.getElementById('modal-tags');
-        tagsContainer.innerHTML = tags.map(tag => `
-            <span class="px-3 py-1 bg-white rounded-full text-sm shadow-sm border" style="background:var(--btn-regular-bg-active);">
-                ${tag}
-            </span>
-        `).join('');
+// 使用立即执行函数封装代码，避免全局污染
+(function() {
+  // 模态框操作函数
+  function openModal(imageUrl, title, camera, tags) {
+    let modal = document.getElementById('modal');
+    
+    // 如果模态框不存在则创建
+    if (!modal) {
+      modal = createModalElement();
+      document.body.appendChild(modal);
+      
+      // 添加全局事件监听（只需一次）
+      setupGlobalListeners();
     }
 
-    function closeModal() {
-        const modal = document.getElementById('modal');
-        if (modal) {
-            modal.classList.add('hidden');
-        }
+    // 更新模态框内容
+    document.getElementById('modal-image').src = imageUrl;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-camera').textContent = camera;
+    
+    // 渲染标签
+    const tagsContainer = document.getElementById('modal-tags');
+    tagsContainer.innerHTML = tags.map(tag => `
+      <span class="px-3 py-1 bg-white rounded-full text-sm shadow-sm border" style="background:var(--btn-regular-bg-active);">
+        ${tag}
+      </span>
+    `).join('');
+    
+    // 显示模态框
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // 防止背景滚动
+  }
+
+  function createModalElement() {
+    const modal = document.createElement('div');
+    modal.id = 'modal';
+    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50';
+    
+    // 获取主题色
+    const rootStyles = getComputedStyle(document.documentElement);
+    const primaryColor = rootStyles.getPropertyValue('--primary').trim();
+
+    modal.innerHTML = `
+      <div class="rounded-xl max-w-6xl w-full md:max-w-5xl lg:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl relative" style="background:var(--page-bg);">
+        <button 
+          id="modal-close-btn"
+          class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/30 rounded-full p-2 transition-colors backdrop-blur-sm z-10"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div class="p-6 border-b border-gray-200">
+          <h2 id="modal-title" class="text-2xl font-bold text-gray-900 mb-2" style="color: ${primaryColor};"></h2>
+          <div class="flex items-center gap-4 text-gray-600">
+            <div class="flex items-center gap-1">
+              <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              </svg>
+              <span id="modal-camera"></span>
+            </div>
+            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+        <div class="relative p-4">
+          <img 
+            id="modal-image"
+            class="w-full h-auto max-h-[70vh] object-contain"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    `;
+    return modal;
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = ''; // 恢复滚动
     }
+  }
 
-    // 绑定点击事件
-    document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('modal');
-        document.querySelectorAll('.photo-card').forEach(card => {
-            card.addEventListener('click', () => {
-                openModal(
-                    card.dataset.image,
-                    card.dataset.title,
-                    card.dataset.camera,
-                    JSON.parse(card.dataset.tags)
-                );
-            });
-        });
-
-        // 点击背景关闭
-        if (modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-        }
-
-        // ESC键关闭
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
+  function setupGlobalListeners() {
+    // 点击关闭按钮
+    document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
+    
+    // 点击模态框背景关闭
+    document.getElementById('modal')?.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modal')) {
+        closeModal();
+      }
     });
+    
+    // ESC键关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !document.getElementById('modal')?.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+  }
+
+  // 使用事件委托处理图片点击（适用于动态内容）
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.photo-card');
+    if (card) {
+      e.preventDefault();
+      openModal(
+        card.dataset.image,
+        card.dataset.title,
+        card.dataset.camera,
+        JSON.parse(card.dataset.tags)
+      );
+    }
+  });
+
+})();
 </script>
+
 <style>
     .photo-card {
         @apply relative overflow-hidden rounded-xl shadow-lg transition-shadow duration-300;
