@@ -7,9 +7,9 @@ tags:
   - Java
   - SpringBoot
 cover: https://api.mtyqx.cn/tapi/random.php
-status: 未完成
+status: 已完成
 date: 2025-03-22 17:35
-updated: 2025-04-16 17:32
+updated: 2025-05-12 10:50
 series: SpringBoot
 ---
 [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 是一个 [MyBatis](https://www.mybatis.org/mybatis-3/) 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
@@ -87,7 +87,7 @@ swagger 2 已经不支持 vue 3 了，因此你要是启用自带的 swagger 在
 
 ###  **步骤一：创建自定义模板**
 1. 在 `resources` 目录下新建模板文件夹：  
-   ```
+   ```text
    src/main/resources/templates/
    ```
 

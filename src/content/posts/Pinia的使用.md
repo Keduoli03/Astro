@@ -8,9 +8,9 @@ tags:
   - 前端
   - Vue
 cover: 
-status: 未完成
+status: 已完成
 date: 2025-03-23 14:39
-updated: 2025-04-07 22:33
+updated: 2025-05-12 10:50
 series: SpringBoot
 ---
 
@@ -220,7 +220,7 @@ const handleLogin = async () => {
 
 
 ## 六、项目结构规范
-```
+```text
 src/
 ├── api/          # API 接口封装
 │   └── user.ts   # 用户相关接口
