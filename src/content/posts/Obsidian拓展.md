@@ -15,7 +15,7 @@ halo:
   name: 89ce33e0-365c-422c-b39b-73e8adaff2ad
   publish: true
 date: 2024-11-17 13:59
-updated: 2025-04-04 01:17
+updated: 2025-05-14 18:42
 ---
 最近又对笔记进行了一些优化，目前感觉还可以，简单记录一下。 ^b9bb4d
 
@@ -27,7 +27,7 @@ DataView 是 Obsidian 社区中的热门插件，它为用户提供了一个强�
 ### 展示最近的文件
 ![&dataview-展示最近文件](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/img/%26dataview-%E5%B1%95%E7%A4%BA%E6%9C%80%E8%BF%91%E6%96%87%E4%BB%B6.png)
 
-````JS
+````javascript
 ```dataview
 table WITHOUT ID tags as "🏷️标签",
 file.link as "📜文件",
@@ -51,7 +51,7 @@ limit 就是限制展示的长度啦
 
 添加 CSS 优化，如果你已经粘贴复制了，那么标签一多，表格就会很乱，当然我们可以用 CSS 来控制
 
-````JS
+````javascript
 ```dataview
 table WITHOUT ID "<span style='display:flex; justify-content: left;'>"+tags as "🏷️标签",
 "<span style='display:flex; justify-content: left;'>"+file.link as "📜文件",
@@ -81,7 +81,7 @@ where type = "编程"
 ![展示未完成的笔记](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/img/%E5%B1%95%E7%A4%BA%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84%E7%AC%94%E8%AE%B0.png)
 这里其实就是添加了个 status 的属性
 
-`````JS
+`````javascript
 ```dataview
 table WITHOUT ID "<span style='display:flex; justify-content: left;'>"+tags as "🏷️标签",
 "<span style='display:flex; justify-content: left;'>"+file.link as "📜文件",
@@ -99,7 +99,7 @@ dataview 本身是支持 JS 语法拓展的。这里展示一些我使用的例�
 ### 展示天数
 直接上代码了
 
-```JS
+```javascript
  今天是 `=dateformat(date(today),"yyyy年M月d日")`，今年还剩 `=(date(2024-12-31)-date(today))` 
 ```
 
@@ -139,7 +139,7 @@ dv.list(dv.pages("#Vue").file.link)
 
  **table 展示**
 
-````JS
+````javascript
 ```dataviewjs
 dv.table(
   ["File", "Status"],
@@ -154,7 +154,7 @@ dv.table(
 
 `dv.current()` 展示当前文件名字
 
-````JS
+````javascript
 ```dataviewjs
 dv.paragraph(dv.current().file.name);
 ```
@@ -169,7 +169,7 @@ dv.paragraph(dv.current().file.name);
 我用的是二改过的，然后自己再修改了一点，加了创建日期。
 链接：[点我下载]( https://www.123684.com/s/YyUDVv-B1IJA )
 **用法**
-````JS
+````javascript
 ```dataviewjs
 dv.view("笔记模板/字数统计","")
 ```
