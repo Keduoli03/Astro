@@ -1,6 +1,6 @@
 ---
 title: 谈谈对Spring IOC的理解，原理与实现
-description: 摘要
+description: 第一道
 categories:
   - 计算机
 tags:
@@ -11,7 +11,7 @@ series: Java面试
 cover: 
 status: 未完成
 date: 2025-05-12 11:30
-updated: 2025-05-12 12:22
+updated: 2025-05-13 17:49
 ---
 答题技巧：采取总分的形式
 总：当前问题回答的是哪些具体的点
