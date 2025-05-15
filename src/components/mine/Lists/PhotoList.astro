@@ -175,7 +175,6 @@ const { timelineItems } = Astro.props;
     });
   }
 
-  // 使用事件委托处理图片点击（适用于动态内容）
   document.addEventListener('click', (e) => {
     const card = e.target.closest('.photo-card');
     if (card) {
