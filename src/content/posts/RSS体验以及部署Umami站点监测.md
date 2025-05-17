@@ -9,7 +9,7 @@ series: 博客
 cover: 
 status: 已完成
 date: 2025-05-17 19:22
-updated: 2025-05-17 19:57
+updated: 2025-05-17 20:00
 ---
 > [!TIP]
 > 故事的起因是我出于好奇，加入了开往的 QQ 群，和群友聊天很有启发，折腾了一些新东西
@@ -409,6 +409,9 @@ RSS 还是要通过阅读器来阅读比较方便，考虑到多平台性。我�
 ## 搭建 Umami
 
 Umami 是一个更加方便且现代化的网站检测工具，今天发现可以 vercel 可以部署后，也是迫不及待的部署体验了一下。
-自带有公共链接，所有人都能看到站点状态：[本站站点状态](https://umami.blueke.top/share/vtD8GhH5iWtKf6uG/www.blueke.top)
+
+因为自带有公共链接，可以让所有人都能看到站点状态：[本站站点状态](https://umami.blueke.top/share/vtD8GhH5iWtKf6uG/www.blueke.top)
+
 至于具体的教程，请参考这篇文章[使用 vercel Neon 搭建 umami 统计](https://www.linexic.top/post/vercel-runing-u/)
+
 在这里真的很感谢这位博主的分享！
