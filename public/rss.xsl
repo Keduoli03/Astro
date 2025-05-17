@@ -285,7 +285,7 @@
               <div class="meta">
                 <time datetime="{pubDate}">
                   <xsl:variable name="pubDateStr" select="pubDate" />
-                  <xsl:variable name="year" select="substring($pubDateStr, 12, 4)" /> <!-- 修正：年份取4位 -->
+                  <xsl:variable name="year" select="substring($pubDateStr, 13, 4)" />
                   <xsl:variable name="month-abbr" select="substring($pubDateStr, 9, 3)" />
                   <xsl:variable name="day" select="substring($pubDateStr, 6, 2)" />
                   <xsl:variable name="month">
