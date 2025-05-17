@@ -9,17 +9,17 @@ series: 博客
 cover: 
 status: 已完成
 date: 2025-05-17 19:22
-updated: 2025-05-17 19:50
+updated: 2025-05-17 19:57
 ---
 > [!TIP]
 > 故事的起因是我出于好奇，加入了开往的 QQ 群，和群友聊天很有启发，折腾了一些新东西
 
 ## RSS
 老实说，我知道它可以订阅博客以及其他的网站，但真没有深入了解过
-### 美化博客RSS
+## 美化博客RSS
 ![RSS 美化效果图](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/RSS%E4%BD%93%E9%AA%8C%E4%BB%A5%E5%8F%8A%E9%83%A8%E7%BD%B2Umami%E7%AB%99%E7%82%B9%E7%9B%91%E6%B5%8B-202505171938.webp)
 原本的 RSS 地址是 xml 格式，看上去跟一团乱码一样，但是可以用 xsl 进行美化。具体的不多叙述，会附上他人的博客教程，这里只记录我具体的实操。
-#### 新建 `rss.xsl`
+### 新建 `rss.xsl`
 在 `public` 目录下新建一个 `rss.xsl` 的文件，保存具体的样式，作用类似于 CSS。
 ```xml title="rss.xsl"
 <?xml version="1.0" encoding="UTF-8"?>
@@ -357,7 +357,7 @@ updated: 2025-05-17 19:50
   </xsl:template>
 </xsl:stylesheet>
 ```
-#### 引入
+### 引入
    ```ts title="rss.xml.ts" ins={14,30}
 import { siteConfig } from "@/config";
    import rss from "@astrojs/rss";
@@ -400,13 +400,12 @@ import { siteConfig } from "@/config";
 >  
 如果你不想自己定义样式，也可以用下面的 `beauty` 进行一键美化
 
-#### 参考来源
+### 参考来源
 - [美化你的RSS订阅地址 | LiuShen's Blog](https://blog.liushen.fun/posts/caee2d9f/#XSL%E6%96%87%E4%BB%B6)
 - [RSS.Beauty](https://rss.beauty/)
 
-### RSS 阅读器
+## RSS 阅读器
 RSS 还是要通过阅读器来阅读比较方便，考虑到多平台性。我直接在自己的服务器上 docker 部署了一个 `FreshRSS`，目前体验良好。
-
 ## 搭建 Umami
 
 Umami 是一个更加方便且现代化的网站检测工具，今天发现可以 vercel 可以部署后，也是迫不及待的部署体验了一下。
