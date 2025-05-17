@@ -7,12 +7,32 @@
 >
   <xsl:output method="html" doctype-system="about:legacy-compat" />
 
+  <!-- 月份映射模板 -->
+  <xsl:template name="month-to-number">
+    <xsl:param name="month-abbr" />
+    <xsl:choose>
+      <xsl:when test="$month-abbr = 'Jan'">1</xsl:when>
+      <xsl:when test="$month-abbr = 'Feb'">2</xsl:when>
+      <xsl:when test="$month-abbr = 'Mar'">3</xsl:when>
+      <xsl:when test="$month-abbr = 'Apr'">4</xsl:when>
+      <xsl:when test="$month-abbr = 'May'">5</xsl:when>
+      <xsl:when test="$month-abbr = 'Jun'">6</xsl:when>
+      <xsl:when test="$month-abbr = 'Jul'">7</xsl:when>
+      <xsl:when test="$month-abbr = 'Aug'">8</xsl:when>
+      <xsl:when test="$month-abbr = 'Sep'">9</xsl:when>
+      <xsl:when test="$month-abbr = 'Oct'">10</xsl:when>
+      <xsl:when test="$month-abbr = 'Nov'">11</xsl:when>
+      <xsl:when test="$month-abbr = 'Dec'">12</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="/">
     <html lang="{rss/channel/language}">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><xsl:value-of select="rss/channel/title" /> RSS Feed</title>
+        <title><xsl:value-of select="rss/channel/title" /> RSS 订阅</title>
         <style>
           :root {
             --primary: #4f46e5;
@@ -183,11 +203,11 @@
             border-radius: 0.25rem;
           }
           
+          /* 关键修改：减小阅读更多按钮的上边距 */
           .read-more {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            margin-top: 1.5rem;
             color: var(--primary);
             font-weight: 500;
             text-decoration: none;
@@ -220,6 +240,11 @@
             article {
               padding: 1.5rem;
             }
+            
+            /* 移动端进一步减小间距 */
+            .read-more {
+              margin-top: 0.5rem;
+            }
           }
           
           @media (max-width: 480px) {
@@ -241,7 +266,7 @@
           <h1><xsl:value-of select="rss/channel/title" /></h1>
           <p class="subtitle"><xsl:value-of select="rss/channel/description" /></p>
           <a href="{rss/channel/link}" class="read-more">
-            Visit Website
+            参观站点
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
@@ -259,11 +284,17 @@
               
               <div class="meta">
                 <time datetime="{pubDate}">
-                  <xsl:value-of select="concat(
-                    substring(pubDate, 9, 2), ' ',
-                    substring(pubDate, 6, 2), ' ',
-                    substring(pubDate, 1, 4)
-                  )" />
+                  <xsl:variable name="pubDateStr" select="pubDate" />
+                  <xsl:variable name="year" select="substring($pubDateStr, 12, 4)" /> <!-- 修正：年份取4位 -->
+                  <xsl:variable name="month-abbr" select="substring($pubDateStr, 9, 3)" />
+                  <xsl:variable name="day" select="substring($pubDateStr, 6, 2)" />
+                  <xsl:variable name="month">
+                    <xsl:call-template name="month-to-number">
+                      <xsl:with-param name="month-abbr" select="$month-abbr" />
+                    </xsl:call-template>
+                  </xsl:variable>
+                  
+                  <xsl:value-of select="concat($year, '年', $month, '月', $day, '日')" />
                 </time>
                 
                 <xsl:if test="category">
@@ -271,7 +302,6 @@
                     <xsl:for-each select="category">
                       <span class="tag">
                         <xsl:value-of select="." />
-                        <!-- 非最后一个标签添加空格 -->
                         <xsl:if test="position() != last()"> </xsl:if>
                       </span>
                     </xsl:for-each>
@@ -290,7 +320,7 @@
               </div>
               
               <a href="{link}" class="read-more">
-                Read full post
+                阅读完整文章
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
