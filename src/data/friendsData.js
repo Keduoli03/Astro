@@ -58,4 +58,11 @@ export const items = [
 		siteurl: "https://www.linexic.top/",
 		tags: ["友链"],
 	},
+	{
+		title: "独元殇",
+		imgurl: "https://img1.ccgxk.com/ccgxk-oss/2025/05/202505191037317NTuR1.jpg",
+		desc: "月光刚好，你在仰望，我们一起仰望",
+		siteurl: "https://www.ccgxk.com",
+		tags: ["友链"],
+	},
 ];
