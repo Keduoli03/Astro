@@ -15,6 +15,13 @@ export const items = [
 		tags: ["主题"],
 	},
 	{
+		title: "笔墨迹",
+		imgurl: "https://photo.xiangming.site/img/blogscn_icon.png",
+		desc: "致敬还在写博客的我们！",
+		siteurl: "https://blogscn.fun/",
+		tags: ["组织"],
+	},
+	{
 		title: "天影大侠的小站",
 		imgurl:
 			"https://weavatar.com/avatar/7388ea4765a319d5f83fea61c3236384?s=1000",
