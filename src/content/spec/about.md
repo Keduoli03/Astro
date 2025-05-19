@@ -27,7 +27,14 @@
       <div class="unique-icon"><i class="fa fa-commenting"></i></div>
       <span>Waline</span>
     </div>
-  </a> <!-- 闭合第二个a标签 -->
+  </a> 
+
+  <a href="https://umami.is/" target="_blank">
+    <div class="unique-button">
+      <div class="unique-icon"><i class="fa-solid fa-dashboard"></i></div>
+        <span>Umami</span>
+    </div>
+  </a> 
         <!-- <div class="unique-button">
             <div class="unique-icon"><i class="fab fa-instagram"></i></div>
             <span>Instagram</span>
