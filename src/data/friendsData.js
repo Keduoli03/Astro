@@ -22,6 +22,13 @@ export const items = [
 		tags: ["组织"],
 	},
 	{
+		title: "博友圈",
+		imgurl: "https://www.boyouquan.com/assets/images/sites/logo/logo-small.png",
+		desc: "博客人的朋友圈，博客收录与文章 RSS 聚合网站",
+		siteurl: "https://www.boyouquan.com/home",
+		tags: ["组织"],
+	},
+	{
 		title: "天影大侠的小站",
 		imgurl:
 			"https://weavatar.com/avatar/7388ea4765a319d5f83fea61c3236384?s=1000",

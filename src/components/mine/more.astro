@@ -18,6 +18,11 @@ const websiteData = [
 		badge: "友链接力",
 	},
 	{
+		title: "🪐博友圈",
+		url: "https://www.boyouquan.com/planet-shuttle",
+		badge: "友链接力",
+	},
+	{
 		title: "RSS阅读器",
 		url: "http://reader.blueke.top/i/",
 		badge: "工具",
@@ -37,7 +42,7 @@ interface Props {
 }
 
 const COLLAPSED_HEIGHT = "7.5rem";
-const COLLAPSE_THRESHOLD = 5;
+const COLLAPSE_THRESHOLD = 7;
 const isCollapsed = websiteData.length >= COLLAPSE_THRESHOLD;
 const className = Astro.props.class;
 const style = Astro.props.style;
