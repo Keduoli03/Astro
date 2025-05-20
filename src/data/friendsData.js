@@ -79,4 +79,11 @@ export const items = [
 		siteurl: "https://www.ccgxk.com",
 		tags: ["友链"],
 	},
+	{
+		title: "記緒漂流",
+		imgurl: "https://ttio.cc/apple-touch-icon.png",
+		desc: "記憶の川に、思いで漂う",
+		siteurl: "https://ttio.cc/info",
+		tags: ["友链"],
+	},
 ];
