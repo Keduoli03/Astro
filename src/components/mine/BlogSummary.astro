@@ -1,8 +1,6 @@
 ---
 // 服务器端代码块：数据预处理
 import { getSortedPosts } from "@utils/content-utils";
-
-// 确保导入MarkdownIt（如果需要处理Markdown内容）
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 
@@ -15,61 +13,46 @@ let totalWords = 0;
 
 // 计算总字数
 posts.forEach(post => {
-  // 确保内容存在且可处理
   const content = post.body || '';
   const text = md.render(content.toString())
     .replace(/<[^>]*>/g, '')
     .replace(/[#*_\-\[\]!`]/g, '')
     .replace(/\s+/g, ' ');
   
-  // 计算中文字符和英文字数
   const chineseChars = text.match(/[\u4e00-\u9fa5]/g) || [];
   const englishWords = text.replace(/[\u4e00-\u9fa5]/g, '').split(/\s+/).filter(w => w.length > 0);
   
   totalWords += chineseChars.length + englishWords.length;
 });
 
-// 计算平均字数（避免除以零）
-const avgWordsPerPost = totalPosts > 0 
-  ? Math.round(totalWords / totalPosts) 
-  : 0;
+// 计算平均字数
+const avgWordsPerPost = totalPosts > 0 ? Math.round(totalWords / totalPosts) : 0;
 
-// 获取当前年份
+// 年度统计
 const currentYear = new Date().getFullYear();
-
-// 年度文章统计
 const yearStats = posts.reduce((acc, post) => {
-  // 确保有发布日期
   const publishedDate = post.data?.published || new Date();
   const year = new Date(publishedDate).getFullYear();
   acc[year] = (acc[year] || 0) + 1;
   return acc;
 }, {});
 
-// 按年份排序（从最近到最远）
+// 按年份排序
 const years = Object.keys(yearStats).sort((a, b) => b - a);
 const yearCounts = years.map(year => yearStats[year]);
 
-// 服务器端代码：颜色生成部分
+// 生成颜色
 const generateUniqueColors = (count) => {
   const colors = new Set();
-  const goldenRatio = 0.618033988749895; // 黄金比例，用于颜色分布
-  
-  // 生成固定数量的唯一颜色
+  const goldenRatio = 0.618033988749895;
   for (let i = 0; i < count; i++) {
-    // 使用黄金比例确保颜色间隔均匀
     const hue = Math.floor(((i * goldenRatio) % 1) * 360);
-    const saturation = 75 + Math.floor(Math.random() * 15); // 75-90%
-    const lightness = 60 + Math.floor(Math.random() * 10); // 60-70%
-    
-    const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    colors.add(color);
+    const saturation = 75 + Math.floor(Math.random() * 15);
+    const lightness = 60 + Math.floor(Math.random() * 10);
+    colors.add(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
   }
-  
   return Array.from(colors);
 };
-
-// 生成完全不重复的随机颜色
 const backgroundColors = generateUniqueColors(years.length);
 ---
 
@@ -110,23 +93,26 @@ const backgroundColors = generateUniqueColors(years.length);
       <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
         <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
       </h2>
-      <div class="chart-wrapper relative h-64" style="min-height: 300px;">
-        <div 
-          id="yearPieChart" 
-          class="w-full h-full"
-          data-chart-data={JSON.stringify(yearCounts)}
-          data-chart-labels={JSON.stringify(years)}
-          data-chart-colors={JSON.stringify(backgroundColors)}
-        ></div>
+
+      <!-- 图表单独一行 -->
+      <div class="chart-wrapper mb-6" style="height: 300px;">
+        <div id="yearPieChart" 
+     class="w-full h-full"
+     data-chart-data={JSON.stringify(yearCounts)}
+     data-chart-labels={JSON.stringify(years)}
+     data-chart-colors={JSON.stringify(backgroundColors)}>
+</div>
+
       </div>
-      <div class="legend mt-4 grid grid-cols-2 gap-2">
+
+      <!-- 图例在图表下方，水平排列 -->
+      <div class="legend grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {years.map((year, index) => (
           <div class="flex items-center" key={year}>
-            <span 
-              class="inline-block w-3 h-3 mr-2 rounded-full" 
-              style={{ backgroundColor: backgroundColors[index] }}
-            ></span>
-            <span class="text-sm">{year}年: {yearCounts[index]}篇</span>
+            <span class="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: backgroundColors[index] }}></span>
+            <span class="text-sm truncate">
+              {year}年: {yearCounts[index]}篇 ({(yearCounts[index]/totalPosts*100).toFixed(1)}%)
+            </span>
           </div>
         ))}
       </div>
@@ -134,88 +120,140 @@ const backgroundColors = generateUniqueColors(years.length);
   </div>
 </div>
 
-<!-- 引入外部CDN资源 -->
+<!-- 引入ECharts -->
 <script context="client" src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 
-<script context="client" is:inline>
-  window.addEventListener('load', () => {
+<script is:inline>
+// 图表管理对象
+const chartManager = {
+  instance: null,
+  resizeHandler: null,
+
+  init() {
     const chartDom = document.getElementById('yearPieChart');
     if (!chartDom) return;
-    
-    // 检查ECharts是否成功加载
-    if (!window.echarts) {
-      chartDom.innerHTML = '<div class="text-center text-red-500 mt-10">图表库加载失败，请检查网络连接</div>';
-      return;
+
+    // 清理旧实例
+    this.destroy();
+
+    // 检查ECharts是否加载
+    if (typeof echarts === 'undefined') {
+      console.warn('ECharts未加载');
+      return this.loadECharts();
     }
-    
+
     // 获取数据
-    const data = JSON.parse(chartDom.getAttribute('data-chart-data') || '[]');
-    const labels = JSON.parse(chartDom.getAttribute('data-chart-labels') || '[]');
-    const colors = JSON.parse(chartDom.getAttribute('data-chart-colors') || '[]');
-    
-    // 验证数据有效性
-    if (data.length === 0 || labels.length === 0) {
-      chartDom.innerHTML = '<div class="text-center text-gray-500 mt-10">暂无文章数据</div>';
+    const { data, labels, colors } = this.getChartData(chartDom);
+    if (data.length === 0) {
+      console.warn('没有可用的图表数据');
       return;
     }
-    
-    // 初始化ECharts实例
-    const myChart = echarts.init(chartDom);
-    
-    // 配置图表
-    const option = {
+
+    // 初始化图表
+    this.instance = echarts.init(chartDom);
+    this.setupChart(data, labels, colors);
+    this.setupResizeHandler();
+  },
+
+  getChartData(chartDom) {
+    try {
+      return {
+        data: JSON.parse(chartDom.dataset.chartData || '[]'),
+        labels: JSON.parse(chartDom.dataset.chartLabels || '[]'),
+        colors: JSON.parse(chartDom.dataset.chartColors || '[]')
+      };
+    } catch (e) {
+      console.error('图表数据解析失败:', e);
+      return { data: [], labels: [], colors: [] };
+    }
+  },
+
+  setupChart(data, labels, colors) {
+    this.instance.setOption({
       color: colors,
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b}: {c}篇 ({d}%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        textStyle: { color: '#333' },
-        borderColor: '#eee',
-        borderWidth: 1
+        formatter: '{b}: {c}篇 ({d}%)'
       },
-      series: [
-        {
-          name: '文章分布',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          center: ['50%', '50%'],
-          data: labels.map((label, index) => ({
-            value: data[index],
-            name: `${label}年`,
-            itemStyle: {
-              color: colors[index],
-              shadowBlur: 200,
-              shadowColor: 'rgba(0, 0, 0, 0.1)'
-            }
-          })),
-          label: {
-            show: true,
-            formatter: '{b}: {d}%',
-            textStyle: {
-              fontSize: 12,
-              color: '#666'
-            }
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          },
-          animationType: 'scale',
-          animationEasing: 'elasticOut',
-          animationDuration: 1000
-        }
-      ]
-    };
+      series: [{
+        name: '文章分布',
+        type: 'pie',
+        radius: ['50%', '70%'], // 调整半径
+        center: ['50%', '50%'], // 确保居中
+        avoidLabelOverlap: true,
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 1
+        },
+        label: {
+          show: false, // 隐藏饼图上的标签
+        },
+        labelLine: {
+          show: false
+        },
+        data: labels.map((label, i) => ({
+          value: data[i],
+          name: `${label}年`,
+          itemStyle: { color: colors[i] }
+        }))
+      }],
+      grid: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        containLabel: true
+      }
+    });
+  },
+
+  setupResizeHandler() {
+    this.resizeHandler = () => this.instance?.resize();
+    window.addEventListener('resize', this.resizeHandler);
     
-    // 设置图表配置
-    myChart.setOption(option);
+    // 自动清理
+    this.instance.on('disposed', () => {
+      window.removeEventListener('resize', this.resizeHandler);
+    });
+  },
+
+  loadECharts() {
+    if (document.querySelector('script[src*="echarts"]')) return;
     
-    // 窗口大小变化时重绘图表
-    window.addEventListener('resize', () => myChart.resize());
-  });
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js';
+    script.onload = () => setTimeout(() => this.init(), 100);
+    document.head.appendChild(script);
+  },
+
+  destroy() {
+    if (this.instance) {
+      this.instance.dispose();
+      this.instance = null;
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+      this.resizeHandler = null;
+    }
+  }
+};
+
+// 页面加载处理
+const initOnReady = () => {
+  if (document.readyState === 'complete') {
+    chartManager.init();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => chartManager.init());
+  }
+};
+
+// Astro页面切换事件
+document.addEventListener('astro:after-swap', () => {
+  setTimeout(() => chartManager.init(), 50);
+});
+
+// 初始化执行
+initOnReady();
 </script>
 
 <style>
@@ -224,19 +262,31 @@ const backgroundColors = generateUniqueColors(years.length);
   margin: 0 auto;
 }
 
+/* 新增布局样式（覆盖旧样式） */
+.pie-chart-container .flex {
+  display: flex;
+  flex-direction: column; /* 垂直排列默认 */
+  align-items: center;
+  gap: 16px; /* 图表与图例间距 */
+}
+
 .chart-wrapper {
-  position: relative;
-  height: 300px;
-  width: 100%;
+  width: 100% !important;
+  height: 220px !important; /* 固定高度 */
+  margin-bottom: 0; /* 移除底部间距（通过flex gap控制） */
 }
 
-.legend span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.legend {
+  width: 100% !important;
+  max-height: none !important; /* 移除高度限制 */
+  overflow-y: visible !important; /* 取消滚动 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 自适应列 */
+  gap: 8px;
+  justify-items: start; /* 左对齐 */
 }
 
-/* 动画效果 */
+/* 动画样式保留 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -249,25 +299,25 @@ const backgroundColors = generateUniqueColors(years.length);
 
 .blog-stats {
   animation-delay: 0.1s;
-}
-
-.pie-chart-container {
-  animation-delay: 0.2s;
-}
-
-.blog-stats {
-  flex: 1; /* 弹性增长 */
-  min-height: 360px; /* 设置最小高度 */
-  display: flex; /* 启用flex布局 */
-  flex-direction: column; /* 垂直排列内容 */
+  flex: 1;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-stats > div:first-child {
-  flex-grow: 1; /* 中间内容撑满空间 */
+  flex-grow: 1;
 }
 
 .blog-stats .bg-blue-50 {
-  margin-top: auto; /* 推到底部 */
-  border-top: 1px solid #e5e7eb; /* 添加顶部边框 */
+  margin-top: auto;
+  border-top: 1px solid #e5e7eb;
 }
+
+/* 响应式调整（覆盖旧媒体查询） */
+@media (min-width: 768px) {
+  .pie-chart-container .flex {
+    flex-direction: row; /* 大屏水平排列 */
+  }
+  }
 </style>
