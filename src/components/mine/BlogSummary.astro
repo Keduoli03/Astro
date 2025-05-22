@@ -4,6 +4,28 @@ import { getSortedPosts } from "@utils/content-utils";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 
+// 专业字数统计函数（支持中日韩全字符集+英文单词过滤）
+function countWords(markdownText: string): number {
+  // 1. 渲染Markdown并移除HTML标签
+  const html = md.render(markdownText);
+  const text = html.replace(/<[^>]+>/g, ' ');
+
+  // 2. 清理特殊符号（保留空格分隔符）
+  const cleaned = text
+    .replace(/[`~@#$%^&*()_|+\-=;:'"<>{}[\]\\]/g, ' ')
+    .replace(/[！？。，、；：“”‘’（）【】…—～《》・]/g, ' ');
+
+  // 3. 统计中文字符（包含扩展区字符）
+  const cjkRegex = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g;
+  const cjkChars = (cleaned.match(cjkRegex) || []).length;
+
+  // 4. 统计英文单词（至少2个字母，忽略单字母/数字）
+  const englishRegex = /\b[A-Za-z]{2,}\b/g;
+  const englishWords = (cleaned.match(englishRegex) || []).length;
+
+  return cjkChars + englishWords;
+}
+
 // 获取文章数据
 const posts = await getSortedPosts();
 
@@ -11,22 +33,14 @@ const posts = await getSortedPosts();
 const totalPosts = posts.length || 0;
 let totalWords = 0;
 
-// 计算总字数
+// 应用新统计函数
 posts.forEach(post => {
   const content = post.body || '';
-  const text = md.render(content.toString())
-    .replace(/<[^>]*>/g, '')
-    .replace(/[#*_\-\[\]!`]/g, '')
-    .replace(/\s+/g, ' ');
-  
-  const chineseChars = text.match(/[\u4e00-\u9fa5]/g) || [];
-  const englishWords = text.replace(/[\u4e00-\u9fa5]/g, '').split(/\s+/).filter(w => w.length > 0);
-  
-  totalWords += chineseChars.length + englishWords.length;
+  totalWords += countWords(content);
 });
 
 // 计算平均字数
-const avgWordsPerPost = totalPosts > 0 ? Math.round(totalWords / totalPosts) : 0;
+const avgWordsPerPost = totalPosts > 0 ? Math.floor(totalWords / totalPosts) : 0;
 
 // 年度统计
 const currentYear = new Date().getFullYear();
@@ -90,9 +104,10 @@ const backgroundColors = generateUniqueColors(years.length);
   <!-- 右侧ECharts饼图 -->
   <div class="pie-chart-container w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="p-6">
-      <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
-        <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
-      </h2>
+      <h2 class="text-xl font-bold mb-2 text-gray-800 flex items-center">
+    <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
+  </h2>
+
 
       <!-- 图表单独一行 -->
       <div class="chart-wrapper mb-6" style="height: 300px;">
@@ -108,11 +123,9 @@ const backgroundColors = generateUniqueColors(years.length);
       <!-- 图例在图表下方，水平排列 -->
       <div class="legend grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {years.map((year, index) => (
-          <div class="flex items-center" key={year}>
-            <span class="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: backgroundColors[index] }}></span>
-            <span class="text-sm truncate">
-              {year}年: {yearCounts[index]}篇 ({(yearCounts[index]/totalPosts*100).toFixed(1)}%)
-            </span>
+          <div class="flex items-center gap-1" key={year}>
+            <span class="w-3 h-3 rounded-full mr-1.5" style={{ backgroundColor: backgroundColors[index] }}></span>
+            <span class="text-sm truncate">{year}年: {yearCounts[index]}篇</span>
           </div>
         ))}
       </div>
@@ -262,13 +275,7 @@ initOnReady();
   margin: 0 auto;
 }
 
-/* 新增布局样式（覆盖旧样式） */
-.pie-chart-container .flex {
-  display: flex;
-  flex-direction: column; /* 垂直排列默认 */
-  align-items: center;
-  gap: 16px; /* 图表与图例间距 */
-}
+
 
 .chart-wrapper {
   width: 100% !important;
@@ -320,4 +327,5 @@ initOnReady();
     flex-direction: row; /* 大屏水平排列 */
   }
   }
+
 </style>
