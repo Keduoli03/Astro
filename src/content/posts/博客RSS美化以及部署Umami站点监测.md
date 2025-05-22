@@ -1,5 +1,5 @@
 ---
-title: RSS体验以及部署Umami站点监测
+title: 博客RSS美化以及部署Umami站点监测
 description: 跟群友聊了聊，折腾了一些新东西
 categories:
   - 博客
@@ -9,7 +9,7 @@ series: 博客
 cover: 
 status: 已完成
 date: 2025-05-17 19:22
-updated: 2025-05-22 12:24
+updated: 2025-05-22 12:25
 ---
 > [!TIP]
 > 故事的起因是我出于好奇，加入了开往的 QQ 群，和群友聊天很有启发，折腾了一些新东西
