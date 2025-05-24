@@ -4,11 +4,11 @@ export const timelineItems = [
 		title: "薇薇 -萤石眼之歌",
 		cover:
 			"https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/%E8%90%A4%E7%9F%B3%E7%9C%BC%E4%B9%8B%E6%AD%8C.webp",
-		date: "2025-04-13",
+		date: "2021-04-03",
 		url: "https://www.blueke.top/posts/%E4%BA%BA%E4%B8%8Eai%E7%88%B1%E4%B8%8E%E7%90%86%E6%80%A7/",
-		episodes: "连载中",
+		episodes: "已完结",
 		rating: 8.6,
-		tags: ["喜剧", "剧情", "成长"],
+		tags: ["科幻", "剧情", "成长"],
 	},
 	{
 		type: "anime",
