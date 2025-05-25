@@ -155,7 +155,3 @@
 .collapsed {
     height: var(--collapsedHeight);
 }
-/* 正文字体 */
-.prose-base {
-  font-size: 1.125rem !important; /* 强制覆盖 */
-}
