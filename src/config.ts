@@ -29,6 +29,9 @@ export const siteConfig: SiteConfig = {
 		depth: 3, // Maximum heading depth to show in the table, from 1 to 3
 	},
 	favicon: [
+		{
+			src:'/favicon/logo.png'
+		},
 		// Leave this array empty to use the default favicon
 		// {
 		//   src: '/favicon/icon.png',    // Path of the favicon, relative to the /public directory
