@@ -1,32 +1,46 @@
----
-// src/components/Comments.astro
-import 'artalk/dist/Artalk.css'
-
----
-
 <div id="Comments"></div>
 
-<script>
-  // 确保在客户端执行
-  if (import.meta.env.SSR) {
-    // 服务端不执行
-  } else {
-    // 动态导入 Artalk 避免 SSR 问题
-    import('artalk').then(({ default: Artalk }) => {
-      // 确保 DOM 加载完成
-      document.addEventListener('DOMContentLoaded', () => {
-        new Artalk({
-          el: '#Comments',
-          server: 'https://dtptggtz.ap-northeast-1.clawcloudrun.com/',
-          site: "Astro",
-          pageKey: '', // 使用当前页面路径
-          pageTitle: '',
-          locale: 'zh-CN', // 添加中文支持
-          
-        })
-      })
-    }).catch((error) => {
-      console.error('Artalk failed to load:', error)
-    })
-  }
+<script is:inline>
+  (async () => {
+    // 加载 CSS
+    const loadCSS = () => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css';
+      document.head.appendChild(link);
+    };
+    
+    // 使用 ES 模块方式导入 Artalk
+    const Artalk = await import('https://esm.sh/artalk@2.9.1');
+
+    const initArtalk = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      // 调用 Artalk.init() 方法初始化
+      Artalk.init({
+        el: '#Comments',
+        server: 'https://dtptggtz.ap-northeast-1.clawcloudrun.com/',
+        dark: isDark ? 'html.dark' : false,
+        site: "Astro",
+        pageKey: '', // 使用当前页面路径
+        pageTitle: '',
+        locale: 'zh-CN', // 添加中文支持
+      });
+    };
+
+    // 并行加载资源
+    loadCSS();
+    initArtalk();
+  
+    new MutationObserver(() => {
+      const container = document.getElementById('waline');
+      if (container?.innerHTML) {
+        container.innerHTML = '';
+        initArtalk();
+      }
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  })();
 </script>
