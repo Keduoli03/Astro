@@ -8,14 +8,12 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
 date: 2025-04-03 11:40
-updated: 2025-05-12 10:50
+updated: 2025-05-31 12:31
 ---
-
 
 ## 为什么选择 Astro
 **Astro** 是一个现代化的静态站点生成框架，其核心目标是帮助开发者创建 **快速、轻量、且以内容为核心** 的网站。它于 2021 年首次发布，由于其独特的设计理念和对性能的极致追求，迅速在开发者社区中崭露头角。
 
-   
 ### 推荐什么人适合 Astro
 1. 想亲手打造独具一格的博客
 2. 对编程有耐心
@@ -29,24 +27,35 @@ updated: 2025-05-12 10:50
 ### 所需环境
 - node >= 18.14.1
 - 文本编辑器(VsCode)
-  
+
 ## 部署基础模板
+
 在 Git 中使用命令部署 astro 
+
 ```npm
 npm create astro@latest
 ```
+
 第一个选项是命名，可以自己更改
+
 第二个选项是我们选择使用 blog 模板
+
 第三个我们选择 yes，安装所需依赖
+
 第四个选项 git 仓库初始化，可以先不选
 
 ![[使用Astro搭建博客-202504031206.png|500]]
+
 ## 使用主题模板部署 Astro 博客
+
 如果你不想使用 astro 的模板，GitHub 有许多开发者提供的模板
 
 这里我选择的是 [Fuwari.](https://github.com/saicaca/fuwari)。这个模板真的很好看！
+
 首先我们先去 fork 或拉取这个仓库
+
 clone 到本地后依次执行以下命令
+
 ```shell
 # 如果你尚未安装pnpm，执行如下命令
 npm install -g pnpm
@@ -64,26 +73,38 @@ pnpm add sharp
 安装好所需依赖后，在终端执行 `npm run dev` 即可本地构建运行
 
 ### Vercel 部署
+
 进入 Vercel，选择自己 fork 的仓库，一路确认即可
 
 ## 主题配置
+
 在 `src/config.ts` 进行站点配置
 
 ### 页面配置
 #### 关于页面
+
 在 `src\content\spec\about.md` 进行配置
+
 由于 Astro 使用的是 MDx，所以你可以一边写 md 一边写 html，感觉挺有意思
+
 #### 创建页面
+
 不想配图... 参考别人的叭
+
 **参考文章**
+
 - [给你的Fuwari添加一个友链页面 - AULyPc](https://blog.aulypc0x0.online/posts/add_friendspage_in_fuwari/)
+
 ####  添加一个系列页面
 **参考文章**
 - [在Fuwari中添加系列栏 - 伊卡的记事本](https://ikamusume7.org/posts/frontend/add_series_field/)
-  
+
 ### 日期修改
+
 我 Obsidian使用的日期是 date, 但是主题用的是 published，得替换一下
+
 修改 `src\content\config.ts`
+
 ```ts
 //src\content\config.ts
 import { defineCollection, z } from "astro:content";
@@ -123,9 +144,10 @@ export const collections = {
 
 ```
 
-
 ### 修改底部信息
+
 在 `src\components\Footer.astro`，我们可以看到底部信息并进行编辑。这里我用的是不蒜子加上日期计数器
+
 ```html
 <div class="framework-info">
          Powered by: 🪐 <a href="https://astro.build/">Astro</a> + <a href="https://github.com/saicaca/fuwari">Fuwari</a>✨
@@ -142,10 +164,13 @@ export const collections = {
 ```
 
 ### 自定义字体
+
 我们可以根据官方文档[使用自定义字体 | Docs](https://docs.astro.build/zh-cn/guides/fonts/) 进行本地安装，更加具体地请参照这篇文章[在Fuwari使用自定义字体 - AULyPc](https://blog.aulypc0x0.online/posts/use_custom_fonts_in_fuwari/)
 
 这里我选择取巧进行外部文件注入
+
 在 `src\components\Navbar.astro` 的末尾或合适位置注入你想使用的字体资源，以落霞孤鹜为例
+
 ```html
 <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" />
       <style>
@@ -157,149 +182,119 @@ export const collections = {
 ```
 
 然后保存，就能看见站点字体已发生改变
+
 ### 修改代码块样式
+
 教程来源[伊卡](https://ikamusume7.org/)大佬
+
 参考于[伊卡-增强Fuwari的代码块功能]( https://ikamusume7.org/posts/frontend/code_block_ex/ )
 
 ### 添加 Waline 评论
-根据官方指南进行修改，为了适配主题的夜间模式，所以多写了几个方法
-```html
-<!-- 引入Waline评论 -->
-    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
-<div id="waline"></div>
-<script type="module">
-  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-  // 监听主题变化
-  function initWaline() {
-    const isDark = document.documentElement.classList.contains('dark');
-    
-    init({
-      el: '#waline',
-      serverURL: 'your serverURL',
-      dark: isDark ? 'html.dark' : false, // 关键配置
-      comment: true, // 评论数统计
-      reaction: [ // 反馈表情，使用默认的也可以
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatwave.png',//打招呼
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
-    'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
-     ],
-      emoji: [
-        // 必须使用有效的CDN地址
-        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
-        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
 
-      ],
-
-    });
-  }
-  // 初始化
-  initWaline();
-
-  // 监听主题切换（根据你的主题实现方式调整）
-  const observer = new MutationObserver(() => {
-    const container = document.getElementById('waline');
-    if (container && container.innerHTML) {
-      container.innerHTML = ''; // 清空重新初始化
-      initWaline();
-    }
-  });
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-</script>
-```
-
-#### 使用方法
-在想要加入的页面，比如文章页面 `src\pages\posts\[...slug].astro` 倒数第二行加入
-
-```html
-//你的代码
-</MainGridLayout>
-```
-更推荐将这这些代码单独弄到一个组件里，然后进行调用，不然不好管理
+#### 组件导入
 
 组件完整代码
-```html
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+
+```html title="src/components/Waline.astro"
+
+<!-- 1. 先静态显示阅读量/评论数的骨架屏 -->
+<!-- 可选，不需要可以直接删掉下面的-->
 <div id="waline-info">
-  <!--阅读量 -->
   <div style="display: flex; align-items: center;">
-      阅读量: <span class="waline-pageview-count" style="margin-left: 5px;"></span>
+    阅读量: <span class="waline-pageview-count"  style="margin-left: 5px;">--</span>
   </div>
-  <!--评论数 -->
   <div style="display: flex; align-items: center;">
-      评论数：<span class="waline-comment-count" style="margin-left: 5px;"></span>
+    评论数：<span class="waline-comment-count" style="margin-left: 5px;">--</span>
   </div>
 </div>
+
+<!-- 2. 评论容器（初始为空） -->
 <div id="waline"></div>
-<script is:inline type="module">
-  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-  // 监听主题变化
-  function initWaline() {
-    const isDark = document.documentElement.classList.contains('dark');
-    
-    
-    init({
-      el: '#waline',
-      serverURL: 'https://waline.blueke.top/',
-      dark: isDark ? 'html.dark' : false, // 适配夜间模式
-      pageview: true, // 浏览量统计,可选项
-      comment: true, // 评论数统计,可选项
-    //   reaction: [
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheart.png',//比心
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatalt.png',   //可爱
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatwave.png',//打招呼
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatthink.png',//思考
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/ablobcatheartbroken.png',//心碎
-    // 'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/blobcatgay.png',//难平
-    //  ],
-      emoji: [
-        // 必须使用有效的CDN地址
-        'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
-        'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
 
-      ],
+<!-- 3. 异步加载逻辑 -->
+<script is:inline>
+  (async () => {
+    const loadCSS = () => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/@waline/client@v3/dist/waline.css';
+      document.head.appendChild(link);
+    };
 
+    const { init } = await import('https://unpkg.com/@waline/client@v3/dist/waline.js');
+
+    const initWaline = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      init({
+        el: '#waline',
+        serverURL: 'https://waline.blueke.top/',
+        dark: isDark ? 'html.dark' : false,
+        pageview: true,
+        comment: true,
+        emoji: [
+          'https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs',
+          'https://cdn.jsdelivr.net/npm/@waline/emojis@1.3.0/qq',
+        ],
+      });
+    };
+
+    // 并行加载资源
+    loadCSS();
+    initWaline();
+
+    new MutationObserver(() => {
+      const container = document.getElementById('waline');
+      if (container?.innerHTML) {
+        container.innerHTML = '';
+        initWaline();
+      }
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
     });
-  }
-  // 初始化
-  initWaline();
-
-  // 监听主题切换（根据你的主题实现方式调整）
-  const observer = new MutationObserver(() => {
-    const container = document.getElementById('waline');
-    if (container && container.innerHTML) {
-      container.innerHTML = ''; // 清空重新初始化
-      initWaline();
-    }
-  });
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
+  })();
 </script>
 
 <style>
-  /* 为了确保waline-info和waline之间有间隔，添加margin-bottom */
   #waline-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
-  /* 确保waline独占一行 */
   #waline {
-      clear: both;
+    clear: both;
+  }
+
+  .waline-pageview-count::before,
+  .waline-comment-count::before {
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: #eee;
+    animation: pulse 1.5s infinite;
+    vertical-align: middle;
+    margin-right: 0.3em;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
   }
 </style>
+
 ```
 
+然后我们只需要在需要评论的页面下引用组件
+
+```html
+<Waline />
+```
 
 ### **参考文章**
+
 官方网站 [Astro](https://astro.build/)
+
 指南：[为什么是 Astro? | Docs](https://docs.astro.build/zh-cn/concepts/why-astro/)
+
 [新一代静态博客框架Astro的部署优化指南与使用体验 - 时歌的博客](https://www.lapis.cafe/posts/technicaltutorials/%E6%96%B0%E4%B8%80%E4%BB%A3%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6astro%E7%9A%84%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/#1%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C)

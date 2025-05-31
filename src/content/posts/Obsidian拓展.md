@@ -5,7 +5,7 @@ tags:
   - 笔记
   - 博客
 cove: 
-status: 未完成
+status: 已完成
 title: Obsidian拓展
 abbrlink: obsidiantuo-zhan
 slug: obsidiantuo-zhan
