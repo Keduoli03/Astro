@@ -1,4 +1,5 @@
 ---
+slug: 561813
 title: MyBatis
 description: 摘要
 categories:
@@ -69,4 +70,4 @@ password=root
 
 ## MyBatis-Plus
 
-详见我的另一篇博客：[使用mybatis代码生成器快速构建springboot项目 - Lanke](https://www.blueke.top/posts/%E4%BD%BF%E7%94%A8mybatis-plus%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BAspringboot%E9%A1%B9%E7%9B%AE/#%E6%B5%8B%E8%AF%95)
+详见我的另一篇博客：[使用mybatis代码生成器快速构建springboot项目](https://www.blueke.top/posts/%E4%BD%BF%E7%94%A8mybatis-plus%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BAspringboot%E9%A1%B9%E7%9B%AE/#%E6%B5%8B%E8%AF%95)
