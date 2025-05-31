@@ -14,7 +14,6 @@ updated: 2025-05-12 10:50
 series: SpringBoot
 slug: 970498
 ---
----
 
 ## 一、为什么选择 Pinia？
 Pinia 是 Vue.js 官方推荐的状态管理库，它基于 Composition API 设计，具有以下核心优势：
