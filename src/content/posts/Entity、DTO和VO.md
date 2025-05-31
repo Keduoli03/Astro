@@ -1,6 +1,6 @@
 ---
-title: 
-description: 摘要
+title: Entity、DTO和VO
+description: 一点笔记记录
 categories:
   - 计算机
 tags:
