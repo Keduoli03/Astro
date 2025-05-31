@@ -31,7 +31,7 @@ const postsCollection = defineCollection({
 			cover: z.string().optional().catch(undefined), // 无效值直接移除，因为我有时候可能忘记封面导致值为null
 			categories: z.string().or(z.array(z.string())).optional(),
 			status: z.string().optional(),
-			abbrlink: z.union([z.number(), z.string()]).optional(),
+			slug: z.union([z.number(), z.string()]).optional(),
 		})
 		.transform((data) => {
 			// 处理分类逻辑
