@@ -36,7 +36,7 @@
     initArtalk();
   
     new MutationObserver(() => {
-      const container = document.getElementById('waline');
+      const container = document.getElementById('Comments');
       if (container?.innerHTML) {
         container.innerHTML = '';
         initArtalk();
