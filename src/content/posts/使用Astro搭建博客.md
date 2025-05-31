@@ -2,13 +2,13 @@
 title: 使用Astro搭建博客
 description: 简单记录Astro的部署以及主题自定义配置
 categories:
-  - 计算机
+  - 博客
 tags:
   - 博客
 cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
 date: 2025-04-03 11:40
-updated: 2025-05-31 23:58
+updated: 2025-06-01 00:02
 series: 博客
 slug: 107368
 ---
