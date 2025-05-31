@@ -9,14 +9,18 @@ tags:
 cover: https://api.miaomc.cn/image/get
 status: 已完成
 date: 2025-03-21 11:31
-updated: 2025-05-12 10:51
+updated: 2025-05-31 23:58
 slug: 179640
 ---
 
 电脑一重装，我的数据库又又没了，每次配置都要慢慢折腾，还经常有问题，索性写一个完整过程了。
+
 <!--more-->
+
 ## 下载
+
 下载地址：[MySQL](https://dev.mysql.com/downloads/mysql/)
+
 ### 安装
 1. 接受协议，点击 `next`
 2. 选择 `custom`，自定义安装 ![MySQL9.2版本安装-202503211135|450](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/MySQL9.2%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85-202503211135.png)
@@ -35,16 +39,21 @@ slug: 179640
 13. 点击 finish 安装即可完成
 
 #### 修改数据路径
+
 如果你想修改数据地址，找到上面的 `my.ini`，修改这一行即可
+
 ```ini
 datadir= 你的路径/Data
 ```
 
 然后原来的文件夹下有个 Data，复制过去即可(还有个 uploads 文件夹，也可以这么更改)
+
 最后在任务管理器重新启动数据库服务即可
+
 ![MySQL9.2版本安装-202503211236|450](https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/MySQL9.2%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85-202503211236.png)
 
-
 #### Navicat
+
 Navicat 是个非常好用的数据库管理软件，现在也出了 lite 版可以免费使用
+
 下载地址：[Navicat | 免费下载 Navicat Premium Lite](https://www.navicat.com.cn/download/navicat-premium-lite)
