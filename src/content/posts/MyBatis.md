@@ -1,7 +1,7 @@
 ---
-slug: 561813
+slug: 293572
 title: MyBatis
-description: 摘要
+description: 记录一下MyBatis的理解
 categories:
   - 计算机
 tags:
