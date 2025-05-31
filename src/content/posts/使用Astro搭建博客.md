@@ -9,6 +9,7 @@ cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
 date: 2025-04-03 11:40
 updated: 2025-05-31 12:31
+series: 博客
 ---
 
 ## 为什么选择 Astro
