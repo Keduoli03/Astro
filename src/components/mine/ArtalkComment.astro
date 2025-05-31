@@ -6,12 +6,15 @@
     const loadCSS = () => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/artalk@:ArtalkVersion:/dist/Artalk.css';
+      // 修正：移除重复的版本号
+      link.href = 'https://unpkg.com/artalk@2.9.1/dist/Artalk.css';
       document.head.appendChild(link);
     };
     
     // 使用 ES 模块方式导入 Artalk
-    const Artalk = await import('https://unpkg.com/artalk@:ArtalkVersion:/dist/Artalk.js');
+    const ArtalkModule = await import('https://esm.sh/artalk@2.9.1');
+    // 注意：某些模块需要通过 .default 访问
+    const Artalk = ArtalkModule.default || ArtalkModule;
 
     const initArtalk = () => {
       const isDark = document.documentElement.classList.contains('dark');
