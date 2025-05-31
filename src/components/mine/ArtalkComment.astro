@@ -1,15 +1,33 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css">
+---
+// src/components/Comments.astro
+import 'artalk/dist/Artalk.css'
 
+---
 
-<body>
-  <div id="Comments"></div>
+<div id="Comments"></div>
 
-  <script type="module">
-    import Artalk from 'https://esm.sh/artalk@2.9.1'
-
-    Artalk.init({
-      el: '#Comments',
-        server: 'https://dtptggtz.ap-northeast-1.clawcloudrun.com/',
+<script>
+  // 确保在客户端执行
+  if (import.meta.env.SSR) {
+    // 服务端不执行
+  } else {
+    // 动态导入 Artalk 避免 SSR 问题
+    import('artalk').then(({ default: Artalk }) => {
+      // 确保 DOM 加载完成
+      document.addEventListener('DOMContentLoaded', () => {
+        new Artalk({
+          el: '#Comments',
+          server: 'https://dtptggtz.ap-northeast-1.clawcloudrun.com/',
+          site: "Lanke`s Blog",
+          pageKey: '', // 使用当前页面路径
+          pageTitle: '',
+          locale: 'zh-CN', // 添加中文支持
+          useBackendConf: true, // 使用后端配置
+          
+        })
+      })
+    }).catch((error) => {
+      console.error('Artalk failed to load:', error)
     })
-  </script>
-</body>
+  }
+</script>
