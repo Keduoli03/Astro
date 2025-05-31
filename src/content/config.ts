@@ -31,7 +31,12 @@ const postsCollection = defineCollection({
 			cover: z.string().optional().catch(undefined), // 无效值直接移除，因为我有时候可能忘记封面导致值为null
 			categories: z.string().or(z.array(z.string())).optional(),
 			status: z.string().optional(),
-			slug: z.union([z.number(), z.string()]).optional(),
+			slug: z
+      			.union([
+        		z.string(),
+        		z.number().transform((num) => String(num)), // 数字转字符串
+      			]).optional() // 允许为空（如果由文件名自动生成）
+      			.default(""), // 默认值为空字符串
 		})
 		.transform((data) => {
 			// 处理分类逻辑
