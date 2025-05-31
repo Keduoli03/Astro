@@ -15,6 +15,7 @@ import PostMetadata from "../../components/PostMeta.astro";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import ArtalkComment from "@components/mine/ArtalkComment.astro";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -134,6 +135,7 @@ const jsonLd = {
     </div>
 
 
-<WalineComment />
+<!-- <WalineComment /> -->
+ <ArtalkComment />
 
 </MainGridLayout>

@@ -15,7 +15,6 @@
 <!-- 3. 异步加载逻辑 -->
 <script is:inline>
   (async () => {
-    // 动态加载 Waline CSS（非阻塞）
     const loadCSS = () => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
@@ -23,10 +22,8 @@
       document.head.appendChild(link);
     };
 
-    // 动态加载 Waline JS
     const { init } = await import('https://unpkg.com/@waline/client@v3/dist/waline.js');
 
-    // 初始化函数
     const initWaline = () => {
       const isDark = document.documentElement.classList.contains('dark');
       init({
@@ -46,7 +43,6 @@
     loadCSS();
     initWaline();
 
-    // 主题切换监听（保留你的原有逻辑）
     new MutationObserver(() => {
       const container = document.getElementById('waline');
       if (container?.innerHTML) {
@@ -61,7 +57,6 @@
 </script>
 
 <style>
-  /* 保留原有样式 */
   #waline-info {
     display: flex;
     justify-content: space-between;
@@ -71,7 +66,7 @@
   #waline {
     clear: both;
   }
-  /* 添加加载动画（可选） */
+
   .waline-pageview-count::before,
   .waline-comment-count::before {
     content: '';
