@@ -8,6 +8,7 @@ import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import WalineComment from "@components/mine/WalineComment.astro";
 import Markdown from "@components/misc/Markdown.astro";
+import ArtalkComment from "@components/mine/ArtalkComment.astro";
 
 const friendsPost = await getEntry("spec", "friends");
 
@@ -51,5 +52,6 @@ const { Content } = await friendsPost.render();
             </Markdown>
         </div>
     </div>
-    <WalineComment />
+    // <WalineComment />
+    <ArtalkComment />
 </MainGridLayout>
