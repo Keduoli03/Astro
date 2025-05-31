@@ -12,7 +12,7 @@ status: 已完成
 date: 2025-03-23 14:39
 updated: 2025-05-12 10:50
 series: SpringBoot
-slug: 970498
+slug: "970498"
 ---
 
 ## 一、为什么选择 Pinia？

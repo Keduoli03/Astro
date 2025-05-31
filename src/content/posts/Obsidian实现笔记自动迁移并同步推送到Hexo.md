@@ -9,7 +9,7 @@ tags:
 status: 已完成
 date: 2024-11-19 20:47
 updated: 2025-05-31 23:48
-slug: obsidianshi-xian-bi-ji-zi-dong-qian-yi-bing-tong-bu-tui-song-dao-hexo
+slug: "obsidianshi-xian-bi-ji-zi-dong-qian-yi-bing-tong-bu-tui-song-dao-hexo"
 cover: https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/img/%E8%83%8C%E8%BA%AB%E5%A6%B9%E5%A6%B9.jpg
 ---
 

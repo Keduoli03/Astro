@@ -7,8 +7,7 @@ tags:
 cove: 
 status: 已完成
 title: Obsidian拓展
-abbrlink: obsidiantuo-zhan
-slug: obsidiantuo-zhan
+slug: "obsidiantuo-zhan"
 cover: ""
 halo:
   site: https://www.blueke.top

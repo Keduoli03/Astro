@@ -10,7 +10,7 @@ cover: https://api.miaomc.cn/image/get
 status: 已完成
 date: 2025-03-21 11:31
 updated: 2025-05-31 23:58
-slug: 179640
+slug: "179640"
 ---
 
 电脑一重装，我的数据库又又没了，每次配置都要慢慢折腾，还经常有问题，索性写一个完整过程了。

@@ -10,7 +10,7 @@ status: 已完成
 date: 2025-04-03 11:40
 updated: 2025-06-01 00:02
 series: 博客
-slug: 107368
+slug: "107368"
 ---
 
 ## 为什么选择 Astro
