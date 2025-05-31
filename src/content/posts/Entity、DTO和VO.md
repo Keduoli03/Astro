@@ -1,5 +1,4 @@
 ---
-slug: 543872
 title: Entity、DTO和VO
 description: 一点笔记记录
 categories:
@@ -13,6 +12,8 @@ cover:
 status: 未完成
 date: 2025-05-30 20:35
 updated: 2025-05-31 22:54
+slug: 894321
+---
 ---
 
 最近在写一个新的项目，因为打算做的正式点，不能像之前那样只是个自娱自乐的玩具，所以安全性这方面就需要注意一下。

@@ -1,5 +1,4 @@
 ---
-slug: 293572
 title: MyBatis
 description: 记录一下MyBatis的理解
 categories:
@@ -13,6 +12,8 @@ cover:
 status: 未完成
 date: 2025-05-28 19:59
 updated: 2025-05-28 20:34
+slug: 536923
+---
 ---
 
 ## 介绍

@@ -11,6 +11,8 @@ status: 已完成
 date: 2025-03-22 17:35
 updated: 2025-05-14 18:43
 series: SpringBoot
+slug: 234253
+---
 ---
 [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 是一个 [MyBatis](https://www.mybatis.org/mybatis-3/) 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
 <!--more-->

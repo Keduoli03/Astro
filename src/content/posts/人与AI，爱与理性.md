@@ -11,6 +11,8 @@ cover: https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/p2638160918.webp
 status: 已完成
 date: 2025-05-24 15:43
 updated: 2025-05-24 17:21
+slug: 178593
+---
 ---
 
 写在《薇薇-萤石眼之歌》后
