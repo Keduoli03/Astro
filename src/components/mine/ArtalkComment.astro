@@ -6,12 +6,12 @@
     const loadCSS = () => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css';
+      link.href = 'https://unpkg.com/artalk@:ArtalkVersion:/dist/Artalk.css';
       document.head.appendChild(link);
     };
     
     // 使用 ES 模块方式导入 Artalk
-    const Artalk = await import('https://esm.sh/artalk@2.9.1');
+    const Artalk = await import('https://unpkg.com/artalk@:ArtalkVersion:/dist/Artalk.js');
 
     const initArtalk = () => {
       const isDark = document.documentElement.classList.contains('dark');
@@ -19,9 +19,9 @@
       // 调用 Artalk.init() 方法初始化
       Artalk.init({
         el: '#Comments',
-        server: 'https://ofvozjpg.ap-northeast-1.clawcloudrun.com/',
+        server: 'https://artalk.blueke.top/',
         dark: isDark ? 'html.dark' : false,
-        site: "Astro",
+        site: "Lanke",
         pageKey: '', // 使用当前页面路径
         pageTitle: '',
         locale: 'zh-CN', // 添加中文支持
