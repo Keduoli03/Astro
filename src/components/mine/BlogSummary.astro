@@ -234,7 +234,7 @@ const chartManager = {
     if (document.querySelector('script[src*="echarts"]')) return;
     
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js';
+    script.src = 'https://gw.alipayobjects.com/os/antv/pkg/_antv.echarts-5.4.3/dist/echarts.min.js';
     script.onload = () => setTimeout(() => this.init(), 100);
     document.head.appendChild(script);
   },
