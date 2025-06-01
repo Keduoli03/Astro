@@ -1,6 +1,18 @@
+
+<!-- 1. 先静态显示阅读量/评论数的骨架屏 -->
+<div class="flex justify-between items-center text-neutral-700 dark:text-neutral-300 mb-4">
+  <div style="display: flex; align-items: center;">
+    阅读量: <span class="artalk-pv-count" style="margin-left: 5px;">--</span>
+  </div>
+  <div style="display: flex; align-items: center;">
+    评论数：<span class="artalk-comment-count" style="margin-left: 5px;">--</span>
+  </div>
+</div>
+
 <div id="Comments"></div>
 
 <script is:inline>
+
   (async () => {
     // 加载 CSS
     const loadCSS = () => {
@@ -18,16 +30,16 @@
 
     const initArtalk = () => {
       const isDark = document.documentElement.classList.contains('dark');
-      
       // 调用 Artalk.init() 方法初始化
       Artalk.init({
         el: '#Comments',
         server: 'https://artalk.blueke.top/',
-        dark: isDark ? 'html.dark' : false,
         site: "Lanke",
         pageKey: '', // 使用当前页面路径
         pageTitle: '',
         locale: 'zh-CN', // 添加中文支持
+        noComment: '快来评论吧！',
+        darkMode: isDark ? true : false,
       });
     };
 
