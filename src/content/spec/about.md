@@ -21,11 +21,11 @@
     </div>
   </a> <!-- 闭合第一个a标签 -->
 
-  <!-- 第二个链接：Waline -->
-  <a href="https://waline.js.org/" target="_blank">
+  <!-- 第二个链接：Artalk -->
+  <a href="https://artalk.js.org/" target="_blank">
     <div class="unique-button">
       <div class="unique-icon"><i class="fa fa-commenting"></i></div>
-      <span>Waline</span>
+      <span>Artalk</span>
     </div>
   </a> 
 
