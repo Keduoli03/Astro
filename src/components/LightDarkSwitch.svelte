@@ -4,6 +4,7 @@ import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants.ts";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
+import { expressiveCodeConfig } from "../config.ts";
 import {
 	applyThemeToDocument,
 	getStoredTheme,
@@ -17,9 +18,9 @@ let mode: LIGHT_DARK_MODE = $state(AUTO_MODE);
 onMount(() => {
 	mode = getStoredTheme();
     if (mode === DARK_MODE) {
-    document.documentElement.setAttribute("data-theme", "catppuccin-frappe");
+    document.documentElement.setAttribute("data-theme", expressiveCodeConfig.themes[0]);
   } else {
-    document.documentElement.setAttribute("data-theme", "light-plus");
+    document.documentElement.setAttribute("data-theme", expressiveCodeConfig.themes[1]);
   }
 	const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 	const changeThemeWhenSchemeChanged: Parameters<
@@ -39,9 +40,9 @@ onMount(() => {
 function switchScheme(newMode: LIGHT_DARK_MODE) {
 	mode = newMode;
     if (mode === DARK_MODE) {
-    document.documentElement.setAttribute("data-theme", "catppuccin-frappe");
+    document.documentElement.setAttribute("data-theme", expressiveCodeConfig.themes[0]);
   } else {
-    document.documentElement.setAttribute("data-theme", "light-plus");
+    document.documentElement.setAttribute("data-theme", expressiveCodeConfig.themes[1]);
   }
 	setTheme(newMode);
 }

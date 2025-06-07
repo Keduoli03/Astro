@@ -1,4 +1,3 @@
-import { expressiveCodeConfig } from "@/config";
 import type { LIGHT_DARK_MODE } from "@/types/config";
 import {
 	AUTO_MODE,
@@ -45,10 +44,10 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	}
 
 	// Set the theme for Expressive Code
-	document.documentElement.setAttribute(
-		"data-theme",
-		expressiveCodeConfig.themes[0],
-	);
+	// document.documentElement.setAttribute(
+	// 	"data-theme",
+	// 	expressiveCodeConfig.themes,
+	// );
 }
 
 export function setTheme(theme: LIGHT_DARK_MODE): void {
