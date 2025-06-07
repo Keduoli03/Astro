@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import type { BlogPostData } from "@/types/config";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
+import { getCategoryUrl } from "@utils/url-utils.ts";
 
 export async function getSortedPosts() {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
@@ -55,6 +56,7 @@ export async function getTagList(): Promise<Tag[]> {
 export type Category = {
 	name: string;
 	count: number;
+	url: string;
 };
 
 export async function getCategoryList(): Promise<Category[]> {
@@ -62,7 +64,7 @@ export async function getCategoryList(): Promise<Category[]> {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
-	allBlogPosts.map((post: { data: { category: string | number } }) => {
+	allBlogPosts.map((post: { data: { category: string | null } }) => {
 		if (!post.data.category) {
 			const ucKey = i18n(I18nKey.uncategorized);
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
@@ -79,7 +81,11 @@ export async function getCategoryList(): Promise<Category[]> {
 
 	const ret: Category[] = [];
 	for (const c of lst) {
-		ret.push({ name: c, count: count[c] });
+		ret.push({
+			name: c,
+			count: count[c],
+			url: getCategoryUrl(c),
+		});
 	}
 	return ret;
 }

@@ -305,36 +305,62 @@ function initCustomScrollbar() {
 			autoHideSuspend: false,
 		},
 	});
-	
-	// const preElements = document.querySelectorAll('pre');
-	// preElements.forEach((ele) => {
-	// 	OverlayScrollbars(ele, {
-	// 		scrollbars: {
-	// 			theme: 'scrollbar-base scrollbar-dark px-2',
-	// 			autoHide: 'leave',
-	// 			autoHideDelay: 500,
-	// 			autoHideSuspend: false
-	// 		}
-	// 	});
-	// });
 
 	const katexElements = document.querySelectorAll('.katex-display') as NodeListOf<HTMLElement>;
-	katexElements.forEach((ele) => {
-		OverlayScrollbars(ele, {
+
+	const katexObserverOptions = {
+		root: null,
+		rootMargin: '100px',
+		threshold: 0.1
+	};
+
+	const processKatexElement = (element: HTMLElement) => {
+		if (!element.parentNode) return;
+		if (element.hasAttribute('data-scrollbar-initialized')) return;
+
+		const container = document.createElement('div');
+		container.className = 'katex-display-container';
+		container.setAttribute('aria-label', 'scrollable container for formulas');
+
+		element.parentNode.insertBefore(container, element);
+		container.appendChild(element);
+
+		OverlayScrollbars(container, {
 			scrollbars: {
-				theme: 'scrollbar-base scrollbar-auto py-1',
+				theme: 'scrollbar-base scrollbar-auto',
+				autoHide: 'leave',
+				autoHideDelay: 500,
+				autoHideSuspend: false
 			}
 		});
+
+		element.setAttribute('data-scrollbar-initialized', 'true');
+	};
+
+	const katexObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+			processKatexElement(entry.target as HTMLElement);
+			observer.unobserve(entry.target);
+			}
+		});
+	}, katexObserverOptions);
+
+	katexElements.forEach(element => {
+		katexObserver.observe(element);
 	});
 }
 
 function showBanner() {
-	const banner = document.getElementById('banner')
+	if (!siteConfig.banner.enable) return;
+
+	const banner = document.getElementById('banner');
 	if (!banner) {
 		console.error('Failed to find the banner element')
 		return
 	}
-	banner.classList.remove('opacity-0', 'scale-105')
+
+	banner.classList.remove('opacity-0', 'scale-105');
 }
 
 function init() {
