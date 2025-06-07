@@ -1,11 +1,11 @@
+
 ---
 import type { MarkdownHeading } from "astro";
-import More from "../mine/more.astro";
 import Categories from "./Categories.astro";
 import Profile from "./Profile.astro";
-import Series from "./Series.astro";
-import TOC from "./TOC.astro";
 import Tag from "./Tags.astro";
+import Series from "./Series.astro";
+import More from "../mine/more.astro";
 
 interface Props {
 	class?: string;
@@ -16,6 +16,7 @@ interface Props {
 const className = Astro.props.class;
 const headings = Astro.props.headings;
 const series = Astro.props.series;
+
 ---
 <div id="sidebar" class:list={[className, "w-full"]}>
     <div class="flex flex-col w-full gap-4 mb-4">
@@ -30,3 +31,5 @@ const series = Astro.props.series;
         <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
     </div>
 </div>
+
+
