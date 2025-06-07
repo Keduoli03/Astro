@@ -86,4 +86,11 @@ export const items = [
 		siteurl: "https://ttio.cc/info",
 		tags: ["友链"],
 	},
+	{
+		title: "流月小站",
+		imgurl: "https://cdn.flowmoon.cn/assets/img/avatar.png",
+		desc: "且听风吟，静待花开",
+		siteurl: "https://blog.flowmoon.cn/",
+		tags: ["友链"],
+	},
 ];
