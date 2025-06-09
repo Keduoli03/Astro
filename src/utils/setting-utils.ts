@@ -1,3 +1,4 @@
+import { expressiveCodeConfig } from "@/config";
 import type { LIGHT_DARK_MODE } from "@/types/config";
 import {
 	AUTO_MODE,
@@ -30,15 +31,19 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	switch (theme) {
 		case LIGHT_MODE:
 			document.documentElement.classList.remove("dark");
+			document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[0],);
 			break;
 		case DARK_MODE:
 			document.documentElement.classList.add("dark");
+			document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[1],);
 			break;
 		case AUTO_MODE:
 			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
 				document.documentElement.classList.add("dark");
+				document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[1],);
 			} else {
 				document.documentElement.classList.remove("dark");
+				document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[0],);
 			}
 			break;
 	}
@@ -46,7 +51,7 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	// Set the theme for Expressive Code
 	// document.documentElement.setAttribute(
 	// 	"data-theme",
-	// 	expressiveCodeConfig.themes,
+	// 	expressiveCodeConfig.theme,
 	// );
 }
 
