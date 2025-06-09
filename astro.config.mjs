@@ -23,7 +23,7 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
-
+import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://www.blueke.top/",
@@ -60,8 +60,12 @@ export default defineConfig({
 			plugins: [
 				pluginLineNumbers(),
 				pluginCollapsibleSections(),
-				pluginLanguageBadge(),
-				pluginCustomCopyButton()
+				//pluginLanguageBadge(),
+				pluginCustomCopyButton(),
+				pluginFileIcons({
+        			iconClass: "text-4 w-5 inline mr-1 mb-1",
+        			titleClass: ""
+      			}),
 			],
 			defaultProps: {
 				wrap: true,
@@ -92,7 +96,7 @@ export default defineConfig({
 			// 	}
 			// },
 			frames: {
-				showCopyToClipboardButton: true,
+				showCopyToClipboardButton: false,
 			}
 		}),
         svelte(),
