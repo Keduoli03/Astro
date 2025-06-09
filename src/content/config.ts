@@ -22,10 +22,11 @@ const postsCollection = defineCollection({
 			category: z.string().optional().default(""),
 			lang: z.string().optional().default(""),
 			series: z.string().optional(),
-			prevTitle: z.string().default(""),
-			prevSlug: z.string().default(""),
-			nextTitle: z.string().default(""),
-			nextSlug: z.string().default(""),
+			/* For internal use */
+		prevTitle: z.string().default(""),
+		prevSlug: z.string().default(""),
+		nextTitle: z.string().default(""),
+		nextSlug: z.string().default(""),
 			// 自己加的字段
 			date: z.coerce.date().optional(), // Obsidian文章创建时间
 			cover: z.string().optional().catch(undefined), // 无效值直接移除，因为我有时候可能忘记封面导致值为null

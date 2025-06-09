@@ -73,7 +73,7 @@ const className = Astro.props.class;
                 <a href={getTagUrl(tag)} aria-label={`View all posts with the ${tag.trim()} tag`}
                    class="link-lg transition text-50 text-sm font-medium
                                 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
-                    {tag}
+                    {tag.trim()}
                 </a>
             ))}
             {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}

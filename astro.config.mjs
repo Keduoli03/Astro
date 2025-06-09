@@ -58,10 +58,7 @@ export default defineConfig({
 		expressiveCode({
 			themes: [expressiveCodeConfig.themes[0], expressiveCodeConfig.themes[1]],
 			plugins: [
-				pluginLineNumbers({
-					// 可以在这里直接配置行号插件
-					showLineNumbers: true,
-				}),
+				pluginLineNumbers(),
 				pluginCollapsibleSections(),
 				pluginLanguageBadge(),
 				pluginCustomCopyButton()
@@ -69,11 +66,6 @@ export default defineConfig({
 			defaultProps: {
 				wrap: true,
 				showLineNumbers: true,
-				overridesByLang: {
-					'shellsession': {
-						showLineNumbers: false,
-					},
-				},
 			},
 			// styleOverrides: {
 			// 	codeBackground: "var(--codeblock-bg)",
