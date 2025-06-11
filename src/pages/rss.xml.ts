@@ -1,35 +1,70 @@
+import path from "node:path";
 import { siteConfig } from "@/config";
+import type { BlogPostData } from "@/types/config";
 import rss from "@astrojs/rss";
-import { getSortedPosts } from "@utils/content-utils";
 import type { APIContext } from "astro";
-import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 
-const parser = new MarkdownIt();
+interface Post {
+	slug: string;
+	frontmatter: BlogPostData;
+	body: string | Promise<string>;
+	compiledContent: () => Promise<string>;
+	file: string;
+}
 
 export async function GET(context: APIContext) {
-	const blog = await getSortedPosts();
+	const postImportResult = await import.meta.glob("../content/posts/**/*.md", {
+		eager: true,
+	});
+	const posts = Object.values(postImportResult) as Post[];
+	console.log("posts", posts);
+
+	const filtered = posts.filter((post) =>
+		import.meta.env.PROD ? post.frontmatter.draft !== true : true,
+	);
+
+	const sorted = filtered.sort((a, b) => {
+		const dateA = new Date(a.frontmatter.published);
+		const dateB = new Date(b.frontmatter.published);
+		return dateB.getTime() - dateA.getTime();
+	});
+
+	const postsWithUrls = sorted.map((post) => {
+		const contentPath = path.relative(process.cwd(), post.file);
+		let url = contentPath
+			.replace(/^src\/content/, "")
+			.replace(/\.md$/, "")
+			.replace(/index$/, "");
+
+		url = url.replace(/\\/g, "/");
+		if (!url.startsWith("/")) {
+			url = `/${url}`;
+		}
+		if (!url.startsWith("/posts/")) {
+			url = `/posts${url}`;
+		}
+		return {
+			...post,
+			url: url,
+		};
+	});
 
 	return rss({
 		stylesheet: "/rss.xsl", // 确保启用XSLT
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
-		site: context.site ?? "https://www.blueke.top",
-		items: blog.map((post) => {
-			const content =
-				typeof post.body === "string" ? post.body : String(post.body || "");
-
-			return {
-				title: post.data.title,
-				pubDate: post.data.published,
-				description: post.data.description || "",
-				link: `/posts/${post.slug}/`,
-				content: sanitizeHtml(parser.render(content), {
+		site: context.site ?? "https://fuwari.vercel.app",
+		items: await Promise.all(
+			postsWithUrls.map(async (post) => ({
+				pubDate: new Date(post.frontmatter.published),
+				link: post.url,
+				content: sanitizeHtml(await post.compiledContent(), {
 					allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
 				}),
-				categories: post.data.tags ?? [],
-			};
-		}),
+				...post.frontmatter,
+			})),
+		),
 		customData: `<language>${siteConfig.lang}</language>`,
 	});
 }
