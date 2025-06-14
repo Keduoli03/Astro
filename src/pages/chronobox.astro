@@ -3,12 +3,13 @@ import { getEntry } from "astro:content";
 import AnimeList from "@/components/mine/Lists/AnimeList.astro";
 import MusicList from "@/components/mine/Lists/MusicList.astro";
 import PhotoList from "@/components/mine/Lists/PhotoList.astro";
-import { timelineItems } from "@/data/chronoboxData.js"; // 假设你有一个文件存放时间线数据
+import { timelineItems } from "@/data/chronoboxData.js";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 import Markdown from "@components/misc/Markdown.astro";
+import BookList from "@components/mine/Lists/BookList.astro";
 const chronoboxPost = await getEntry("spec", "chronobox");
 const { Content } = await chronoboxPost.render();
 ---
@@ -18,42 +19,42 @@ const { Content } = await chronoboxPost.render();
       <Content />
   </Markdown>
 
-  <!-- 选项卡容器 -->
+<!-- 选项卡容器 -->
   <div class="time-capsule-container">
       <div class="card-base z-10 px-9 py-6 relative w-full">
           <!-- 选项卡导航 -->
           <div class="tabs-header flex gap-4 mb-8 border-b border-gray-200 dark:border-gray-700">
-              <button
-              data-tab="anime"
-              class="tab-button active px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative"
-            >
-              动漫
-              <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
-            </button>
-            <button
-            data-tab="music"
-            class="tab-button px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative"
-          >
-            音乐
-            <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
-          </button>
-          <button
-          data-tab="photo"
-          class="tab-button px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative"
-        >
-        照片
-          <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
-        </button>
+              <button data-tab="anime" class="tab-button active px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative">
+                  动漫
+                  <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
+              </button>
+              <button data-tab="book" class="tab-button px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative">
+                  书籍
+                  <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
+              </button>
+              <button data-tab="music" class="tab-button px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative">
+                  音乐
+                  <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
+              </button>
+              <button data-tab="photo" class="tab-button px-4 py-2 rounded-t-lg transition-colors duration-200 font-medium relative">
+                  图片
+                  <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
+              </button>
+              
           </div>
+          <!-- 数据 -->
           <div id="anime-content" class="tab-content">
-  <AnimeList timelineItems={timelineItems} />
-</div>
-<div id="music-content" class="tab-content hidden">
-  <MusicList timelineItems={timelineItems} />
-</div>
-<div id="photo-content" class="tab-content hidden">
-  <PhotoList timelineItems={timelineItems} />
-</div>
+              <AnimeList timelineItems={timelineItems} />
+          </div>
+          <div id="music-content" class="tab-content hidden">
+              <MusicList timelineItems={timelineItems} />
+          </div>
+          <div id="photo-content" class="tab-content hidden">
+              <PhotoList timelineItems={timelineItems} />
+          </div>
+          <div id="book-content" class="tab-content hidden">
+              <BookList timelineItems={timelineItems} />
+          </div>
       </div>
   </div>
 

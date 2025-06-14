@@ -1,0 +1,79 @@
+---
+// BookList.astro
+export interface Props {
+  timelineItems: {
+    type: string;
+    title: string;
+    cover: string;
+    author: string;
+    date: string;
+    desc?: string;
+    url: string;
+    rating: number;
+    tags: string[];
+  }[];
+}
+
+const { timelineItems } = Astro.props;
+---
+
+<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {timelineItems
+    .filter(item => item.type === 'book')
+    .map((item) => (
+      <div class="book-card group relative overflow-hidden rounded-lg shadow-md transition-shadow">
+        <!-- 封面展示 -->
+        <div class="book-cover-container w-full bg-gray-200">
+          <img src={item.cover} alt={item.title} class="w-full h-full object-fill transition-transform group-hover:scale-105" />
+        </div>
+
+        <!-- 亚克力蒙版 -->
+        <div class="absolute bottom-0 left-0 right-0 h-0 overflow-hidden transition-all group-hover:h-36">
+          <div class="bg-gray-500/60 dark:bg-gray-800/40 p-4 flex flex-col justify-end h-full rounded-t-lg backdrop-blur-[3px]">
+            <!-- 标题与作者 -->
+            <h3 class="title text-white text-base font-semibold mb-1 line-clamp-2">
+              {item.title}
+            </h3>
+            <p class="author text-white/80 text-xs mb-2">
+              作者: {item.author}
+            </p>
+
+            <!-- 评分展示 -->
+            <div class="flex items-center gap-1 text-white/90 mb-2">
+              ⭐
+              <span class="text-xs font-medium">{item.rating.toFixed(1)}分</span>
+            </div>
+
+            <!-- 椭圆标签 -->
+            <div class="tag-cloud flex flex-wrap gap-1.5 mt-2">
+              {item.tags.map(tag => (
+                <span class="tag bg-white/25 dark:bg-black/25 px-3 py-1 rounded-full text-xs font-medium">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- 点击穿透层 -->
+        <a href={item.url} class="absolute inset-0" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+    ))}
+</div>
+
+<style>
+.book-card {
+  @apply transition-shadow duration-300;
+  transform: perspective(1000px);
+  will-change: transform, box-shadow;
+  height: 250px; /* 设置固定高度 */
+  width: 80%; /* 设置宽度为父容器的60% */
+}
+
+.book-cover-container {
+  aspect-ratio: 3/4;
+  position: absolute; /* 改为relative */
+  width: 100%;
+  height: 100%; /* 继承父容器高度 */
+}
+</style>
