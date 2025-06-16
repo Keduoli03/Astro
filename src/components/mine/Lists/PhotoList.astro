@@ -1,22 +1,30 @@
 ---
-// PhotoList.astro
+import { AstroProps } from 'astro';
+
+// 定义组件接收的属性接口（将timelineItems改为items）
 export interface Props {
-	timelineItems: {
-		type: string;
-		title: string;
-		image: string;
-		date: string;
-		location: string;
-		camera: string;
-		tags: string[];
-	}[];
+  items: {
+    type: string;
+    title: string;
+    image: string;
+    date: string;
+    location: string;
+    camera: string;
+    tags: string[];
+  }[];
 }
-const { timelineItems } = Astro.props;
+
+// 从props中获取items，设置默认空数组并添加类型检查
+const { items = [] } = Astro.props as AstroProps<Props>;
+
+// 确保items是数组类型，避免后续操作报错
+if (!Array.isArray(items)) {
+  throw new Error('PhotoList: items prop must be an array');
+}
 ---
+
 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-    {timelineItems
-      .filter(item => item.type === 'photo')
-      .map((item) => (
+    {items.map((item) => (
             <div 
                 class="photo-card relative overflow-hidden rounded-xl shadow-lg transition-shadow duration-300 group cursor-pointer"
                 data-image={item.image}

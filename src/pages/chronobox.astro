@@ -3,16 +3,29 @@ import { getEntry } from "astro:content";
 import AnimeList from "@/components/mine/Lists/AnimeList.astro";
 import MusicList from "@/components/mine/Lists/MusicList.astro";
 import PhotoList from "@/components/mine/Lists/PhotoList.astro";
-import { timelineItems } from "@/data/chronoboxData.js";
+import BookList from "@components/mine/Lists/BookList.astro";
+import { animeData } from "@/data/anime.js";
+import { bookData } from "@/data/book.js";
+import { musicData } from "@/data/music.js";
+import { photoData } from "@/data/photo.js";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 import Markdown from "@components/misc/Markdown.astro";
-import BookList from "@components/mine/Lists/BookList.astro";
+
 const chronoboxPost = await getEntry("spec", "chronobox");
 const { Content } = await chronoboxPost.render();
+// 按类型组织数据
+const timelineData = {
+  anime: animeData,
+  book: bookData,
+  music: musicData,
+  photo: photoData
+};
+
 ---
+
 
 <MainGridLayout title={i18n(I18nKey.chronobox)} description={i18n(I18nKey.chronobox)}>
   <Markdown class="mt-8 prose max-w-none">
@@ -40,20 +53,19 @@ const { Content } = await chronoboxPost.render();
                   图片
                   <span class="active-indicator absolute bottom-0 left-0 right-0 h-0.5 transition-opacity"></span>
               </button>
-              
           </div>
-          <!-- 数据 -->
+         <!-- 数据（直接使用对应类型的数据） -->
           <div id="anime-content" class="tab-content">
-              <AnimeList timelineItems={timelineItems} />
+              <AnimeList items={timelineData.anime} />
           </div>
           <div id="music-content" class="tab-content hidden">
-              <MusicList timelineItems={timelineItems} />
+              <MusicList items={timelineData.music} />
           </div>
           <div id="photo-content" class="tab-content hidden">
-              <PhotoList timelineItems={timelineItems} />
+              <PhotoList items={timelineData.photo} />
           </div>
           <div id="book-content" class="tab-content hidden">
-              <BookList timelineItems={timelineItems} />
+              <BookList items={timelineData.book} />
           </div>
       </div>
   </div>
