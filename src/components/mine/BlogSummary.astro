@@ -71,9 +71,9 @@ const backgroundColors = generateUniqueColors(years.length);
 ---
 
 <div class="stats-container flex flex-col md:flex-row gap-6 max-w-6xl mx-auto p-4">
-  <!-- 左侧统计卡片 -->
-  <div class="blog-stats w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-    <div class="p-6">
+  <!-- 左侧统计卡片（修改后） -->
+  <div class="stats-card w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden flex flex-col">
+    <div class="p-6 flex-grow">
       <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
         <i class="fa fa-bar-chart mr-2 text-blue-500"></i> 博客统计
       </h2>
@@ -96,36 +96,49 @@ const backgroundColors = generateUniqueColors(years.length);
         </li>
       </ul>
     </div>
-    <div class="bg-blue-50 px-6 py-3 text-sm text-blue-600 flex items-center">
+    <!-- 底部区域添加mt-auto -->
+    <div class="bg-blue-50 px-6 py-3 text-sm text-blue-600 flex items-center mt-auto border-t border-gray-100">
       <i class="fa fa-refresh mr-1"></i> 上次更新: {new Date().toLocaleDateString()}
     </div>
   </div>
 
-  <!-- 右侧ECharts饼图 -->
+
+  <!-- 右侧ECharts饼图（重点优化部分） -->
   <div class="pie-chart-container w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="p-6">
       <h2 class="text-xl font-bold mb-2 text-gray-800 flex items-center">
-    <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
-  </h2>
+        <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
+        <button 
+          id="chartRefreshBtn"
+          class="ml-3 text-sm text-indigo-500 hover:text-indigo-700"
+          onclick="chartManager.refresh()">
+          <i class="fa fa-refresh mr-1"></i> 刷新
+        </button>
+      </h2>
 
-
-      <!-- 图表单独一行 -->
-      <div class="chart-wrapper mb-6" style="height: 300px;">
+      <!-- 图表容器（带加载状态） -->
+      <div class="chart-wrapper mb-6 relative" style="height: 300px;">
         <div id="yearPieChart" 
-     class="w-full h-full"
-     data-chart-data={JSON.stringify(yearCounts)}
-     data-chart-labels={JSON.stringify(years)}
-     data-chart-colors={JSON.stringify(backgroundColors)}>
-</div>
-
+             class="w-full h-full bg-gray-50 rounded-lg overflow-hidden"
+             data-chart-data={JSON.stringify(yearCounts)}
+             data-chart-labels={JSON.stringify(years)}
+             data-chart-colors={JSON.stringify(backgroundColors)}>
+          <!-- 加载状态默认显示 -->
+          <div class="loading-state absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+            <div class="text-center">
+              <i class="fa fa-spinner fa-spin text-2xl text-indigo-500 mb-2"></i>
+              <p class="text-gray-500 text-sm">加载图表中...</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- 图例在图表下方，水平排列 -->
-      <div class="legend grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <!-- 图例 -->
+      <div class="legend grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
         {years.map((year, index) => (
           <div class="flex items-center gap-1" key={year}>
             <span class="w-3 h-3 rounded-full mr-1.5" style={{ backgroundColor: backgroundColors[index] }}></span>
-            <span class="text-sm truncate">{year}年: {yearCounts[index]}篇</span>
+            <span class="text-xs truncate">{year}年: {yearCounts[index]}篇</span>
           </div>
         ))}
       </div>
@@ -137,10 +150,14 @@ const backgroundColors = generateUniqueColors(years.length);
 <script context="client" src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 
 <script is:inline>
-// 图表管理对象
+// 图表管理核心对象（完整优化版）
 const chartManager = {
   instance: null,
   resizeHandler: null,
+  isInitialized: false,
+  refreshAttempts: 0,
+  maxRefreshAttempts: 3,
+  mutationObserver: null,
 
   init() {
     const chartDom = document.getElementById('yearPieChart');
@@ -148,24 +165,57 @@ const chartManager = {
 
     // 清理旧实例
     this.destroy();
+    
+    // 重置状态
+    this.refreshAttempts = 0;
+    this.isInitialized = false;
+    
+    // 显示加载状态
+    this.showLoading(chartDom);
+    
+    // 异步初始化（避免同步阻塞）
+    setTimeout(() => this.tryInitChart(chartDom), 50);
+  },
 
-    // 检查ECharts是否加载
-    if (typeof echarts === 'undefined') {
-      console.warn('ECharts未加载');
-      return this.loadECharts();
+  tryInitChart(chartDom) {
+    try {
+      // 检查ECharts是否加载
+      if (typeof echarts === 'undefined') {
+        console.warn('ECharts未加载，正在加载...');
+        return this.loadECharts();
+      }
+
+      // 获取数据
+      const { data, labels, colors } = this.getChartData(chartDom);
+      if (data.length === 0) {
+        console.warn('没有可用的图表数据');
+        this.showEmptyState(chartDom);
+        return;
+      }
+
+      // 清除加载状态
+      this.hideLoading(chartDom);
+
+      // 初始化图表
+      this.instance = echarts.init(chartDom);
+      this.setupChart(data, labels, colors);
+      this.setupResizeHandler();
+      this.isInitialized = true;
+      
+      // 添加加载成功动画
+      chartDom.classList.add('animate-fadeIn');
+      
+    } catch (error) {
+      console.error('图表初始化失败:', error);
+      this.refreshAttempts++;
+      
+      if (this.refreshAttempts < this.maxRefreshAttempts) {
+        console.log(`尝试重新初始化图表 (${this.refreshAttempts}/${this.maxRefreshAttempts})`);
+        setTimeout(() => this.tryInitChart(chartDom), 300);
+      } else {
+        this.showErrorState(chartDom, error);
+      }
     }
-
-    // 获取数据
-    const { data, labels, colors } = this.getChartData(chartDom);
-    if (data.length === 0) {
-      console.warn('没有可用的图表数据');
-      return;
-    }
-
-    // 初始化图表
-    this.instance = echarts.init(chartDom);
-    this.setupChart(data, labels, colors);
-    this.setupResizeHandler();
   },
 
   getChartData(chartDom) {
@@ -191,32 +241,29 @@ const chartManager = {
       series: [{
         name: '文章分布',
         type: 'pie',
-        radius: ['50%', '70%'], // 调整半径
-        center: ['50%', '50%'], // 确保居中
-        avoidLabelOverlap: true,
+        radius: ['50%', '70%'],
+        center: ['50%', '50%'],
+        avoidLabelOverlap: false,
         itemStyle: {
           borderColor: '#fff',
           borderWidth: 1
         },
         label: {
-          show: false, // 隐藏饼图上的标签
+          show: true,
+          formatter: '{b}: {d}%',
+          textStyle: {
+          fontSize: 10, // 调整字体大小（默认14px）
+        }
         },
         labelLine: {
-          show: false
+          show: true
         },
         data: labels.map((label, i) => ({
           value: data[i],
           name: `${label}年`,
           itemStyle: { color: colors[i] }
         }))
-      }],
-      grid: {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        containLabel: true
-      }
+      }]
     });
   },
 
@@ -224,7 +271,7 @@ const chartManager = {
     this.resizeHandler = () => this.instance?.resize();
     window.addEventListener('resize', this.resizeHandler);
     
-    // 自动清理
+    // 清理事件
     this.instance.on('disposed', () => {
       window.removeEventListener('resize', this.resizeHandler);
     });
@@ -234,7 +281,7 @@ const chartManager = {
     if (document.querySelector('script[src*="echarts"]')) return;
     
     const script = document.createElement('script');
-    script.src = 'https://gw.alipayobjects.com/os/antv/pkg/_antv.echarts-5.4.3/dist/echarts.min.js';
+    script.src = 'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js';
     script.onload = () => setTimeout(() => this.init(), 100);
     document.head.appendChild(script);
   },
@@ -248,11 +295,59 @@ const chartManager = {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = null;
     }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+      this.mutationObserver = null;
+    }
+    this.isInitialized = false;
+  },
+
+  refresh() {
+    const chartDom = document.getElementById('yearPieChart');
+    if (chartDom) {
+      this.init(); // 重新初始化
+    }
+  },
+
+  showLoading(chartDom) {
+    const loadingEl = chartDom.querySelector('.loading-state');
+    if (loadingEl) loadingEl.style.display = 'flex';
+  },
+
+  hideLoading(chartDom) {
+    const loadingEl = chartDom.querySelector('.loading-state');
+    if (loadingEl) loadingEl.style.display = 'none';
+  },
+
+  showEmptyState(chartDom) {
+    this.hideLoading(chartDom);
+    chartDom.innerHTML = `
+      <div class="flex h-full flex-col items-center justify-center text-gray-400 bg-white">
+        <i class="fa fa-chart-pie text-5xl mb-4 opacity-30"></i>
+        <p class="text-sm">暂无文章数据</p>
+      </div>
+    `;
+  },
+
+  showErrorState(chartDom, error) {
+    this.hideLoading(chartDom);
+    chartDom.innerHTML = `
+      <div class="flex h-full flex-col items-center justify-center p-4 bg-white">
+        <i class="fa fa-exclamation-circle text-4xl mb-3 text-red-500"></i>
+        <p class="text-sm text-center mb-2">图表加载失败</p>
+        <p class="text-xs text-gray-500 mb-4">错误: ${error.message || '未知错误'}</p>
+        <button 
+          class="px-3 py-1 text-xs text-indigo-600 border border-indigo-200 rounded hover:bg-indigo-50"
+          onclick="chartManager.refresh()">
+          点击重试
+        </button>
+      </div>
+    `;
   }
 };
 
-// 页面加载处理
-const initOnReady = () => {
+// 页面加载初始化
+const initOnLoad = () => {
   if (document.readyState === 'complete') {
     chartManager.init();
   } else {
@@ -260,13 +355,45 @@ const initOnReady = () => {
   }
 };
 
-// Astro页面切换事件
+// Astro页面切换事件（核心刷新逻辑）
 document.addEventListener('astro:after-swap', () => {
-  setTimeout(() => chartManager.init(), 50);
+  console.log('页面切换事件触发，刷新图表');
+  chartManager.refresh();
+  
+  // 监听DOM变化确保图表容器加载完成
+  this.mutationObserver = new MutationObserver((mutations) => {
+    const chartDom = document.getElementById('yearPieChart');
+    if (chartDom) {
+      chartManager.refresh();
+      this.mutationObserver.disconnect();
+    }
+  });
+  
+  this.mutationObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // 超时自动断开观察器
+  setTimeout(() => {
+    if (this.mutationObserver) this.mutationObserver.disconnect();
+  }, 2000);
+});
+
+// 页面可见性变化监听（切回浏览器时刷新）
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    chartManager.refresh();
+  }
+});
+
+// 窗口大小变化时重新渲染（优化响应式）
+window.addEventListener('resize', () => {
+  if (chartManager.instance) chartManager.instance.resize();
 });
 
 // 初始化执行
-initOnReady();
+initOnLoad();
 </script>
 
 <style>
@@ -275,57 +402,34 @@ initOnReady();
   margin: 0 auto;
 }
 
-
-
 .chart-wrapper {
   width: 100% !important;
-  height: 220px !important; /* 固定高度 */
-  margin-bottom: 0; /* 移除底部间距（通过flex gap控制） */
+  height: 280px !important;
+  position: relative;
 }
 
 .legend {
   width: 100% !important;
-  max-height: none !important; /* 移除高度限制 */
-  overflow-y: visible !important; /* 取消滚动 */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 自适应列 */
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 8px;
-  justify-items: start; /* 左对齐 */
+  justify-items: start;
 }
 
-/* 动画样式保留 */
+/* 动画样式 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.blog-stats, .pie-chart-container {
-  animation: fadeIn 0.5s ease-out forwards;
-  opacity: 0;
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
-.blog-stats {
-  animation-delay: 0.1s;
-  flex: 1;
-  min-height: 360px;
-  display: flex;
+.loading-state {
+  display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
-.blog-stats > div:first-child {
-  flex-grow: 1;
-}
-
-.blog-stats .bg-blue-50 {
-  margin-top: auto;
-  border-top: 1px solid #e5e7eb;
-}
-
-/* 响应式调整（覆盖旧媒体查询） */
-@media (min-width: 768px) {
-  .pie-chart-container .flex {
-    flex-direction: row; /* 大屏水平排列 */
-  }
-  }
-
 </style>
