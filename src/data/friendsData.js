@@ -93,10 +93,11 @@ export const items = [
 		siteurl: "https://blog.flowmoon.cn/",
 		tags: ["友链"],
 	},
-	｛
+      ｛
 	title: 'Pinpe 的云端',
-imgurl: 'https://pinpe.top/head.jpg',
-desc: '	一个属于自己的云朵。',
-siteurl: 'https://pinpe.top/',
+        imgurl: 'https://pinpe.top/head.jpg',
+        desc: '	一个属于自己的云朵。',
+        siteurl: 'https://pinpe.top/',
+	tags: ["友链"],
 	｝
 ];
