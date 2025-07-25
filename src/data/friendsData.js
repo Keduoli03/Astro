@@ -99,5 +99,12 @@ export const items = [
         desc: '	一个属于自己的云朵。',
         siteurl: 'https://pinpe.top/',
 		tags: ["友链"],
+	},
+	{
+		title: '星辰の博客',
+        imgurl: 'https://blog.strarry.top/avatar.jpg',
+        desc: 'Code | Think | Share | Repeat',
+        siteurl: 'https://blog.strarry.top/',
+		tags: ["友链"],
 	}
 ];
