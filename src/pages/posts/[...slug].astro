@@ -1,7 +1,7 @@
 ---
 import path from "node:path";
-import { getCollection } from "astro:content";
-import WalineComment from "@components/mine/WalineComment.astro";
+import AiSummary from "@components/mine/AiSummary.astro";
+import ArtalkComment from "@components/mine/ArtalkComment.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";
@@ -15,7 +15,6 @@ import PostMetadata from "../../components/PostMeta.astro";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
-import ArtalkComment from "@components/mine/ArtalkComment.astro";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -101,7 +100,12 @@ const jsonLd = {
             {entry.data.image &&
                 <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
             }
-
+            <!-- AI summary -->
+            <AiSummary 
+  slug={entry.slug} 
+  title={entry.data.title} 
+  body={entry.body} 
+/>
 
             <Markdown class="mb-6 markdown-content onload-animation">
                 <Content />
