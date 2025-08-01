@@ -51,6 +51,13 @@ export const items = [
 		tags: ["友链"],
 	},
 	{
+		title: "Mayx的博客",
+		imgurl: "https://avatars0.githubusercontent.com/u/17966333",
+		desc: "Mayx’s Home Page",
+		siteurl: "https://mayx.gitlab.io/",
+		tags: ["友链"],
+	},
+	{
 		title: "JIPA233の小窝",
 		imgurl: "https://jipa.moe/static/avatar.jpg",
 		desc: "Deed divides beings into lower and higher ones.",
