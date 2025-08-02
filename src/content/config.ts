@@ -53,8 +53,8 @@ const postsCollection = defineCollection({
 
 			return {
 				...data,
-				published: data.published ?? data.date,
-				image: finalImage, // 只有有效值才会保留
+				published: data.published ?? data.date ?? new Date(), // 添加默认值
+				image: finalImage,
 				category: finalCategory,
 				// 明确移除不需要的字段
 				...(data.cover === undefined ? {} : { cover: undefined }),
