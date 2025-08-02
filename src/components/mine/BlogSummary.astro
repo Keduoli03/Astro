@@ -6,24 +6,24 @@ const md = new MarkdownIt();
 
 // 专业字数统计函数（支持中日韩全字符集+英文单词过滤）
 function countWords(markdownText: string): number {
-  // 1. 渲染Markdown并移除HTML标签
-  const html = md.render(markdownText);
-  const text = html.replace(/<[^>]+>/g, ' ');
+	// 1. 渲染Markdown并移除HTML标签
+	const html = md.render(markdownText);
+	const text = html.replace(/<[^>]+>/g, " ");
 
-  // 2. 清理特殊符号（保留空格分隔符）
-  const cleaned = text
-    .replace(/[`~@#$%^&*()_|+\-=;:'"<>{}[\]\\]/g, ' ')
-    .replace(/[！？。，、；：“”‘’（）【】…—～《》・]/g, ' ');
+	// 2. 清理特殊符号（保留空格分隔符）
+	const cleaned = text
+		.replace(/[`~@#$%^&*()_|+\-=;:'"<>{}[\]\\]/g, " ")
+		.replace(/[！？。，、；：""''（）【】…—～《》・]/g, " ");
 
-  // 3. 统计中文字符（包含扩展区字符）
-  const cjkRegex = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g;
-  const cjkChars = (cleaned.match(cjkRegex) || []).length;
+	// 3. 统计中文字符（包含扩展区字符）
+	const cjkRegex = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g;
+	const cjkChars = (cleaned.match(cjkRegex) || []).length;
 
-  // 4. 统计英文单词（至少2个字母，忽略单字母/数字）
-  const englishRegex = /\b[A-Za-z]{2,}\b/g;
-  const englishWords = (cleaned.match(englishRegex) || []).length;
+	// 4. 统计英文单词（至少2个字母，忽略单字母/数字）
+	const englishRegex = /\b[A-Za-z]{2,}\b/g;
+	const englishWords = (cleaned.match(englishRegex) || []).length;
 
-  return cjkChars + englishWords;
+	return cjkChars + englishWords;
 }
 
 // 获取文章数据
@@ -34,83 +34,83 @@ const totalPosts = posts.length || 0;
 let totalWords = 0;
 
 // 应用新统计函数
-posts.forEach(post => {
-  const content = post.body || '';
-  totalWords += countWords(content);
-});
+for (const post of posts) {
+	const content = post.body || "";
+	totalWords += countWords(content);
+}
 
 // 计算平均字数
-const avgWordsPerPost = totalPosts > 0 ? Math.floor(totalWords / totalPosts) : 0;
+const avgWordsPerPost =
+	totalPosts > 0 ? Math.floor(totalWords / totalPosts) : 0;
 
 // 年度统计
 const currentYear = new Date().getFullYear();
 const yearStats = posts.reduce((acc, post) => {
-  const publishedDate = post.data?.published || new Date();
-  const year = new Date(publishedDate).getFullYear();
-  acc[year] = (acc[year] || 0) + 1;
-  return acc;
+	const publishedDate = post.data?.published || new Date();
+	const year = new Date(publishedDate).getFullYear();
+	acc[year] = (acc[year] || 0) + 1;
+	return acc;
 }, {});
 
 // 按年份排序
 const years = Object.keys(yearStats).sort((a, b) => b - a);
-const yearCounts = years.map(year => yearStats[year]);
+const yearCounts = years.map((year) => yearStats[year]);
 
 // 生成颜色
 const generateUniqueColors = (count) => {
-  const colors = new Set();
-  const goldenRatio = 0.618033988749895;
-  for (let i = 0; i < count; i++) {
-    const hue = Math.floor(((i * goldenRatio) % 1) * 360);
-    const saturation = 75 + Math.floor(Math.random() * 15);
-    const lightness = 60 + Math.floor(Math.random() * 10);
-    colors.add(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
-  }
-  return Array.from(colors);
+	const colors = new Set();
+	const goldenRatio = 0.618033988749895;
+	for (let i = 0; i < count; i++) {
+		const hue = Math.floor(((i * goldenRatio) % 1) * 360);
+		const saturation = 75 + Math.floor(Math.random() * 15);
+		const lightness = 60 + Math.floor(Math.random() * 10);
+		colors.add(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+	}
+	return Array.from(colors);
 };
 const backgroundColors = generateUniqueColors(years.length);
 ---
 
 <div class="stats-container flex flex-col md:flex-row gap-6 max-w-6xl mx-auto p-4">
-  <!-- 左侧统计卡片（修改后） -->
-  <div class="stats-card w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden flex flex-col">
+  <!-- 左侧统计卡片（适配暗色模式） -->
+  <div class="stats-card w-full md:w-1/2 bg-[var(--card-bg)] rounded-xl shadow-md border border-[var(--line-divider)] overflow-hidden flex flex-col">
     <div class="p-6 flex-grow">
-      <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
-        <i class="fa fa-bar-chart mr-2 text-blue-500"></i> 博客统计
+      <h2 class="text-xl font-bold mb-4 text-90 flex items-center">
+        <i class="fa fa-bar-chart mr-2 text-[var(--primary)]"></i> 博客统计
       </h2>
-      <ul class="space-y-4 text-gray-700">
-        <li class="flex justify-between items-center pb-2 border-b border-gray-100">
+      <ul class="space-y-4 text-75">
+        <li class="flex justify-between items-center pb-2 border-b border-[var(--line-divider)]">
           <span class="text-sm font-medium">文章总数</span>
-          <span class="text-xl font-semibold text-blue-600">{totalPosts}</span>
+          <span class="text-xl font-semibold text-[var(--primary)]">{totalPosts}</span>
         </li>
-        <li class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <li class="flex justify-between items-center pb-2 border-b border-[var(--line-divider)]">
           <span class="text-sm font-medium">总字数</span>
-          <span class="text-xl font-semibold text-blue-600">{totalWords.toLocaleString()}</span>
+          <span class="text-xl font-semibold text-[var(--primary)]">{totalWords.toLocaleString()}</span>
         </li>
-        <li class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <li class="flex justify-between items-center pb-2 border-b border-[var(--line-divider)]">
           <span class="text-sm font-medium">平均字数</span>
-          <span class="text-xl font-semibold text-blue-600">{avgWordsPerPost}</span>
+          <span class="text-xl font-semibold text-[var(--primary)]">{avgWordsPerPost}</span>
         </li>
         <li class="flex justify-between items-center">
           <span class="text-sm font-medium">{currentYear}年文章数</span>
-          <span class="text-xl font-semibold text-blue-600">{yearStats[currentYear] || 0}</span>
+          <span class="text-xl font-semibold text-[var(--primary)]">{yearStats[currentYear] || 0}</span>
         </li>
       </ul>
     </div>
-    <!-- 底部区域添加mt-auto -->
-    <div class="bg-blue-50 px-6 py-3 text-sm text-blue-600 flex items-center mt-auto border-t border-gray-100">
+    <!-- 底部区域适配暗色模式 -->
+    <div class="bg-[var(--btn-plain-bg-hover)] px-6 py-3 text-sm text-[var(--primary)] flex items-center mt-auto border-t border-[var(--line-divider)]">
       <i class="fa fa-refresh mr-1"></i> 上次更新: {new Date().toLocaleDateString()}
     </div>
   </div>
 
-
-  <!-- 右侧ECharts饼图（重点优化部分） -->
-  <div class="pie-chart-container w-full md:w-1/2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+  <!-- 右侧ECharts饼图（适配暗色模式） -->
+  <div class="pie-chart-container w-full md:w-1/2 bg-[var(--card-bg)] rounded-xl shadow-md border border-[var(--line-divider)] overflow-hidden">
     <div class="p-6">
-      <h2 class="text-xl font-bold mb-2 text-gray-800 flex items-center">
-        <i class="fa fa-pie-chart mr-2 text-indigo-500"></i> 年度文章分布
+      <h2 class="text-xl font-bold mb-2 text-90 flex items-center">
+        <i class="fa fa-pie-chart mr-2 text-[var(--primary)]"></i> 年度文章分布
         <button 
           id="chartRefreshBtn"
-          class="ml-3 text-sm text-indigo-500 hover:text-indigo-700"
+          class="ml-3 text-sm text-[var(--primary)] hover:text-[var(--primary)] opacity-80 hover:opacity-100"
           onclick="chartManager.refresh()">
           <i class="fa fa-refresh mr-1"></i> 刷新
         </button>
@@ -119,15 +119,15 @@ const backgroundColors = generateUniqueColors(years.length);
       <!-- 图表容器（带加载状态） -->
       <div class="chart-wrapper mb-6 relative" style="height: 300px;">
         <div id="yearPieChart" 
-             class="w-full h-full bg-gray-50 rounded-lg overflow-hidden"
+             class="w-full h-full bg-[var(--btn-plain-bg-hover)] rounded-lg overflow-hidden"
              data-chart-data={JSON.stringify(yearCounts)}
              data-chart-labels={JSON.stringify(years)}
              data-chart-colors={JSON.stringify(backgroundColors)}>
           <!-- 加载状态默认显示 -->
-          <div class="loading-state absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+          <div class="loading-state absolute inset-0 flex items-center justify-center bg-[var(--card-bg)]/80 z-10">
             <div class="text-center">
-              <i class="fa fa-spinner fa-spin text-2xl text-indigo-500 mb-2"></i>
-              <p class="text-gray-500 text-sm">加载图表中...</p>
+              <i class="fa fa-spinner fa-spin text-2xl text-[var(--primary)] mb-2"></i>
+              <p class="text-50 text-sm">加载图表中...</p>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ const backgroundColors = generateUniqueColors(years.length);
         {years.map((year, index) => (
           <div class="flex items-center gap-1" key={year}>
             <span class="w-3 h-3 rounded-full mr-1.5" style={{ backgroundColor: backgroundColors[index] }}></span>
-            <span class="text-xs truncate">{year}年: {yearCounts[index]}篇</span>
+            <span class="text-xs truncate text-75">{year}年: {yearCounts[index]}篇</span>
           </div>
         ))}
       </div>
@@ -232,11 +232,26 @@ const chartManager = {
   },
 
   setupChart(data, labels, colors) {
+    // 获取当前主题
+    const isDark = document.documentElement.classList.contains('dark');
+    const textColor = isDark ? '#e5e7eb' : '#374151';
+    
+    // 获取组件背景色（使用CSS变量）
+    const computedStyle = getComputedStyle(document.documentElement);
+    const cardBgColor = computedStyle.getPropertyValue('--card-bg').trim();
+    
     this.instance.setOption({
+      // 使用组件的背景色变量
+      backgroundColor: cardBgColor || (isDark ? '#1f2937' : '#ffffff'),
       color: colors,
       tooltip: {
         trigger: 'item',
-        formatter: '{b}: {c}篇 ({d}%)'
+        formatter: '{b}: {c}篇 ({d}%)',
+        backgroundColor: isDark ? '#374151' : '#ffffff',
+        textStyle: {
+          color: textColor
+        },
+        borderColor: isDark ? '#6b7280' : '#e5e7eb'
       },
       series: [{
         name: '文章分布',
@@ -245,18 +260,22 @@ const chartManager = {
         center: ['50%', '50%'],
         avoidLabelOverlap: false,
         itemStyle: {
-          borderColor: '#fff',
+          borderColor: isDark ? '#374151' : '#fff',
           borderWidth: 1
         },
         label: {
           show: true,
           formatter: '{b}: {d}%',
           textStyle: {
-          fontSize: 10, // 调整字体大小（默认14px）
-        }
+            fontSize: 10,
+            color: textColor
+          }
         },
         labelLine: {
-          show: true
+          show: true,
+          lineStyle: {
+            color: textColor
+          }
         },
         data: labels.map((label, i) => ({
           value: data[i],
@@ -321,8 +340,12 @@ const chartManager = {
 
   showEmptyState(chartDom) {
     this.hideLoading(chartDom);
+    const isDark = document.documentElement.classList.contains('dark');
+    const bgColor = isDark ? '#374151' : '#ffffff';
+    const textColor = isDark ? '#9ca3af' : '#6b7280';
+    
     chartDom.innerHTML = `
-      <div class="flex h-full flex-col items-center justify-center text-gray-400 bg-white">
+      <div class="flex h-full flex-col items-center justify-center" style="color: ${textColor}; background-color: ${bgColor};">
         <i class="fa fa-chart-pie text-5xl mb-4 opacity-30"></i>
         <p class="text-sm">暂无文章数据</p>
       </div>
@@ -331,13 +354,19 @@ const chartManager = {
 
   showErrorState(chartDom, error) {
     this.hideLoading(chartDom);
+    const isDark = document.documentElement.classList.contains('dark');
+    const bgColor = isDark ? '#374151' : '#ffffff';
+    const textColor = isDark ? '#e5e7eb' : '#374151';
+    const buttonBg = isDark ? '#4b5563' : '#f3f4f6';
+    
     chartDom.innerHTML = `
-      <div class="flex h-full flex-col items-center justify-center p-4 bg-white">
+      <div class="flex h-full flex-col items-center justify-center p-4" style="background-color: ${bgColor};">
         <i class="fa fa-exclamation-circle text-4xl mb-3 text-red-500"></i>
-        <p class="text-sm text-center mb-2">图表加载失败</p>
-        <p class="text-xs text-gray-500 mb-4">错误: ${error.message || '未知错误'}</p>
+        <p class="text-sm text-center mb-2" style="color: ${textColor};">图表加载失败</p>
+        <p class="text-xs mb-4" style="color: ${textColor}; opacity: 0.7;">错误: ${error.message || '未知错误'}</p>
         <button 
-          class="px-3 py-1 text-xs text-indigo-600 border border-indigo-200 rounded hover:bg-indigo-50"
+          class="px-3 py-1 text-xs rounded hover:opacity-80"
+          style="color: var(--primary); background-color: ${buttonBg}; border: 1px solid var(--line-divider);"
           onclick="chartManager.refresh()">
           点击重试
         </button>
@@ -390,6 +419,23 @@ document.addEventListener('visibilitychange', () => {
 // 窗口大小变化时重新渲染（优化响应式）
 window.addEventListener('resize', () => {
   if (chartManager.instance) chartManager.instance.resize();
+});
+
+// 监听主题变化并重新渲染图表
+const themeObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      if (chartManager.instance) {
+        // 主题变化时重新设置图表样式
+        setTimeout(() => chartManager.refresh(), 100);
+      }
+    }
+  });
+});
+
+themeObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['class']
 });
 
 // 初始化执行
