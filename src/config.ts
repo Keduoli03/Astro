@@ -31,7 +31,7 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-			src: '/favicon/favicon-32.png'  // 使用专门的favicon文件
+			src: "/favicon/logo.png", // 使用专门的favicon文件
 		},
 		// 或者留空使用默认favicon
 		// []
