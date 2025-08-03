@@ -1,9 +1,10 @@
 ---
 import { getEntry } from "astro:content";
+import BookList from "@components/mine/Lists/BookList.astro";
+import Markdown from "@components/misc/Markdown.astro";
 import AnimeList from "@/components/mine/Lists/AnimeList.astro";
 import MusicList from "@/components/mine/Lists/MusicList.astro";
 import PhotoList from "@/components/mine/Lists/PhotoList.astro";
-import BookList from "@components/mine/Lists/BookList.astro";
 import { animeData } from "@/data/anime.js";
 import { bookData } from "@/data/book.js";
 import { musicData } from "@/data/music.js";
@@ -12,18 +13,15 @@ import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
-import Markdown from "@components/misc/Markdown.astro";
-
 const chronoboxPost = await getEntry("spec", "chronobox");
 const { Content } = await chronoboxPost.render();
 // 按类型组织数据
 const timelineData = {
-  anime: animeData,
-  book: bookData,
-  music: musicData,
-  photo: photoData
+	anime: animeData,
+	book: bookData,
+	music: musicData,
+	photo: photoData,
 };
-
 ---
 
 
@@ -160,12 +158,7 @@ const timelineData = {
       height: 100px; /* 自定义合适高度 */
     }
 
-    @media (max-width: 1023px) {
-      .anime-card,
-      .music-card {
-        min-width: calc(50% - 1rem); /* 双列宽度计算（配合gap-6） */
-      }
-    }
+   
 
     /* 响应式调整 */
     @media (max-width: 767px) {
@@ -174,12 +167,45 @@ const timelineData = {
       }
       .anime-card {
         min-height: 200px; /* 移动端最小高度 */
+        width: auto;
       }
     }
 
     @media (min-width: 768px) {
       .anime-card {
         min-height: 350px; /* 平板端最小高度 */
+      }
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 640px) {
+      .anime-card {
+        min-height: 180px; /* 减小移动端最小高度 */
+        max-width: 100px; /* 与AnimeList组件保持一致 */
+        width: auto;
+      }
+      .music-card {
+        max-width: 120px; /* 与MusicList组件保持一致 */
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 1023px) {
+      .anime-card {
+        min-height: 280px; /* 调整平板端高度 */
+        max-width: 140px; /* 与AnimeList组件保持一致 */
+      }
+      .music-card {
+        max-width: 140px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .anime-card {
+        min-height: 350px;
+        max-width: 240px; /* 桌面端保持原有设置 */
+      }
+      .music-card {
+        max-width: 160px;
       }
     }
 

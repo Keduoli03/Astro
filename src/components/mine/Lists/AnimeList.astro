@@ -63,9 +63,9 @@ if (!Array.isArray(items)) {
           </div>
 
           <!-- 椭圆标签 -->
-          <div class="tag-cloud flex flex-wrap gap-1.5 mt-2">
-            {item.tags.map(tag => (
-              <span class="tag bg-white/25 dark:bg-black/25 px-3 py-1 rounded-full text-xs font-medium">
+          <div class="tag-cloud flex flex-wrap gap-1 mt-1">
+            {item.tags.slice(0, 3).map(tag => (
+              <span class="tag bg-white/25 dark:bg-black/25 px-1.5 py-0.5 rounded-full text-[8px] md:text-xs font-medium leading-tight">
                 {tag}
               </span>
             ))}
