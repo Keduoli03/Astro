@@ -6,8 +6,8 @@ import { Icon } from 'astro-icon/components'
     <div id="smart-scroll-btn" class="smart-scroll-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="smartScroll()">
         <button aria-label="Smart Scroll" class="btn-card h-[3.75rem] w-[3.75rem]">
             <div id="scroll-icon-container" class="mx-auto transition-transform duration-200">
-                <Icon id="scroll-up-icon" name="material-symbols:keyboard-arrow-up-rounded" class="block"></Icon>
-                <Icon id="scroll-down-icon" name="material-symbols:keyboard-arrow-down-rounded" class="hidden"></Icon>
+                <Icon id="scroll-up-icon" name="material-symbols:keyboard-arrow-up-rounded" class="block text-[var(--primary)] text-2xl"></Icon>
+                <Icon id="scroll-down-icon" name="material-symbols:keyboard-arrow-down-rounded" class="hidden text-[var(--primary)] text-2xl"></Icon>
             </div>
         </button>
     </div>
@@ -23,14 +23,12 @@ import { Icon } from 'astro-icon/components'
     z-index: 50
     pointer-events: none
 
-.smart-scroll-btn{
+.smart-scroll-btn
     position: fixed
     right: 6rem  // 向左移动（原来是1.75rem）
     bottom: 8rem  // 向上移动（原来是1.75rem）
     pointer-events: auto
     transition: all 0.2s
-}
-    
     
     &.hide
         transform: translateX(5rem)
@@ -47,13 +45,13 @@ function smartScroll() {
     if (scrollDownIcon && !scrollDownIcon.classList.contains('hidden')) {
         // 当前显示向下箭头，继续向下滚动一屏
         window.scrollBy({
-            top: window.innerHeight * 0.8,
+            top: window.innerHeight * 2,
             behavior: 'smooth'
         });
     } else if (scrollUpIcon && !scrollUpIcon.classList.contains('hidden')) {
         // 当前显示向上箭头，继续向上滚动一屏
         window.scrollBy({
-            top: -window.innerHeight * 0.8,
+            top: -window.innerHeight * 2,
             behavior: 'smooth'
         });
     }
