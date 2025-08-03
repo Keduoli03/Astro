@@ -4,9 +4,10 @@ import tailwind from "@astrojs/tailwind";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import swup from "@swup/astro";
+import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
+import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
-import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeComponents from "rehype-components"; /* Render the custom directive content */
 import rehypeKatex from "rehype-katex";
@@ -16,14 +17,13 @@ import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-di
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig } from "./src/config.ts";
+import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
-import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
-import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://www.blueke.top/",
@@ -38,7 +38,7 @@ export default defineConfig({
 			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
 			// the default value `transition-` cause transition delay
 			// when the Tailwind class `transition-all` is used
-			containers: ["main", "#toc", "#series"],
+			containers: ["main", "#toc"],
 			smoothScrolling: true,
 			cache: true,
 			preload: true,
@@ -63,9 +63,9 @@ export default defineConfig({
 				//pluginLanguageBadge(),
 				pluginCustomCopyButton(),
 				pluginFileIcons({
-        			iconClass: "text-4 w-5 inline mr-1 mb-1",
-        			titleClass: ""
-      			}),
+					iconClass: "text-4 w-5 inline mr-1 mb-1",
+					titleClass: "",
+				}),
 			],
 			defaultProps: {
 				wrap: true,
@@ -97,9 +97,9 @@ export default defineConfig({
 			// },
 			frames: {
 				showCopyToClipboardButton: false,
-			}
+			},
 		}),
-        svelte(),
+		svelte(),
 		sitemap(),
 	],
 	markdown: {
