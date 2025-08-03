@@ -145,6 +145,21 @@ const bannerOffset =
 
 		<slot name="head"></slot>
 
+		<!-- sitemap -->
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- umami站点统计 -->
+		<script defer src="https://umami.blueke.top/script.js" data-website-id="58051142-b09c-4ef4-aec9-dfb223ff631b"></script>
+
+		<!-- 自定义字体 -->
+		<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" />
+		<style>
+			body {
+				/* 屏幕优化版 */
+				font-family: "LXGW WenKai Screen", sans-serif;
+			}
+		</style>
+
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
 	</head>

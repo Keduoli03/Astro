@@ -60,7 +60,7 @@ const mainPanelTop = siteConfig.banner.enable
 </div>}
 
 <!-- Main content -->
-<div class="absolute w-full z-30 pointer-events-none lg:ml-25" style={`top: ${mainPanelTop}`}>
+<div class="absolute w-full z-30 pointer-events-none lg:ml-25 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
     <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto pointer-events-auto">
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-4 pt-4 lg:pt-8">
             
@@ -170,7 +170,7 @@ const mainPanelTop = siteConfig.banner.enable
         const searchInput = document.getElementById('floating-search-input');
         const searchResults = document.getElementById('floating-search-results');
         let isSearchOpen = false;
-        let searchTimeout;
+        let searchTimeout: ReturnType<typeof setTimeout> | undefined;
         
         // 检查是否为主页（包括分页）
         function isHomePage() {

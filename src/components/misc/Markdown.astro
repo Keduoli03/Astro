@@ -13,6 +13,27 @@ const className = Astro.props.class;
     <slot/>
 </div>
 
+<style>
+/* 响应式字体大小设置 */
+.custom-md {
+    font-size: 17px; /* 桌面端默认大小 */
+}
+
+/* 手机端字体大小调整 */
+@media (max-width: 768px) {
+    .custom-md {
+        font-size: 15px; /* 手机端较小字号 */
+    }
+}
+
+/* 小屏手机进一步调整 */
+@media (max-width: 480px) {
+    .custom-md {
+        font-size: 14px; /* 小屏手机更小字号 */
+    }
+}
+</style>
+
 <script>
 document.addEventListener("click", function (e: MouseEvent) {
     const target = e.target as Element | null;
