@@ -1,20 +1,20 @@
 ---
 // AnimeList.astro
-import type { Props as AstroProps } from 'astro';
+import type { Props as AstroProps } from "astro";
 
 // 定义组件接收的属性接口
 export interface Props {
-  items: {
-    type: string;
-    title: string;
-    cover: string;
-    date: string;
-    desc?: string;
-    url: string;
-    episodes: string | number;
-    rating: number;
-    tags: string[];
-  }[];
+	items: {
+		type: string;
+		title: string;
+		cover: string;
+		date: string;
+		desc?: string;
+		url: string;
+		episodes: string | number;
+		rating: number;
+		tags: string[];
+	}[];
 }
 
 // 从props中获取items，并添加空值检查
@@ -22,7 +22,7 @@ const { items = [] } = Astro.props as Props;
 
 // 确保items是数组类型
 if (!Array.isArray(items)) {
-  throw new Error('AnimeList: items prop must be an array');
+	throw new Error("AnimeList: items prop must be an array");
 }
 ---
 
@@ -106,13 +106,13 @@ if (!Array.isArray(items)) {
 /* 响应式调整 */
 @media (max-width: 640px) {
   .anime-card {
-    max-width: 160px;
+    max-width: 120px; /* 从160px减小到120px */
   }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
   .anime-card {
-    max-width: 190px;
+    max-width: 160px; /* 从190px减小到160px */
   }
 }
 </style>
