@@ -1,0 +1,71 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<div class="smart-scroll-wrapper hidden lg:block">
+    <div id="smart-scroll-btn" class="smart-scroll-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="smartScroll()">
+        <button aria-label="Smart Scroll" class="btn-card h-[3.75rem] w-[3.75rem]">
+            <div id="scroll-icon-container" class="mx-auto transition-transform duration-200">
+                <Icon id="scroll-up-icon" name="material-symbols:keyboard-arrow-up-rounded" class="block"></Icon>
+                <Icon id="scroll-down-icon" name="material-symbols:keyboard-arrow-down-rounded" class="hidden"></Icon>
+            </div>
+        </button>
+    </div>
+</div>
+
+<style lang="stylus">
+.smart-scroll-wrapper
+    width: 3.75rem
+    height: 3.75rem
+    position: absolute
+    right: 0
+    top: 0
+    z-index: 50
+    pointer-events: none
+
+.smart-scroll-btn{
+    position: fixed
+    right: 6rem  // 向左移动（原来是1.75rem）
+    bottom: 8rem  // 向上移动（原来是1.75rem）
+    pointer-events: auto
+    transition: all 0.2s
+}
+    
+    
+    &.hide
+        transform: translateX(5rem)
+        opacity: 0
+        pointer-events: none
+</style>
+
+<script>
+function smartScroll() {
+    const scrollUpIcon = document.getElementById('scroll-up-icon');
+    const scrollDownIcon = document.getElementById('scroll-down-icon');
+    
+    // 根据当前显示的图标决定滚动方向
+    if (scrollDownIcon && !scrollDownIcon.classList.contains('hidden')) {
+        // 当前显示向下箭头，继续向下滚动一屏
+        window.scrollBy({
+            top: window.innerHeight * 0.8,
+            behavior: 'smooth'
+        });
+    } else if (scrollUpIcon && !scrollUpIcon.classList.contains('hidden')) {
+        // 当前显示向上箭头，继续向上滚动一屏
+        window.scrollBy({
+            top: -window.innerHeight * 0.8,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// 声明全局函数类型
+declare global {
+    interface Window {
+        smartScroll: () => void;
+    }
+}
+
+// 将函数添加到全局作用域
+(window as any).smartScroll = smartScroll;
+</script>

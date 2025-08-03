@@ -191,7 +191,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
 				const isExternal = link.getAttribute('data-external') === 'true';
 				
 				if (isExternal) {
-					window.open(href, '_blank');
+					href && window.open(href, '_blank');
 				} else if (window.swup && href) {
 					// 关闭手机端导航面板
 					closeMobileNavPanel();

@@ -227,50 +227,6 @@ import {
 } from "../constants/constants";
 import { siteConfig } from '../config';
 
-/* Preload fonts */
-// (async function() {
-// 	try {
-// 		await Promise.all([
-// 			document.fonts.load("400 1em Roboto"),
-// 			document.fonts.load("700 1em Roboto"),
-// 		]);
-// 		document.body.classList.remove("hidden");
-// 	} catch (error) {
-// 		console.log("Failed to load fonts:", error);
-// 	}
-// })();
-
-/* TODO This is a temporary solution for style flicker issue when the transition is activated */
-/* issue link: https://github.com/withastro/astro/issues/8711, the solution get from here too */
-/* update: fixed in Astro 3.2.4 */
-/*
-function disableAnimation() {
-	const css = document.createElement('style')
-	css.appendChild(
-		document.createTextNode(
-			`*{
-              -webkit-transition:none!important;
-              -moz-transition:none!important;
-              -o-transition:none!important;
-              -ms-transition:none!important;
-              transition:none!important
-              }`
-		)
-	)
-	document.head.appendChild(css)
-
-	return () => {
-		// Force restyle
-		;(() => window.getComputedStyle(document.body))()
-
-		// Wait for next tick before removing
-		setTimeout(() => {
-			document.head.removeChild(css)
-		}, 1)
-	}
-}
-*/
-
 const bannerEnabled = !!document.getElementById('banner-wrapper')
 
 function setClickOutsideToClose(panel: string, ignores: string[]) {
@@ -290,7 +246,6 @@ function setClickOutsideToClose(panel: string, ignores: string[]) {
 setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"])
 setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"])
 setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"])
-
 
 function loadTheme() {
 	const theme = getStoredTheme()
@@ -379,7 +334,6 @@ function showBanner() {
 }
 
 function init() {
-	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
@@ -389,19 +343,115 @@ function init() {
 /* Load settings when entering the site */
 init();
 
-const setup = () => {
-	// TODO: temp solution to change the height of the banner
-/*
-	window.swup.hooks.on('animation:out:start', () => {
-		const path = window.location.pathname
-		const body = document.querySelector('body')
-		if (path[path.length - 1] === '/' && !body.classList.contains('is-home')) {
-			body.classList.add('is-home')
-		} else if (path[path.length - 1] !== '/' && body.classList.contains('is-home')) {
-			body.classList.remove('is-home')
+// 滚动相关变量
+let smartScrollBtn = document.getElementById('smart-scroll-btn');
+let scrollUpIcon = document.getElementById('scroll-up-icon');
+let scrollDownIcon = document.getElementById('scroll-down-icon');
+let toc = document.getElementById('toc-wrapper');
+let navbar = document.getElementById('navbar-wrapper');
+
+// 在变量声明部分添加
+let lastScrollTop = 0;
+let scrollTimeout: NodeJS.Timeout | null = null;
+
+function scrollFunction() {
+	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
+	let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+	// 清除之前的定时器
+	if (scrollTimeout) {
+		clearTimeout(scrollTimeout);
+	}
+
+	// 智能滚动按钮逻辑
+	if (smartScrollBtn && scrollUpIcon && scrollDownIcon) {
+		if (scrollTop > 50) {
+			smartScrollBtn.classList.remove('hide')
+			
+			// 严格按照滚动方向显示箭头
+			if (scrollTop > lastScrollTop) {
+				// 向下滚动，显示向下箭头
+				scrollUpIcon.classList.add('hidden');
+				scrollUpIcon.classList.remove('block');
+				scrollDownIcon.classList.remove('hidden');
+				scrollDownIcon.classList.add('block');
+				smartScrollBtn.setAttribute('aria-label', 'Continue Scrolling Down');
+			} else if (scrollTop < lastScrollTop) {
+				// 向上滚动，显示向上箭头
+				scrollUpIcon.classList.remove('hidden');
+				scrollUpIcon.classList.add('block');
+				scrollDownIcon.classList.add('hidden');
+				scrollDownIcon.classList.remove('block');
+				smartScrollBtn.setAttribute('aria-label', 'Continue Scrolling Up');
+			}
+			
+			// 设置2秒后自动隐藏
+			scrollTimeout = setTimeout(() => {
+				if (smartScrollBtn) {
+					smartScrollBtn.classList.add('hide');
+				}
+			}, 1000);
+			
+			// 更新上次滚动位置
+			lastScrollTop = scrollTop;
+		} else {
+			// 在页面顶部时默认显示向下箭头
+			smartScrollBtn.classList.remove('hide')
+			scrollUpIcon.classList.add('hidden');
+			scrollUpIcon.classList.remove('block');
+			scrollDownIcon.classList.remove('hidden');
+			scrollDownIcon.classList.add('block');
+			smartScrollBtn.setAttribute('aria-label', 'Scroll Down');
+			lastScrollTop = scrollTop;
+			
+			// 页面顶部也设置2秒后自动隐藏
+			scrollTimeout = setTimeout(() => {
+				if (smartScrollBtn) {
+					smartScrollBtn.classList.add('hide');
+				}
+			}, 2000);
 		}
-	})
-*/
+	}
+
+	// TOC显示逻辑
+	if (bannerEnabled && toc) {
+		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
+			toc.classList.remove('toc-hide')
+		} else {
+			toc.classList.add('toc-hide')
+		}
+	}
+
+	// 导航栏隐藏逻辑
+	if (!bannerEnabled) return
+	if (navbar) {
+		const NAVBAR_HEIGHT = 72
+		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16
+
+		let bannerHeight = BANNER_HEIGHT
+		if (document.body.classList.contains('lg:is-home') && window.innerWidth >= 1024) {
+			bannerHeight = BANNER_HEIGHT_HOME
+		}
+		let threshold = window.innerHeight * (bannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16
+		if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
+			navbar.classList.add('navbar-hidden')
+		} else {
+			navbar.classList.remove('navbar-hidden')
+		}
+	}
+}
+
+// 确保在页面加载时重新获取元素
+function initScrollButtons() {
+	smartScrollBtn = document.getElementById('smart-scroll-btn');
+	scrollUpIcon = document.getElementById('scroll-up-icon');
+	scrollDownIcon = document.getElementById('scroll-down-icon');
+	toc = document.getElementById('toc-wrapper');
+	navbar = document.getElementById('navbar-wrapper');
+	scrollFunction();
+}
+
+const setup = () => {
 	window.swup.hooks.on('link:click', () => {
 		// Remove the delay for the first time page load
 		document.documentElement.style.setProperty('--content-delay', '0ms')
@@ -419,7 +469,10 @@ const setup = () => {
 			navbar.classList.add('navbar-hidden')
 		}
 	})
-	window.swup.hooks.on('content:replace', initCustomScrollbar)
+	window.swup.hooks.on('content:replace', () => {
+		initCustomScrollbar();
+		initScrollButtons();
+	})
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
@@ -463,58 +516,24 @@ const setup = () => {
         }, 200)
 	});
 }
-if (window?.swup?.hooks) {
-	setup()
-} else {
-	document.addEventListener('swup:enable', setup)
-}
 
-let backToTopBtn = document.getElementById('back-to-top-btn');
-let toc = document.getElementById('toc-wrapper');
-let navbar = document.getElementById('navbar-wrapper')
-function scrollFunction() {
-	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
-
-	if (backToTopBtn) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
-			backToTopBtn.classList.remove('hide')
-		} else {
-			backToTopBtn.classList.add('hide')
-		}
-	}
-
-	if (bannerEnabled && toc) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
-			toc.classList.remove('toc-hide')
-		} else {
-			toc.classList.add('toc-hide')
-		}
-	}
-
-	if (!bannerEnabled) return
-	if (navbar) {
-		const NAVBAR_HEIGHT = 72
-		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16			// The height the main panel overlaps the banner
-
-		let bannerHeight = BANNER_HEIGHT
-		if (document.body.classList.contains('lg:is-home') && window.innerWidth >= 1024) {
-			bannerHeight = BANNER_HEIGHT_HOME
-		}
-		let threshold = window.innerHeight * (bannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16
-		if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
-			navbar.classList.add('navbar-hidden')
-		} else {
-			navbar.classList.remove('navbar-hidden')
-		}
-	}
-}
-window.onscroll = scrollFunction
-
+// 事件监听器
+window.onscroll = scrollFunction;
 window.onresize = () => {
 	// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 	let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 	offset = offset - offset % 4;
 	document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+};
+
+// 初始化
+document.addEventListener('DOMContentLoaded', initScrollButtons);
+document.addEventListener('swup:contentReplaced', initScrollButtons);
+
+if (window?.swup?.hooks) {
+	setup()
+} else {
+	document.addEventListener('swup:enable', setup)
 }
 
 </script>
@@ -557,7 +576,7 @@ function createPhotoSwipe() {
 	lightbox.init()
 }
 
-const setup = () => {
+const photoSwipeSetup = () => {
 	if (!lightbox) {
 		createPhotoSwipe()
 	}
@@ -575,8 +594,8 @@ const setup = () => {
 }
 
 if (window.swup) {
-	setup()
+	photoSwipeSetup()
 } else {
-	document.addEventListener("swup:enable", setup)
+	document.addEventListener("swup:enable", photoSwipeSetup)
 }
 </script>

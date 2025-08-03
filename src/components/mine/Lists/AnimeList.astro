@@ -1,6 +1,6 @@
 ---
 // AnimeList.astro
-import { AstroProps } from 'astro';
+import type { Props as AstroProps } from 'astro';
 
 // 定义组件接收的属性接口
 export interface Props {
@@ -18,7 +18,7 @@ export interface Props {
 }
 
 // 从props中获取items，并添加空值检查
-const { items = [] } = Astro.props as AstroProps<Props>;
+const { items = [] } = Astro.props as Props;
 
 // 确保items是数组类型
 if (!Array.isArray(items)) {

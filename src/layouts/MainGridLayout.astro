@@ -1,5 +1,8 @@
 ---
-import BackToTop from "@components/control/BackToTop.astro";
+// 注释掉原来的两个按钮
+// import BackToTop from "@components/control/BackToTop.astro";
+// import ScrollToBottom from "@components/control/ScrollToBottom.astro";
+import SmartScrollButton from "@components/control/SmartScrollButton.astro";
 import Footer from "@components/Footer.astro";
 import SideNavbar from "@components/SideNavbar.astro"; // 新增
 import SideBar from "@components/widget/SideBar.astro";
@@ -94,7 +97,9 @@ const mainPanelTop = siteConfig.banner.enable
             </div>
         </div>
 
-        <BackToTop></BackToTop>
+        <!-- <BackToTop></BackToTop>
+        <ScrollToBottom></ScrollToBottom> -->
+        <SmartScrollButton></SmartScrollButton>
     </div>
 </div>
 
@@ -233,14 +238,14 @@ const mainPanelTop = siteConfig.banner.enable
                     searchResults.innerHTML = '';
                 }
                 if (searchInput) {
-                    searchInput.value = '';
+                    (searchInput as HTMLInputElement).value = '';
                 }
             }
         });
         
         // 搜索功能
         searchInput?.addEventListener('input', (e) => {
-            const keyword = e.target.value.trim();
+            const keyword = (e.target as HTMLInputElement)?.value?.trim() ?? '';
             
             // 清除之前的搜索延时
             if (searchTimeout) {
@@ -261,7 +266,7 @@ const mainPanelTop = siteConfig.banner.enable
         });
         
         // 执行搜索
-        async function performSearch(keyword) {
+        async function performSearch(keyword: string) {
             if (!searchResults) return;
             
             // 显示搜索中状态

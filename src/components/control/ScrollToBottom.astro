@@ -1,0 +1,39 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<!-- There can't be a filter on parent element, or it will break `fixed` -->
+<div class="scroll-to-bottom-wrapper hidden lg:block">
+    <div id="scroll-to-bottom-btn" class="scroll-to-bottom-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="scrollToBottom()">
+        <button aria-label="Scroll to Bottom" class="btn-card h-[3.75rem] w-[3.75rem]">
+            <Icon name="material-symbols:keyboard-arrow-down-rounded" class="mx-auto"></Icon>
+        </button>
+    </div>
+</div>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+// 声明全局函数类型
+declare global {
+    interface Window {
+        scrollToBottom: () => void;
+    }
+}
+
+// 将函数添加到全局作用域
+(window as any).scrollToBottom = scrollToBottom;
+
+// 调试：在控制台输出按钮状态
+console.log('ScrollToBottom component loaded');
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('scroll-to-bottom-btn');
+    console.log('ScrollToBottom button found:', btn);
+});
+</script>
