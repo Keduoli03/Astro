@@ -31,14 +31,10 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-			src:'/favicon/logo.png'
+			src: '/favicon/favicon-32.png'  // 使用专门的favicon文件
 		},
-		// Leave this array empty to use the default favicon
-		// {
-		//   src: '/favicon/icon.png',    // Path of the favicon, relative to the /public directory
-		//   theme: 'light',              // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
-		//   sizes: '32x32',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
-		// }
+		// 或者留空使用默认favicon
+		// []
 	],
 };
 

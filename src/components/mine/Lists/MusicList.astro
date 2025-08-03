@@ -25,7 +25,7 @@ if (!Array.isArray(items)) {
 }
 ---
 
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+<div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
   {items.map((item) => (
     <div class="music-card group relative overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div class="aspect-square w-full bg-gray-200 relative">
@@ -91,24 +91,31 @@ if (!Array.isArray(items)) {
 <style>
 .music-card {
   @apply relative overflow-hidden rounded-xl shadow-md transition-all duration-300;
-  /* 移除固定宽高，依赖网格自动计算 */
+  aspect-ratio: 1/1; /* 方形比例 */
+  min-width: 200px; /* 增大最大宽度 */
+  height: auto;
 }
 
 .music-card:hover {
   @apply shadow-xl -translate-y-1;
 }
 
-/* 响应式优化 */
+/* 响应式调整 */
 @media (max-width: 640px) {
-  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .md:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .music-card {
+    max-width: 150px; /* 小屏幕也增大一些 */
+  }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
-  .lg:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .music-card {
+    max-width: 140px;
+  }
 }
 
 @media (min-width: 1024px) {
-  .lg:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .music-card {
+    max-width: 150px;
+  }
 }
 </style>

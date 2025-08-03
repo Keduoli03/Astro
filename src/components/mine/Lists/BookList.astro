@@ -25,12 +25,12 @@ if (!Array.isArray(items)) {
 }
 ---
 
-<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
   {items.map((item) => (
     <div class="book-card group relative overflow-hidden rounded-lg shadow-md transition-shadow">
       <!-- 封面展示 -->
       <div class="book-cover-container w-full bg-gray-200">
-        <img src={item.cover} alt={item.title} class="w-full h-full object-fill transition-transform group-hover:scale-105" />
+        <img src={item.cover} alt={item.title} class="w-full h-full object-cover transition-transform group-hover:scale-105" />
       </div>
 
       <!-- 亚克力蒙版 -->
@@ -72,14 +72,33 @@ if (!Array.isArray(items)) {
   @apply transition-shadow duration-300;
   transform: perspective(1000px);
   will-change: transform, box-shadow;
-  height: 250px; /* 设置固定高度 */
-  width: 80%; /* 设置宽度为父容器的60% */
+  aspect-ratio: 3/4; /* 书籍封面比例 */
+  height: auto;
+  max-width: 180px; /* 限制最大宽度 */
+}
+
+.book-card:hover {
+  @apply shadow-2xl;
+  transform: scale(1.02);
 }
 
 .book-cover-container {
   aspect-ratio: 3/4;
-  position: absolute; /* 保持定位方式 */
+  position: absolute;
   width: 100%;
-  height: 100%; /* 继承父容器高度 */
+  height: 100%;
+}
+
+/* 响应式调整 */
+@media (max-width: 640px) {
+  .book-card {
+    max-width: 140px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-card {
+    max-width: 160px;
+  }
 }
 </style>

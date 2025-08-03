@@ -1,0 +1,459 @@
+---
+import { Icon } from "astro-icon/components";
+import { navBarConfig, siteConfig } from "../config";
+import { LinkPresets } from "../constants/link-presets";
+import { LinkPreset, type NavBarLink } from "../types/config";
+import { url } from "../utils/url-utils";
+import LightDarkSwitch from "./LightDarkSwitch.svelte";
+import DisplaySettings from "./widget/DisplaySettings.svelte";
+
+let links: NavBarLink[] = navBarConfig.links.map(
+	(item: NavBarLink | LinkPreset): NavBarLink => {
+		if (typeof item === "number") {
+			return LinkPresets[item];
+		}
+		return item;
+	},
+);
+---
+
+<!-- PC端侧边栏 - 只在大屏幕显示 -->
+<div id="side-navbar" class="fixed left-0 top-0 h-full w-16 bg-white dark:bg-[var(--card-bg)] border-r border-[var(--line-divider)] z-50 flex flex-col hidden lg:flex">
+	<!-- 网站Logo -->
+	<div class="p-2 border-b border-[var(--line-divider)] flex justify-center">
+		<button class="hover:opacity-80 transition-opacity" data-swup-link data-href={url('/')}>
+			<img src="/favicon/logo.png" alt="{siteConfig.title}" class="w-6 h-6" />
+		</button>
+	</div>
+
+	<!-- 导航链接 -->
+	<nav class="flex-1 p-2">
+		<ul class="space-y-3">
+			{links.map((l) => (
+				<li class="flex justify-center">
+					<button 
+						data-swup-link
+						data-href={l.external ? l.url : url(l.url)}
+						data-external={l.external}
+						class="flex flex-col items-center p-1 transition-all group nav-link w-auto"
+					>
+						<div class="nav-icon-container w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-1 transition-all relative hover:border-2 hover:border-[var(--primary)] hover:scale-110">
+							{l.name.includes('主页') && <Icon name="material-symbols:home-outline-rounded" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('系列') && <Icon name="material-symbols:library-books-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('归档') && <Icon name="material-symbols:archive-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('时间盒') && <Icon name="material-symbols:schedule" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('友链') && <Icon name="material-symbols:group-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('关于') && <Icon name="material-symbols:person-outline" class="text-sm text-black dark:text-white" />}
+						</div>
+						<span class="text-xs text-black dark:text-white text-center leading-tight">{l.name}</span>
+						{l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-xs text-[var(--deep-text)]/70 mt-1" />}
+					</button>
+				</li>
+			))}
+		</ul>
+	</nav>
+
+	<!-- 底部工具栏 -->
+	<div class="p-2 border-t border-[var(--line-divider)] space-y-2">
+		<!-- 主题色设置按钮 -->
+		{!siteConfig.themeColor.fixed && (
+			<div class="relative">
+				<button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-8 w-8 active:scale-90 text-[var(--deep-text)] hover:bg-[var(--btn-regular-bg-hover)] mx-auto block" id="display-settings-switch">
+					<Icon name="material-symbols:palette-outline" class="text-base" />
+				</button>
+				
+				<!-- 自定义主题色面板 -->
+				<div id="custom-theme-panel" class="absolute left-full bottom-0 ml-2 w-80 bg-[var(--float-panel-bg)] rounded-[var(--radius-large)] shadow-xl p-4 opacity-0 pointer-events-none transition-all duration-200 z-50">
+					<div class="flex flex-row gap-2 mb-3 items-center justify-between">
+						<div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-[0.33rem]">
+							主题色
+							<button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md active:scale-90" id="reset-hue-btn">
+								<div class="text-[var(--btn-content)]">
+									<Icon name="fa6-solid:arrow-rotate-left" class="text-[0.875rem]" />
+								</div>
+							</button>
+						</div>
+						<div class="flex gap-1">
+							<div id="hueValue" class="transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center font-bold text-sm items-center text-[var(--btn-content)]">
+								<span id="hue-display">0</span>
+							</div>
+						</div>
+					</div>
+					<div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+						<input aria-label="主题色" type="range" min="0" max="360" class="w-full h-6 color-slider" id="custom-color-slider" step="5">
+					</div>
+				</div>
+			</div>
+		)}
+		
+		<!-- 夜间模式切换 -->
+		<div class="flex justify-center">
+			<LightDarkSwitch client:only="svelte" />
+		</div>
+	</div>
+</div>
+
+<!-- 手机端顶部导航栏 - 只在手机端显示，只有下边缘圆角 -->
+<div id="mobile-navbar" class="fixed top-0 left-0 right-0 h-14 bg-white dark:bg-[var(--card-bg)] border-b border-[var(--line-divider)] z-50 lg:hidden rounded-b-xl shadow-lg">
+	<div class="flex items-center justify-between h-full px-4">
+		<!-- 网站Logo -->
+		<button class="flex items-center gap-2 hover:opacity-80 transition-opacity" data-swup-link data-href={url('/')}>
+			<img src="/favicon/logo.png" alt="{siteConfig.title}" class="w-5 h-5" />
+			<span class="font-bold text-[var(--primary)] text-base">{siteConfig.title}</span>
+		</button>
+		
+		<!-- 右侧工具栏 -->
+		<div class="flex items-center gap-1">
+			<!-- 主题色设置按钮 -->
+			{!siteConfig.themeColor.fixed && (
+				<div class="relative">
+					<button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-9 w-9 active:scale-90 text-[var(--deep-text)] hover:bg-[var(--btn-regular-bg-hover)]" id="mobile-display-settings-switch">
+						<Icon name="material-symbols:palette-outline" class="text-sm" />
+					</button>
+					
+					<!-- 手机端主题色面板 - 从右侧对齐 -->
+					<div id="mobile-theme-panel" class="absolute right-0 top-full mt-2 w-64 bg-[var(--float-panel-bg)] rounded-xl shadow-xl p-4 opacity-0 pointer-events-none transition-all duration-200 z-50">
+						<div class="flex flex-row gap-2 mb-3 items-center justify-between">
+							<div class="flex gap-2 font-bold text-base text-neutral-900 dark:text-neutral-100 transition relative ml-3 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-[0.2rem]">
+								主题色
+								<button aria-label="Reset to Default" class="btn-regular w-6 h-6 rounded-md active:scale-90" id="mobile-reset-hue-btn">
+									<div class="text-[var(--btn-content)]">
+										<Icon name="fa6-solid:arrow-rotate-left" class="text-xs" />
+									</div>
+								</button>
+							</div>
+							<div class="flex gap-1">
+								<div id="mobileHueValue" class="transition bg-[var(--btn-regular-bg)] w-8 h-6 rounded-md flex justify-center font-bold text-xs items-center text-[var(--btn-content)]">
+									<span id="mobile-hue-display">0</span>
+								</div>
+							</div>
+						</div>
+						<div class="w-full h-5 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded-lg select-none">
+							<input aria-label="主题色" type="range" min="0" max="360" class="w-full h-5 color-slider" id="mobile-color-slider" step="5">
+						</div>
+					</div>
+				</div>
+			)}
+			
+			<!-- 夜间模式切换 -->
+			<div class="scale-90">
+				<LightDarkSwitch client:only="svelte" />
+			</div>
+			
+			<!-- 菜单按钮 -->
+			<button 
+				id="mobile-menu-toggle" 
+				class="btn-plain scale-animation rounded-lg w-9 h-9 active:scale-90 text-[var(--deep-text)] hover:bg-[var(--btn-regular-bg-hover)]" 
+				aria-label="Toggle Navigation"
+			>
+				<Icon name="material-symbols:menu-rounded" class="text-sm" />
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- 手机端导航菜单面板 - 右侧小方块样式 -->
+<div id="mobile-nav-panel" class="fixed top-16 right-4 w-56 bg-white dark:bg-[var(--card-bg)] border border-[var(--line-divider)] z-40 lg:hidden transform translate-x-full opacity-0 transition-all duration-300 shadow-xl rounded-xl">
+	<nav class="p-3">
+		<ul class="space-y-1">
+			{links.map((l) => (
+				<li>
+					<button 
+						data-swup-link
+						data-href={l.external ? l.url : url(l.url)}
+						data-external={l.external}
+						class="flex flex-row items-center p-2.5 transition-all group nav-link w-full rounded-lg hover:bg-[var(--btn-regular-bg-hover)]"
+					>
+						<div class="nav-icon-container w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-2.5 transition-all relative">
+							{l.name.includes('主页') && <Icon name="material-symbols:home-outline-rounded" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('系列') && <Icon name="material-symbols:library-books-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('归档') && <Icon name="material-symbols:archive-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('时间盒') && <Icon name="material-symbols:schedule" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('友链') && <Icon name="material-symbols:group-outline" class="text-sm text-black dark:text-white" />}
+							{l.name.includes('关于') && <Icon name="material-symbols:person-outline" class="text-sm text-black dark:text-white" />}
+						</div>
+						<span class="text-sm text-black dark:text-white text-left flex-1">{l.name}</span>
+						{l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-xs text-[var(--deep-text)]/70 ml-auto" />}
+					</button>
+				</li>
+			))}
+		</ul>
+	</nav>
+</div>
+
+<script>
+	import { getHue, setHue, getDefaultHue } from '@utils/setting-utils';
+	
+	// 导航链接点击处理
+	function initSwupNavigation() {
+		const swupLinks = document.querySelectorAll('[data-swup-link]');
+		
+		swupLinks.forEach(link => {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				const href = link.getAttribute('data-href');
+				const isExternal = link.getAttribute('data-external') === 'true';
+				
+				if (isExternal) {
+					window.open(href, '_blank');
+				} else if (window.swup && href) {
+					// 关闭手机端导航面板
+					closeMobileNavPanel();
+					window.swup.navigate(href);
+				} else if (href) {
+					window.location.href = href;
+				}
+			});
+		});
+	}
+	
+	// 手机端导航面板控制
+	function toggleMobileNavPanel() {
+		const panel = document.getElementById('mobile-nav-panel');
+		
+		if (panel) {
+			const isOpen = !panel.classList.contains('translate-x-full');
+			
+			if (isOpen) {
+				closeMobileNavPanel();
+			} else {
+				openMobileNavPanel();
+			}
+		}
+	}
+	
+	function openMobileNavPanel() {
+		const panel = document.getElementById('mobile-nav-panel');
+		
+		if (panel) {
+			panel.classList.remove('translate-x-full');
+			panel.classList.remove('opacity-0');
+		}
+	}
+	
+	function closeMobileNavPanel() {
+		const panel = document.getElementById('mobile-nav-panel');
+		
+		if (panel) {
+			panel.classList.add('translate-x-full');
+			panel.classList.add('opacity-0');
+		}
+	}
+	
+	// PC端主题色设置
+	function loadDesktopThemeScript() {
+		const switchButton = document.getElementById('display-settings-switch');
+		const themePanel = document.getElementById('custom-theme-panel');
+		const colorSlider = document.getElementById('custom-color-slider');
+		const hueDisplay = document.getElementById('hue-display');
+		const resetBtn = document.getElementById('reset-hue-btn');
+		
+		if (switchButton && themePanel) {
+			// 初始化色调值
+			const currentHue = getHue();
+			if (colorSlider) (colorSlider as HTMLInputElement).value = currentHue.toString();
+			if (hueDisplay) hueDisplay.textContent = currentHue.toString();
+			
+			// 切换面板显示
+			switchButton.addEventListener('click', () => {
+				themePanel.classList.toggle('opacity-0');
+				themePanel.classList.toggle('pointer-events-none');
+			});
+			
+			// 滑块变化事件
+			if (colorSlider) {
+				colorSlider.addEventListener('input', (e) => {
+					if (e.target) {
+						const hue = (e.target as HTMLInputElement).value;
+						setHue(parseInt(hue));
+						if (hueDisplay) hueDisplay.textContent = hue;
+					}
+				});
+			}
+			
+			// 重置按钮
+			if (resetBtn) {
+				resetBtn.addEventListener('click', () => {
+					const defaultHue = getDefaultHue();
+					setHue(defaultHue);
+					if (colorSlider) (colorSlider as HTMLInputElement).value = defaultHue.toString();
+					if (hueDisplay) hueDisplay.textContent = defaultHue.toString();
+				});
+			}
+			
+			// 点击外部关闭面板
+			document.addEventListener('click', (e) => {
+				if (e.target && !themePanel.contains(e.target as Node) && !switchButton.contains(e.target as Node)) {
+					themePanel.classList.add('opacity-0', 'pointer-events-none');
+				}
+			});
+		}
+	}
+	
+	// 手机端主题色设置
+	function loadMobileThemeScript() {
+		const switchButton = document.getElementById('mobile-display-settings-switch');
+		const themePanel = document.getElementById('mobile-theme-panel');
+		const colorSlider = document.getElementById('mobile-color-slider');
+		const hueDisplay = document.getElementById('mobile-hue-display');
+		const resetBtn = document.getElementById('mobile-reset-hue-btn');
+		
+		if (switchButton && themePanel) {
+			// 初始化色调值
+			const currentHue = getHue();
+			if (colorSlider) (colorSlider as HTMLInputElement).value = currentHue.toString();
+			if (hueDisplay) hueDisplay.textContent = currentHue.toString();
+			
+			// 切换面板显示
+			switchButton.addEventListener('click', () => {
+				themePanel.classList.toggle('opacity-0');
+				themePanel.classList.toggle('pointer-events-none');
+			});
+			
+			// 滑块变化事件
+			if (colorSlider) {
+				colorSlider.addEventListener('input', (e) => {
+					if (e.target) {
+						const hue = (e.target as HTMLInputElement).value;
+						setHue(parseInt(hue));
+						if (hueDisplay) hueDisplay.textContent = hue;
+					}
+				});
+			}
+			
+			// 重置按钮
+			if (resetBtn) {
+				resetBtn.addEventListener('click', () => {
+					const defaultHue = getDefaultHue();
+					setHue(defaultHue);
+					if (colorSlider) (colorSlider as HTMLInputElement).value = defaultHue.toString();
+					if (hueDisplay) hueDisplay.textContent = defaultHue.toString();
+				});
+			}
+			
+			// 点击外部关闭面板
+			document.addEventListener('click', (e) => {
+				if (e.target && !themePanel.contains(e.target as Node) && !switchButton.contains(e.target as Node)) {
+					themePanel.classList.add('opacity-0', 'pointer-events-none');
+				}
+			});
+		}
+	}
+	
+	// 页面加载时初始化
+	document.addEventListener('DOMContentLoaded', () => {
+		initSwupNavigation();
+		loadDesktopThemeScript();
+		loadMobileThemeScript();
+		
+		// 绑定手机端菜单按钮事件
+		const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+		
+		if (mobileMenuToggle) {
+			mobileMenuToggle.addEventListener('click', toggleMobileNavPanel);
+		}
+	});
+	
+	// swup页面切换后重新初始化
+	if (typeof window !== 'undefined' && window.swup) {
+		window.swup.hooks.on('content:replace', () => {
+			initSwupNavigation();
+		});
+	}
+</script>
+
+<style>
+	/* PC端侧边栏样式 */
+	#side-navbar {
+		transition: transform 0.3s ease;
+	}
+	
+	/* 手机端顶部导航栏样式 */
+	#mobile-navbar {
+		backdrop-filter: blur(10px);
+	}
+	
+	/* 手机端导航面板样式 */
+	#mobile-nav-panel {
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	
+	/* 导航链接悬停效果 */
+	.nav-link:hover .nav-icon-container {
+		box-shadow: 0 0 0 2px var(--primary);
+		transform: scale(1.05);
+	}
+	
+	.nav-link {
+		border-radius: 0.5rem;
+	}
+	
+	.nav-link:hover {
+		background: transparent; /* PC端移除背景色变化 */
+	}
+	
+	/* 手机端导航链接悬停效果 */
+	#mobile-nav-panel .nav-link:hover {
+		background: var(--btn-regular-bg-hover); /* 手机端保留背景色变化 */
+	}
+	
+	.nav-icon-container {
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	
+	/* 彩虹色滑块样式 */
+	.color-slider {
+		-webkit-appearance: none;
+		height: 1.25rem;
+		background-image: var(--color-selection-bar);
+		transition: background-image 0.15s ease-in-out;
+		border-radius: 0.5rem;
+	}
+	
+	/* 滑块拖拽按钮样式 */
+	.color-slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		height: 0.875rem;
+		width: 0.875rem;
+		border-radius: 50%;
+		background: white;
+		border: 2px solid var(--primary);
+		cursor: pointer;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	}
+	
+	.color-slider::-webkit-slider-thumb:hover {
+		background: rgba(255, 255, 255, 0.8);
+	}
+	
+	.color-slider::-webkit-slider-thumb:active {
+		background: rgba(255, 255, 255, 0.6);
+	}
+	
+	/* Firefox样式 */
+	.color-slider::-moz-range-thumb {
+		-webkit-appearance: none;
+		height: 0.875rem;
+		width: 0.4rem;
+		border-radius: 0.125rem;
+		border-width: 0;
+		background: rgba(255, 255, 255, 0.7);
+		box-shadow: none;
+		cursor: pointer;
+	}
+	
+	.color-slider::-moz-range-thumb:hover {
+		background: rgba(255, 255, 255, 0.8);
+	}
+	
+	.color-slider::-moz-range-thumb:active {
+		background: rgba(255, 255, 255, 0.6);
+	}
+	
+	/* 手机端主体内容间距 */
+	@media (max-width: 1023px) {
+		body {
+			padding-top: 3.5rem; /* 为顶部导航栏留出空间 */
+		}
+	}
+</style>
