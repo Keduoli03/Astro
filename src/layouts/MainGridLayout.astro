@@ -55,7 +55,7 @@ const mainPanelTop = siteConfig.banner.enable
 <SideNavbar />
 
 <!-- Banner -->
-{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden lg:ml-16`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
+{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full lg:w-[calc(100%-4rem)] transition duration-700 overflow-hidden lg:ml-16`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
     <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
                   src={siteConfig.banner.src} position={siteConfig.banner.position}
     >
@@ -63,7 +63,7 @@ const mainPanelTop = siteConfig.banner.enable
 </div>}
 
 <!-- Main content -->
-<div class="absolute w-full z-30 pointer-events-none lg:ml-16 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
+<div class="absolute w-full lg:w-[calc(100%-4rem)] z-30 pointer-events-none lg:ml-16 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
     <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto pointer-events-auto">
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-4 pt-4 lg:pt-8">
             
