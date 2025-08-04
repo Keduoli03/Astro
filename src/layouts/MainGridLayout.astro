@@ -55,7 +55,7 @@ const mainPanelTop = siteConfig.banner.enable
 <SideNavbar />
 
 <!-- Banner -->
-{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden lg:ml-8`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
+{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-[calc(100%-2rem)] transition duration-700 overflow-hidden lg:ml-8`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
     <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
                   src={siteConfig.banner.src} position={siteConfig.banner.position}
     >
@@ -63,7 +63,7 @@ const mainPanelTop = siteConfig.banner.enable
 </div>}
 
 <!-- Main content -->
-<div class="absolute w-full z-30 pointer-events-none lg:ml-8 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
+<div class="absolute w-[calc(100%-2rem)] z-30 pointer-events-none lg:ml-8 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
     <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto pointer-events-auto">
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-4 pt-4 lg:pt-8">
             
@@ -97,28 +97,27 @@ const mainPanelTop = siteConfig.banner.enable
             </div>
         </div>
 
-        <!-- <BackToTop></BackToTop>
-        <ScrollToBottom></ScrollToBottom> -->
-        <SmartScrollButton></SmartScrollButton>
-    </div>
-</div>
+        <!-- TOC -->
+        <div class="absolute w-[calc(100%-2rem)] z-0 hidden 2xl:block lg:ml-8">
+            <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto">
+                {siteConfig.toc.enable && <div id="toc-wrapper" class:list={["hidden lg:block transition absolute top-0 -right-[var(--toc-width)] w-[var(--toc-width)] items-center",
+                    {"toc-hide": siteConfig.banner.enable}]}
+                >
+                    <div id="toc-inner-wrapper" class="fixed top-14 w-[var(--toc-width)] h-[calc(100vh_-_20rem)] overflow-y-scroll overflow-x-hidden hide-scrollbar">
+                        <div id="toc" class="w-full h-full transition-swup-fade ">
+                            <div class="h-8 w-full"></div>
+                            <TOC headings={headings}></TOC>
+                            <div class="h-8 w-full"></div>
+                        </div>
+                    </div>
+                </div>}
 
-<!-- TOC -->
-<div class="absolute w-full z-0 hidden 2xl:block lg:ml-16">
-    <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto">
-        {siteConfig.toc.enable && <div id="toc-wrapper" class:list={["hidden lg:block transition absolute top-0 -right-[var(--toc-width)] w-[var(--toc-width)] items-center",
-            {"toc-hide": siteConfig.banner.enable}]}
-        >
-            <div id="toc-inner-wrapper" class="fixed top-14 w-[var(--toc-width)] h-[calc(100vh_-_20rem)] overflow-y-scroll overflow-x-hidden hide-scrollbar">
-                <div id="toc" class="w-full h-full transition-swup-fade ">
-                    <div class="h-8 w-full"></div>
-                    <TOC headings={headings}></TOC>
-                    <div class="h-8 w-full"></div>
-                </div>
+                {!siteConfig.toc.enable && <div id="toc"></div>}
             </div>
-        </div>}
+        </div>
 
         {!siteConfig.toc.enable && <div id="toc"></div>}
+        <SmartScrollButton></SmartScrollButton>
     </div>
 </div>
 
