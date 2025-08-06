@@ -51,6 +51,11 @@ const mainPanelTop = siteConfig.banner.enable
 
 <slot slot="head" name="head"></slot>
 
+<!-- Live2D容器-->
+<div id="live2d-widget" class="fixed left-22 bottom-6 pointer-events-auto">
+
+</div>
+
 <!-- 侧边导航栏 -->
 <SideNavbar />
 
@@ -62,11 +67,15 @@ const mainPanelTop = siteConfig.banner.enable
     </ImageWrapper>
 </div>}
 
+
+
 <!-- Main content -->
 <div class="absolute w-full px-2 md:w-[calc(100%-2rem)] md:px-0 z-30 pointer-events-none lg:ml-8 pt-14 lg:pt-0" style={`top: ${mainPanelTop}`}>
     <div class="relative max-w-[calc(var(--page-width)+1rem)] mx-auto pointer-events-auto">
+        
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4 pt-4 lg:pt-8">
             
+
             <!-- Banner image credit -->
             {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
@@ -121,6 +130,9 @@ const mainPanelTop = siteConfig.banner.enable
     </div>
 </div>
 
+<!-- Live2D Script -->
+<script src="https://live2d.blueke.top/autoload.js"></script>
+
 <!-- 右下角悬浮搜索按钮 - 只在主页显示 -->
 <div id="floating-search-wrapper" class="fixed bottom-6 right-6 z-50 hidden">
     <div id="floating-search-container" class="relative">
@@ -164,6 +176,7 @@ const mainPanelTop = siteConfig.banner.enable
         </div>
     </div>
 </div>
+
 
 <script>
     // 悬浮搜索功能
