@@ -68,7 +68,7 @@ export default defineConfig({
 				}),
 			],
 			defaultProps: {
-				wrap: true,
+				wrap: false,
 				showLineNumbers: true,
 			},
 			// styleOverrides: {
