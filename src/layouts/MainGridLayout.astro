@@ -9,6 +9,7 @@ import SideNavbar from "@components/SideNavbar.astro"; // 新增
 import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
+import Live2D from "../components/mine/live2d.astro";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
@@ -52,7 +53,7 @@ const mainPanelTop = siteConfig.banner.enable
 <slot slot="head" name="head"></slot>
 
 <!-- Live2D容器-->
-<div id="live2d-widget" class="fixed left-22 bottom-6 pointer-events-auto">
+<Live2D />
 
 </div>
 
@@ -130,8 +131,6 @@ const mainPanelTop = siteConfig.banner.enable
     </div>
 </div>
 
-<!-- Live2D Script -->
-<script src="https://live2d.blueke.top/autoload.js"></script>
 
 <!-- 右下角悬浮搜索按钮 - 只在主页显示 -->
 <div id="floating-search-wrapper" class="fixed bottom-6 right-6 z-50 hidden">
@@ -336,3 +335,4 @@ const mainPanelTop = siteConfig.banner.enable
     });
 </script>
 </Layout>
+
