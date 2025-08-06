@@ -4,6 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import Live2D from "@components/mine/live2d.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -144,7 +145,8 @@ const bannerOffset =
 
 
 		<slot name="head"></slot>
-
+		<!-- Live2D容器-->
+<Live2D />
 		<!-- sitemap -->
 		<link rel="sitemap" href="/sitemap-index.xml" />
 

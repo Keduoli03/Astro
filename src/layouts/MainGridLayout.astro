@@ -48,15 +48,12 @@ const mainPanelTop = siteConfig.banner.enable
 	: "0";
 ---
 
+
+
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
 <slot slot="head" name="head"></slot>
-
-<!-- Live2D容器-->
-<Live2D />
-
 </div>
-
 <!-- 侧边导航栏 -->
 <SideNavbar />
 
@@ -335,4 +332,3 @@ const mainPanelTop = siteConfig.banner.enable
     });
 </script>
 </Layout>
-
