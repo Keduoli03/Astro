@@ -10,7 +10,43 @@
 
 <!-- Live2D脚本加载 -->
 <script src="https://live2d.blueke.top/autoload.js"></script>
+
+<!-- 添加移动端检测脚本 -->
+<script is:inline>
+  // 检测是否为移动设备，如果是则不加载Live2D
+  function isMobileDevice() {
+    return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+  
+  // 如果是移动设备，隐藏Live2D容器
+  if (isMobileDevice()) {
+    const live2dWidget = document.getElementById('live2d-widget');
+    if (live2dWidget) {
+      live2dWidget.style.display = 'none';
+    }
+    
+    // 阻止Live2D脚本执行
+    window.addEventListener('DOMContentLoaded', function() {
+      const waifuElements = document.querySelectorAll('#waifu, #waifu-toggle, #waifu-tips');
+      waifuElements.forEach(element => {
+        element.style.display = 'none';
+      });
+    });
+  }
+</script>
+
 <style is:global>
+    /* 移动端隐藏Live2D */
+    @media (max-width: 768px) {
+        #live2d-widget,
+        #waifu,
+        #waifu-toggle,
+        #waifu-tips,
+        #waifu-tool {
+            display: none !important;
+        }
+    }
+    
     #waifu-toggle {
 	background-color: #fa0;
 	border-radius: 5px;
