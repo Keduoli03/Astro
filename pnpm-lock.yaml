@@ -71,6 +71,9 @@ importers:
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
+      bilibili-bangumi-component:
+        specifier: ^0.3.1
+        version: 0.3.1
       hastscript:
         specifier: ^9.0.1
         version: 9.0.1
@@ -2116,6 +2119,9 @@ packages:
 
   bcp-47-match@2.0.3:
     resolution: {integrity: sha512-JtTezzbAibu8G0R9op9zb3vcWZd9JF6M0xOYGPn0fNCd7wOpRB1mU2mH9T8gaBGbAAyIIVgB2G7xG0GP98zMAQ==}
+
+  bilibili-bangumi-component@0.3.1:
+    resolution: {integrity: sha512-RrXCmOKvKeVDXk+VR4oBLvbe20N6Hzjk2dp6SXNle4mlo8ywvERj1pvCQBT7svEkLW9wRw0wNUssuA1PBDdHdA==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -7491,6 +7497,8 @@ snapshots:
   base64-js@1.5.1: {}
 
   bcp-47-match@2.0.3: {}
+
+  bilibili-bangumi-component@0.3.1: {}
 
   binary-extensions@2.3.0: {}
 
