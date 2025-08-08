@@ -1,0 +1,170 @@
+---
+// 这是一个纯客户端组件，不在服务器端渲染任何内容
+---
+
+<div id="series-panel-container" class="fixed left-20 top-20 z-40 w-48 hidden xl:block" style="display: none;">
+	<div class="sticky top-20">
+		<div id="series-panel" class="card-base px-4 py-4">
+			<!-- 内容将由 JavaScript 动态填充 -->
+		</div>
+	</div>
+</div>
+
+<script>
+	// 定义文章数据类型
+	interface PostData {
+		slug: string;
+		title: string;
+		series?: string;
+		published: string;
+		url: string;
+	}
+
+	let allPosts: PostData[] | null = null;
+	
+	// 获取所有文章数据
+	async function getAllPosts(): Promise<PostData[]> {
+		if (allPosts) return allPosts;
+		
+		try {
+			// 从页面中提取文章数据
+			const response = await fetch('/posts.json');
+			if (response.ok) {
+				allPosts = await response.json();
+				return allPosts as PostData[];
+			}
+		} catch (error) {
+			console.log('无法从API获取文章数据，尝试从页面提取');
+		}
+		
+		// 如果API不可用，返回空数组
+		return [];
+	}
+	
+	// 从页面URL获取当前文章信息
+	function getCurrentArticleInfo() {
+		const path = window.location.pathname;
+		
+		// 检查是否是文章页面
+		if (!path.includes('/posts/')) {
+			return null;
+		}
+		
+		// 从 URL 提取 slug
+		const slug = path.split('/posts/')[1]?.replace('/', '');
+		
+		// 尝试从页面中获取系列信息
+		const seriesElement = document.querySelector('meta[name="series"]');
+		const series = seriesElement?.getAttribute('content');
+		
+		return series && slug ? { series, slug } : null;
+	}
+	
+	// 渲染系列面板
+	async function renderSeriesPanel() {
+		const articleInfo = getCurrentArticleInfo();
+		
+		if (!articleInfo) {
+			hideSeriesPanel();
+			return;
+		}
+		
+		const { series, slug: currentSlug } = articleInfo;
+		const posts = await getAllPosts();
+		
+		if (!posts || posts.length === 0) {
+			hideSeriesPanel();
+			return;
+		}
+		
+		// 筛选出同一系列的文章
+		const seriesPosts = posts.filter(
+			(post) => post.series === series && post.series !== undefined,
+		);
+		
+		if (seriesPosts.length <= 1) {
+			hideSeriesPanel();
+			return;
+		}
+		
+		// 按发布日期排序
+		seriesPosts.sort((a: PostData, b: PostData) => {
+			const dateA = new Date(a.published);
+			const dateB = new Date(b.published);
+			return dateA > dateB ? 1 : -1;
+		});
+		
+		const panel = document.getElementById('series-panel');
+		if (!panel) return;
+		
+		panel.innerHTML = `
+			<div class="flex items-center mb-3">
+				<svg class="text-lg text-[var(--primary)] mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+					<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+				</svg>
+				<h3 class="font-medium text-sm text-black/80 dark:text-white/80">系列</h3>
+			</div>
+			
+			<div class="text-xs text-black/60 dark:text-white/60 mb-1 font-medium">
+				${series}
+			</div>
+			
+			<div class="text-xs text-black/40 dark:text-white/40 mb-3">
+				共 ${seriesPosts.length} 篇
+			</div>
+			
+			<div class="space-y-1">
+				${seriesPosts.map((post, index) => {
+					const isCurrent = post.slug === currentSlug;
+					return `
+						<div class="series-item flex items-start p-2 rounded-md transition-colors ${
+							isCurrent ? 'bg-[var(--primary)]/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
+						}" data-slug="${post.slug}">
+							<div class="series-number w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 mt-0.5 flex-shrink-0 ${
+								isCurrent 
+									? 'bg-[var(--primary)] text-white' 
+									: 'bg-black/10 dark:bg-white/10 text-black/50 dark:text-white/50'
+							}">
+								${index + 1}
+							</div>
+							
+							${isCurrent ? `
+								<div class="series-title flex-1 font-medium text-[var(--primary)] text-xs leading-relaxed">
+									${post.title}
+								</div>
+							` : `
+								<a href="${post.url}" class="series-title flex-1 text-xs text-black/70 dark:text-white/70 hover:text-[var(--primary)] transition-colors leading-relaxed" title="${post.title}">
+									${post.title}
+								</a>
+							`}
+						</div>
+					`;
+				}).join('')}
+			</div>
+		`;
+		
+		showSeriesPanel();
+	}
+	
+	// 显示系列面板
+	function showSeriesPanel() {
+		const container = document.getElementById('series-panel-container');
+		if (container) {
+			container.style.display = 'block';
+		}
+	}
+	
+	// 隐藏系列面板
+	function hideSeriesPanel() {
+		const container = document.getElementById('series-panel-container');
+		if (container) {
+			container.style.display = 'none';
+		}
+	}
+	
+	// 监听页面变化
+	document.addEventListener('DOMContentLoaded', renderSeriesPanel);
+	window.addEventListener('popstate', renderSeriesPanel);
+	document.addEventListener('astro:page-load', renderSeriesPanel);
+	document.addEventListener('swup:contentReplaced', renderSeriesPanel);
+</script>
