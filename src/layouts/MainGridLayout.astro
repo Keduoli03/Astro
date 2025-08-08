@@ -227,34 +227,62 @@ const mainPanelTop = siteConfig.banner.enable
         
         // 执行搜索
         async function performSearch(keyword: string) {
-            if (!searchResults) return;
-            
-            // 显示搜索中状态
-            searchResults.innerHTML = '<div class="text-sm text-black/50 dark:text-white/50 text-center py-4">搜索中...</div>';
-            
-            try {
-                if (window.pagefind) {
-                    const response = await window.pagefind.search(keyword);
-                    const results = await Promise.all(
-                        response.results.slice(0, 8).map(item => item.data())
-                    );
-                    
-                    if (results.length > 0) {
-                        searchResults.innerHTML = results.map(item => `
-                            <a href="${item.url}" class="block p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0">
-                                <div class="font-medium text-black/80 dark:text-white/80 mb-1">${item.meta.title}</div>
-                                <div class="text-sm text-black/60 dark:text-white/60 line-clamp-2">${item.excerpt}</div>
-                            </a>
-                        `).join('');
-                    } else {
-                        searchResults.innerHTML = '<div class="text-sm text-black/50 dark:text-white/50 text-center py-4">未找到相关结果</div>';
-                    }
-                } else {
-                    searchResults.innerHTML = '<div class="text-sm text-red-500 text-center py-4">搜索功能暂不可用</div>';
+            if (!keyword || keyword.trim() === '') {
+                if (searchResults) {
+                    searchResults.innerHTML = '';
                 }
+                return;
+            }
+        
+            // 显示搜索中状态
+            if (searchResults) {
+                searchResults.innerHTML = '<div class="text-center py-4 text-neutral-600">搜索中...</div>';
+            }
+        
+            try {
+                // 等待Pagefind加载完成（最多等待5秒）
+                let attempts = 0;
+                const maxAttempts = 50; // 5秒，每次等待100ms
+                
+                while (!window.pagefind && attempts < maxAttempts) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    attempts++;
+                }
+        
+                if (!window.pagefind) {
+                    if (searchResults) {
+                        searchResults.innerHTML = '<div class="text-center py-4 text-red-500">搜索功能暂不可用，请稍后再试</div>';
+                    }
+                    return;
+                }
+        
+                // 执行搜索
+                const search = await window.pagefind.search(keyword);
+                
+                if (search.results.length === 0) {
+                    if (searchResults) {
+                        searchResults.innerHTML = '<div class="text-center py-4 text-neutral-600">未找到相关结果</div>';
+                    }
+                    return;
+                }
+        
+                // 渲染搜索结果（限制前8个结果）
+                const results = await Promise.all(search.results.slice(0, 8).map(result => result.data()));
+                
+                if (searchResults) {
+                    searchResults.innerHTML = results.map(result => `
+                        <a href="${result.url}" class="block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors">
+                            <h3 class="font-medium text-neutral-900 dark:text-neutral-100 mb-1">${result.meta.title || '无标题'}</h3>
+                            <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">${result.excerpt}</p>
+                        </a>
+                    `).join('');
+                }
+                
             } catch (error) {
                 console.error('搜索出错:', error);
-                searchResults.innerHTML = '<div class="text-sm text-red-500 text-center py-4">搜索出错，请稍后重试</div>';
+                if (searchResults) {
+                    searchResults.innerHTML = '<div class="text-center py-4 text-red-500">搜索出错，请重试</div>';
+                }
             }
         }
         
