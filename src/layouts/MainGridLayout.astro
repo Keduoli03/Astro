@@ -187,8 +187,9 @@ const mainPanelTop = siteConfig.banner.enable
         
         // 打开/关闭搜索面板
         sidebarSearchBtn?.addEventListener('click', () => {
-            isSearchOpen = !isSearchOpen;
-            if (isSearchOpen) {
+            if (!isSearchOpen) {
+                // 打开搜索面板
+                isSearchOpen = true;
                 searchPanel?.classList.remove('opacity-0', 'pointer-events-none');
                 searchPanel?.classList.add('opacity-100', 'pointer-events-auto');
                 const panelContent = searchPanel?.querySelector('div');
@@ -198,6 +199,7 @@ const mainPanelTop = siteConfig.banner.enable
                     searchInput?.focus();
                 }, 100);
             } else {
+                // 关闭搜索面板
                 closeSearchPanel();
             }
         });
