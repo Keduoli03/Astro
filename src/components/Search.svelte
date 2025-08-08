@@ -6,10 +6,26 @@ import { url } from "@utils/url-utils.ts";
 import { onMount } from "svelte";
 import type { SearchResult } from "@/global";
 
-export let showSearchButtons = false; // 新增的prop
+// 导出open方法供外部调用
+export function openSearchPanel() {
+	const panel = document.getElementById("search-panel");
+	panel?.classList.remove("hidden");
+	document.getElementById("search-input")?.focus();
+}
 
-let keywordDesktop = "";
-let keywordMobile = "";
+export function closeSearchPanel() {
+	const panel = document.getElementById("search-panel");
+	panel?.classList.add("hidden");
+}
+
+// 处理面板点击事件
+function handlePanelClick(e: MouseEvent) {
+	if (e.target === e.currentTarget) {
+		closeSearchPanel();
+	}
+}
+
+let keyword = "";
 let result: SearchResult[] = [];
 let isSearching = false;
 let pagefindLoaded = false;
@@ -18,53 +34,24 @@ let initialized = false;
 const fakeResult: SearchResult[] = [
 	{
 		url: url("/"),
-		meta: {
-			title: "This Is a Fake Search Result",
-		},
+		meta: { title: "This Is a Fake Search Result" },
 		excerpt:
 			"Because the search cannot work in the <mark>dev</mark> environment.",
 	},
 	{
 		url: url("/"),
-		meta: {
-			title: "If You Want to Test the Search",
-		},
+		meta: { title: "If You Want to Test the Search" },
 		excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
 	},
 ];
 
-const togglePanel = () => {
-	const panel = document.getElementById("search-panel");
-	panel?.classList.toggle("float-panel-closed");
-};
-
-// 新增的函数，供外部调用来打开搜索面板
-export const openSearchPanel = () => {
-	const panel = document.getElementById("search-panel");
-	panel?.classList.remove("float-panel-closed");
-};
-
-const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
-	const panel = document.getElementById("search-panel");
-	if (!panel || !isDesktop) return;
-
-	if (show) {
-		panel.classList.remove("float-panel-closed");
-	} else {
-		panel.classList.add("float-panel-closed");
-	}
-};
-
-const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
+const search = async (): Promise<void> => {
 	if (!keyword) {
-		setPanelVisibility(false, isDesktop);
 		result = [];
 		return;
 	}
 
-	if (!initialized) {
-		return;
-	}
+	if (!initialized) return;
 
 	isSearching = true;
 
@@ -78,17 +65,12 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 			);
 		} else if (import.meta.env.DEV) {
 			searchResults = fakeResult;
-		} else {
-			searchResults = [];
-			console.error("Pagefind is not available in production environment.");
 		}
 
 		result = searchResults;
-		setPanelVisibility(result.length > 0, isDesktop);
 	} catch (error) {
 		console.error("Search error:", error);
 		result = [];
-		setPanelVisibility(false, isDesktop);
 	} finally {
 		isSearching = false;
 	}
@@ -101,108 +83,108 @@ onMount(() => {
 			typeof window !== "undefined" &&
 			!!window.pagefind &&
 			typeof window.pagefind.search === "function";
-		console.log("Pagefind status on init:", pagefindLoaded);
-		if (keywordDesktop) search(keywordDesktop, true);
-		if (keywordMobile) search(keywordMobile, false);
+		if (keyword) search();
 	};
 
 	if (import.meta.env.DEV) {
-		console.log(
-			"Pagefind is not available in development mode. Using mock data.",
-		);
 		initializeSearch();
 	} else {
-		document.addEventListener("pagefindready", () => {
-			console.log("Pagefind ready event received.");
-			initializeSearch();
-		});
-		document.addEventListener("pagefindloaderror", () => {
-			console.warn(
-				"Pagefind load error event received. Search functionality will be limited.",
-			);
-			initializeSearch(); // Initialize with pagefindLoaded as false
-		});
+		document.addEventListener("pagefindready", initializeSearch);
+		document.addEventListener("pagefindloaderror", initializeSearch);
 
-		// Fallback in case events are not caught or pagefind is already loaded by the time this script runs
 		setTimeout(() => {
-			if (!initialized) {
-				console.log("Fallback: Initializing search after timeout.");
-				initializeSearch();
-			}
-		}, 2000); // Adjust timeout as needed
+			if (!initialized) initializeSearch();
+		}, 2000);
 	}
+
+	// ESC键关闭面板
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") closeSearchPanel();
+	});
 });
 
-$: if (initialized && keywordDesktop) {
-	(async () => {
-		await search(keywordDesktop, true);
-	})();
-}
-
-$: if (initialized && keywordMobile) {
-	(async () => {
-		await search(keywordMobile, false);
-	})();
+$: if (initialized && keyword) {
+	search();
 }
 </script>
 
-<!-- search bar for desktop view -->
-{#if showSearchButtons}
-<div id="search-bar" class="hidden lg:flex transition-all items-center h-11 mr-2 rounded-lg
-      bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
-      dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
-">
-    <Icon icon="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
-    <input placeholder="{i18n(I18nKey.search)}" bind:value={keywordDesktop} on:focus={() => search(keywordDesktop, true)}
-           class="transition-all pl-10 text-sm bg-transparent outline-0
-         h-full w-40 active:w-60 focus:w-60 text-black/50 dark:text-white/50"
-    >
-</div>
-
-<!-- toggle btn for phone/tablet view -->
-<button on:click={togglePanel} aria-label="Search Panel" id="search-switch"
-        class="btn-plain scale-animation lg:!hidden rounded-lg w-11 h-11 active:scale-90">
-    <Icon icon="material-symbols:search" class="text-[1.25rem]"></Icon>
-</button>
-{/if}
-
-<!-- search panel -->
-<div id="search-panel" class="float-panel float-panel-closed search-panel absolute md:w-[30rem]
-top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
-
-    <!-- search bar inside panel for phone/tablet -->
-    <div id="search-bar-inside" class="flex relative transition-all items-center h-11 rounded-xl
-      bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
-      dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
-  ">
-        <Icon icon="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
-        <input placeholder="搜索文章..." bind:value={keywordMobile}
-               class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
-               focus:w-60 text-black/50 dark:text-white/50"
-        >
+<!-- 搜索面板 -->
+<div 
+  id="search-panel" 
+  class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm transition-opacity duration-300" 
+  on:click={handlePanelClick}
+  on:keydown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      closeSearchPanel();
+    }
+  }}
+  role="dialog"
+  aria-modal="true"
+  tabindex="0"
+>
+  <!-- svelte-ignore a11y_interactive_supports_focus -->
+  <div 
+    class="w-full max-w-2xl bg-[var(--card-bg)] border border-[var(--line-divider)] rounded-xl shadow-2xl p-6 transform transition-all duration-300" 
+    on:click|stopPropagation
+    on:keydown|stopPropagation
+    role="dialog"
+    aria-label="搜索面板内容"
+  >
+    <!-- 搜索输入框 -->
+    <div class="flex relative items-center h-12 rounded-xl mb-4
+        bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
+        dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
+        border-2 border-transparent focus-within:border-[var(--primary)]">
+      <Icon icon="material-symbols:search" class="absolute text-xl pointer-events-none ml-4 transition my-auto text-black/30 dark:text-white/30" />
+      <input 
+        id="search-input"
+        bind:value={keyword}
+        placeholder={i18n(I18nKey.search)}
+        class="pl-12 pr-4 absolute inset-0 text-base bg-transparent outline-0 text-black/70 dark:text-white/70 placeholder:text-black/40 dark:placeholder:text-white/40"
+        autocomplete="off"
+      >
     </div>
-
-    <!-- search results -->
-    {#each result as item}
-        <a href={item.url}
-           class="transition first-of-type:mt-2 group block
-       rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
-            <div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">
-                {item.meta.title}<Icon icon="fa6-solid:chevron-right" class="transition text-[0.75rem] translate-x-1 my-auto text-[var(--primary)]"></Icon>
-            </div>
-            <div class="transition text-sm text-50">
-                {@html item.excerpt}
-            </div>
-        </a>
-    {/each}
+    
+    <!-- 搜索结果 -->
+    {#if isSearching}
+      <div class="text-sm text-black/50 dark:text-white/50 text-center py-4">
+        {i18n(I18nKey.search)}...
+      </div>
+    {:else if result.length > 0}
+      <div class="max-h-80 overflow-y-auto">
+        {#each result as item}
+          <a href={item.url} class="block p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0">
+            <div class="font-medium text-black/80 dark:text-white/80 mb-1">{item.meta.title}</div>
+            <div class="text-sm text-black/60 dark:text-white/60 line-clamp-2">{@html item.excerpt}</div>
+          </a>
+        {/each}
+      </div>
+    {:else if keyword}
+      <div class="text-sm text-black/50 dark:text-white/50 text-center py-4">
+        {i18n(I18nKey.noResultsFound)}
+      </div>
+    {:else}
+      <div class="text-sm text-black/50 dark:text-white/50 text-center py-4">
+        {i18n(I18nKey.searchPrompt)}
+      </div>
+    {/if}
+    
+    <!-- 搜索提示 -->
+    <div class="text-sm text-black/50 dark:text-white/50 mt-3 text-center">
+      {i18n(I18nKey.searchHint)}
+    </div>
+  </div>
 </div>
 
-<style>
-  input:focus {
-    outline: 0;
-  }
-  .search-panel {
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-  }
-</style>
+<!-- 点击背景关闭面板 -->
+<div 
+  class="fixed inset-0 -z-10" 
+  on:click={closeSearchPanel}
+  on:keydown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      closeSearchPanel();
+    }
+  }}
+  role="button"
+  tabindex="0"
+></div>

@@ -4,8 +4,8 @@
 // import ScrollToBottom from "@components/control/ScrollToBottom.astro";
 import SmartScrollButton from "@components/control/SmartScrollButton.astro";
 import Footer from "@components/Footer.astro";
+import SideNavbar from "@components/Navbar.astro"; // 新增
 import Search from "@components/Search.svelte";
-import SideNavbar from "@components/SideNavbar.astro"; // 新增
 import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
@@ -84,9 +84,6 @@ const mainPanelTop = siteConfig.banner.enable
                 </Icon>
             </a>}
 
-            <!-- 注释掉原本的左侧边栏 -->
-            <!-- <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings} series={series}></SideBar> -->
-
             <main id="swup-container" class="transition-swup-fade col-span-1 overflow-hidden">
                 <div id="content-wrapper" class="onload-animation">
                     <slot></slot>
@@ -125,197 +122,6 @@ const mainPanelTop = siteConfig.banner.enable
     </div>
 </div>
 
-
-
-<!-- 屏幕中央搜索面板 -->
-<div id="floating-search-panel" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-    <div class="w-full max-w-2xl bg-[var(--card-bg)] border border-[var(--line-divider)] rounded-xl shadow-2xl p-6 transform scale-95 transition-all duration-300">
-        <!-- 搜索输入框 -->
-        <div class="flex relative transition-all items-center h-12 rounded-xl mb-4
-            bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
-            dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
-            border-2 border-transparent focus-within:border-[var(--primary)]
-        ">
-            <Icon name="material-symbols:search" class="absolute text-xl pointer-events-none ml-4 transition my-auto text-black/30 dark:text-white/30" />
-            <input 
-                id="floating-search-input"
-                placeholder="搜索文章..."
-                class="pl-12 pr-4 absolute inset-0 text-base bg-transparent outline-0 text-black/70 dark:text-white/70 placeholder:text-black/40 dark:placeholder:text-white/40"
-                autocomplete="off"
-            >
-        </div>
-        
-        <!-- 搜索结果容器 -->
-        <div id="floating-search-results" class="max-h-80 overflow-y-auto">
-            <!-- 搜索结果将通过JavaScript动态插入 -->
-        </div>
-        
-        <!-- 搜索提示 -->
-        <div class="text-sm text-black/50 dark:text-white/50 mt-3 text-center">
-            输入关键词开始搜索 • 按 ESC 关闭
-        </div>
-    </div>
-</div>
-
-
-<script>
-    // 搜索功能
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebarSearchBtn = document.getElementById('sidebar-search-btn');
-        const searchPanel = document.getElementById('floating-search-panel');
-        const searchInput = document.getElementById('floating-search-input');
-        const searchResults = document.getElementById('floating-search-results');
-        let isSearchOpen = false;
-        let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-        
-        // 关闭搜索面板的函数
-        function closeSearchPanel() {
-            isSearchOpen = false;
-            searchPanel?.classList.add('opacity-0', 'pointer-events-none');
-            searchPanel?.classList.remove('opacity-100', 'pointer-events-auto');
-            const panelContent = searchPanel?.querySelector('div');
-            panelContent?.classList.add('scale-95');
-            panelContent?.classList.remove('scale-100');
-            if (searchResults) {
-                searchResults.innerHTML = '';
-            }
-            if (searchInput) {
-                (searchInput as HTMLInputElement).value = '';
-            }
-        }
-        
-        // 打开/关闭搜索面板
-        sidebarSearchBtn?.addEventListener('click', () => {
-            if (!isSearchOpen) {
-                // 打开搜索面板
-                isSearchOpen = true;
-                searchPanel?.classList.remove('opacity-0', 'pointer-events-none');
-                searchPanel?.classList.add('opacity-100', 'pointer-events-auto');
-                const panelContent = searchPanel?.querySelector('div');
-                panelContent?.classList.remove('scale-95');
-                panelContent?.classList.add('scale-100');
-                setTimeout(() => {
-                    searchInput?.focus();
-                }, 100);
-            } else {
-                // 关闭搜索面板
-                closeSearchPanel();
-            }
-        });
-        
-        // 搜索功能
-        searchInput?.addEventListener('input', (e) => {
-            const keyword = (e.target as HTMLInputElement)?.value?.trim() ?? '';
-            
-            // 清除之前的搜索延时
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
-            
-            // 延时搜索，避免频繁请求
-            searchTimeout = setTimeout(async () => {
-                if (keyword.length > 0) {
-                    await performSearch(keyword);
-                } else {
-                    // 清空搜索结果
-                    if (searchResults) {
-                        searchResults.innerHTML = '<div class="text-sm text-black/50 dark:text-white/50 text-center py-4">输入关键词开始搜索</div>';
-                    }
-                }
-            }, 300);
-        });
-        
-        // 执行搜索
-        async function performSearch(keyword: string) {
-            if (!keyword || keyword.trim() === '') {
-                if (searchResults) {
-                    searchResults.innerHTML = '';
-                }
-                return;
-            }
-        
-            // 显示搜索中状态
-            if (searchResults) {
-                searchResults.innerHTML = '<div class="text-center py-4 text-neutral-600">搜索中...</div>';
-            }
-        
-            try {
-                // 等待Pagefind加载完成（最多等待5秒）
-                let attempts = 0;
-                const maxAttempts = 50; // 5秒，每次等待100ms
-                
-                while (!window.pagefind && attempts < maxAttempts) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    attempts++;
-                }
-        
-                if (!window.pagefind) {
-                    if (searchResults) {
-                        searchResults.innerHTML = '<div class="text-center py-4 text-red-500">搜索功能暂不可用，请稍后再试</div>';
-                    }
-                    return;
-                }
-        
-                // 执行搜索
-                const search = await window.pagefind.search(keyword);
-                
-                if (search.results.length === 0) {
-                    if (searchResults) {
-                        searchResults.innerHTML = '<div class="text-center py-4 text-neutral-600">未找到相关结果</div>';
-                    }
-                    return;
-                }
-        
-                // 渲染搜索结果（限制前8个结果）
-                const results = await Promise.all(search.results.slice(0, 8).map(result => result.data()));
-                
-                if (searchResults) {
-                    searchResults.innerHTML = results.map(result => `
-                        <a href="${result.url}" class="block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors">
-                            <h3 class="font-medium text-neutral-900 dark:text-neutral-100 mb-1">${result.meta.title || '无标题'}</h3>
-                            <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">${result.excerpt}</p>
-                        </a>
-                    `).join('');
-                }
-                
-            } catch (error) {
-                console.error('搜索出错:', error);
-                if (searchResults) {
-                    searchResults.innerHTML = '<div class="text-center py-4 text-red-500">搜索出错，请重试</div>';
-                }
-            }
-        }
-        
-        // 按ESC键关闭搜索面板
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isSearchOpen) {
-                closeSearchPanel();
-            }
-        });
-        
-        // 点击背景关闭搜索面板
-        searchPanel?.addEventListener('click', (e) => {
-            if (e.target === searchPanel) {
-                closeSearchPanel();
-            }
-        });
-        
-        // SPA导航支持
-        if (window.swup) {
-            window.swup.hooks.on('content:replace', () => {
-                // 页面切换时关闭搜索面板
-                if (isSearchOpen) {
-                    closeSearchPanel();
-                }
-            });
-        }
-    });
-</script>
-</Layout>
-
-
-<!-- 删除原有的搜索面板HTML和JavaScript代码 -->
-<!-- 只保留Search组件，不显示自带按钮 -->
 <Search client:load showSearchButtons={false} />
 
 <script>
@@ -323,10 +129,20 @@ const mainPanelTop = siteConfig.banner.enable
     document.addEventListener('DOMContentLoaded', () => {
         const sidebarSearchBtn = document.getElementById('sidebar-search-btn');
         
-        sidebarSearchBtn?.addEventListener('click', () => {
-            // 触发搜索面板打开
+        sidebarSearchBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // 直接显示搜索面板
             const panel = document.getElementById('search-panel');
-            panel?.classList.toggle('float-panel-closed');
+            if (panel) {
+                panel.classList.remove('hidden');
+                // 聚焦搜索输入框
+                setTimeout(() => {
+                    const searchInput = document.getElementById('search-input');
+                    searchInput?.focus();
+                }, 100);
+            }
         });
         
         // SPA导航支持
@@ -334,12 +150,13 @@ const mainPanelTop = siteConfig.banner.enable
             window.swup.hooks.on('content:replace', () => {
                 // 页面切换时关闭搜索面板
                 const panel = document.getElementById('search-panel');
-                if (panel && !panel.classList.contains('float-panel-closed')) {
-                    panel.classList.add('float-panel-closed');
+                if (panel && !panel.classList.contains('hidden')) {
+                    panel.classList.add('hidden');
                 }
             });
         }
     });
 </script>
+<Search client:load />
 </Layout>
 

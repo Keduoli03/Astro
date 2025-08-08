@@ -38,4 +38,9 @@ export const zh_CN: Translation = {
 	[Key.friends]: "友链",
 	[Key.series]: "系列",
 	[Key.chronobox]: "时间盒",
+
+	// 添加搜索相关翻译
+	[Key.noResultsFound]: "未找到相关结果",
+	[Key.searchPrompt]: "输入关键词开始搜索",
+	[Key.searchHint]: "输入关键词开始搜索 • 按 ESC 关闭",
 };

@@ -35,6 +35,11 @@ enum I18nKey {
 	friends = "friends",
 	series = "series",
 	chronobox = "chronobox",
+
+	// 添加搜索相关的键值
+	noResultsFound = "noResultsFound",
+	searchPrompt = "searchPrompt",
+	searchHint = "searchHint",
 }
 
 export default I18nKey;
