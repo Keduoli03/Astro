@@ -122,24 +122,11 @@ const mainPanelTop = siteConfig.banner.enable
         </div>
 
         {!siteConfig.toc.enable && <div id="toc"></div>}
-        <SmartScrollButton></SmartScrollButton>
+        <SmartScrollButton class="bottom-30 right-12" />
     </div>
 </div>
 
 
-<!-- 右下角悬浮搜索按钮 - 只在主页显示 -->
-<div id="floating-search-wrapper" class="fixed bottom-6 right-6 z-50 hidden">
-    <div id="floating-search-container" class="relative">
-        <!-- 搜索按钮 -->
-        <button 
-            id="floating-search-btn" 
-            class="w-14 h-14 bg-[var(--primary)] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-105 active:scale-95"
-            aria-label="搜索"
-        >
-            <Icon name="material-symbols:search" class="text-2xl" />
-        </button>
-    </div>
-</div>
 
 <!-- 屏幕中央搜索面板 -->
 <div id="floating-search-panel" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
@@ -173,79 +160,45 @@ const mainPanelTop = siteConfig.banner.enable
 
 
 <script>
-    // 悬浮搜索功能
+    // 搜索功能
     document.addEventListener('DOMContentLoaded', () => {
-        const searchWrapper = document.getElementById('floating-search-wrapper');
-        const searchBtn = document.getElementById('floating-search-btn');
+        const sidebarSearchBtn = document.getElementById('sidebar-search-btn');
         const searchPanel = document.getElementById('floating-search-panel');
         const searchInput = document.getElementById('floating-search-input');
         const searchResults = document.getElementById('floating-search-results');
         let isSearchOpen = false;
         let searchTimeout: ReturnType<typeof setTimeout> | undefined;
         
-        // 检查是否为主页（包括分页）
-        function isHomePage() {
-            const path = window.location.pathname;
-            // 主页路径：/ 或 /页码/ (如 /2/, /3/ 等)
-            return path === '/' || /^\/\d+\/$/.test(path);
-        }
-        
-        // 显示/隐藏搜索按钮
-        function toggleSearchButton() {
-            if (isHomePage()) {
-                searchWrapper?.classList.remove('hidden');
-            } else {
-                searchWrapper?.classList.add('hidden');
-                // 如果搜索面板是打开的，关闭它
-                if (isSearchOpen) {
-                    isSearchOpen = false;
-                    searchPanel?.classList.add('opacity-0', 'pointer-events-none');
-                    searchPanel?.classList.remove('opacity-100', 'pointer-events-auto');
-                    const panelContent = searchPanel?.querySelector('div');
-                    panelContent?.classList.add('scale-95');
-                    panelContent?.classList.remove('scale-100');
-                }
+        // 关闭搜索面板的函数
+        function closeSearchPanel() {
+            isSearchOpen = false;
+            searchPanel?.classList.add('opacity-0', 'pointer-events-none');
+            searchPanel?.classList.remove('opacity-100', 'pointer-events-auto');
+            const panelContent = searchPanel?.querySelector('div');
+            panelContent?.classList.add('scale-95');
+            panelContent?.classList.remove('scale-100');
+            if (searchResults) {
+                searchResults.innerHTML = '';
+            }
+            if (searchInput) {
+                (searchInput as HTMLInputElement).value = '';
             }
         }
         
-        // 初始化时检查页面
-        toggleSearchButton();
-        
-        // 监听页面变化（用于 swup 导航）
-        if (window.swup) {
-            window.swup.hooks.on('content:replace', () => {
-                toggleSearchButton();
-            });
-        }
-        
         // 打开/关闭搜索面板
-        searchBtn?.addEventListener('click', () => {
+        sidebarSearchBtn?.addEventListener('click', () => {
             isSearchOpen = !isSearchOpen;
             if (isSearchOpen) {
                 searchPanel?.classList.remove('opacity-0', 'pointer-events-none');
                 searchPanel?.classList.add('opacity-100', 'pointer-events-auto');
-                // 搜索面板内容动画
                 const panelContent = searchPanel?.querySelector('div');
                 panelContent?.classList.remove('scale-95');
                 panelContent?.classList.add('scale-100');
-                // 自动聚焦到输入框
                 setTimeout(() => {
                     searchInput?.focus();
                 }, 100);
             } else {
-                searchPanel?.classList.add('opacity-0', 'pointer-events-none');
-                searchPanel?.classList.remove('opacity-100', 'pointer-events-auto');
-                // 搜索面板内容动画
-                const panelContent = searchPanel?.querySelector('div');
-                panelContent?.classList.add('scale-95');
-                panelContent?.classList.remove('scale-100');
-                // 清空搜索结果
-                if (searchResults) {
-                    searchResults.innerHTML = '';
-                }
-                if (searchInput) {
-                    (searchInput as HTMLInputElement).value = '';
-                }
+                closeSearchPanel();
             }
         });
         
@@ -307,26 +260,27 @@ const mainPanelTop = siteConfig.banner.enable
         // 按ESC键关闭搜索面板
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && isSearchOpen) {
-                isSearchOpen = false;
-                searchPanel?.classList.add('opacity-0', 'pointer-events-none');
-                searchPanel?.classList.remove('opacity-100', 'pointer-events-auto');
-                const panelContent = searchPanel?.querySelector('div');
-                panelContent?.classList.add('scale-95');
-                panelContent?.classList.remove('scale-100');
+                closeSearchPanel();
             }
         });
         
         // 点击背景关闭搜索面板
         searchPanel?.addEventListener('click', (e) => {
             if (e.target === searchPanel) {
-                isSearchOpen = false;
-                searchPanel.classList.add('opacity-0', 'pointer-events-none');
-                searchPanel.classList.remove('opacity-100', 'pointer-events-auto');
-                const panelContent = searchPanel.querySelector('div');
-                panelContent?.classList.add('scale-95');
-                panelContent?.classList.remove('scale-100');
+                closeSearchPanel();
             }
         });
+        
+        // SPA导航支持
+        if (window.swup) {
+            window.swup.hooks.on('content:replace', () => {
+                // 页面切换时关闭搜索面板
+                if (isSearchOpen) {
+                    closeSearchPanel();
+                }
+            });
+        }
     });
 </script>
 </Layout>
+
