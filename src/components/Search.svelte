@@ -29,7 +29,7 @@ let keyword = "";
 let result: SearchResult[] = [];
 let isSearching = false;
 let pagefindLoaded = false;
-let initialized = false;
+let pagefindLoading = false;
 
 const fakeResult: SearchResult[] = [
 	{
@@ -45,25 +45,88 @@ const fakeResult: SearchResult[] = [
 	},
 ];
 
+// 动态加载Pagefind
+const loadPagefind = async (): Promise<boolean> => {
+	if (pagefindLoaded) return true;
+	if (pagefindLoading) {
+		// 如果正在加载，等待加载完成
+		while (pagefindLoading) {
+			await new Promise((resolve) => setTimeout(resolve, 100));
+		}
+		return pagefindLoaded;
+	}
+
+	pagefindLoading = true;
+
+	try {
+		// 动态加载Pagefind脚本
+		const script = document.createElement("script");
+		script.src = "/pagefind/pagefind.js";
+		script.type = "text/javascript";
+
+		const loadPromise = new Promise<boolean>((resolve) => {
+			script.onload = async () => {
+				try {
+					// 等待Pagefind可用，不需要手动调用init()
+					if (window.pagefind) {
+						pagefindLoaded = true;
+						resolve(true);
+					} else {
+						resolve(false);
+					}
+				} catch (error) {
+					console.error("Pagefind initialization error:", error);
+					resolve(false);
+				}
+			};
+
+			script.onerror = () => {
+				console.error("Failed to load Pagefind script");
+				resolve(false);
+			};
+		});
+
+		document.head.appendChild(script);
+		return await loadPromise;
+	} catch (error) {
+		console.error("Error loading Pagefind:", error);
+		return false;
+	} finally {
+		pagefindLoading = false;
+	}
+};
+
 const search = async (): Promise<void> => {
 	if (!keyword) {
 		result = [];
 		return;
 	}
 
-	if (!initialized) return;
-
 	isSearching = true;
 
 	try {
 		let searchResults: SearchResult[] = [];
 
-		if (import.meta.env.PROD && pagefindLoaded && window.pagefind) {
-			const response = await window.pagefind.search(keyword);
-			searchResults = await Promise.all(
-				response.results.map((item) => item.data()),
-			);
+		if (import.meta.env.PROD) {
+			// 在生产环境中按需加载Pagefind
+			const loaded = await loadPagefind();
+			if (loaded && window.pagefind) {
+				const response = await window.pagefind.search(keyword);
+				searchResults = await Promise.all(
+					response.results.map((item) => item.data()),
+				);
+			} else {
+				console.warn("Pagefind failed to load, showing fallback message");
+				searchResults = [
+					{
+						url: url("/"),
+						meta: { title: "搜索功能暂时不可用" },
+						excerpt: "搜索功能加载失败，请刷新页面重试。",
+					},
+				];
+			}
 		} else if (import.meta.env.DEV) {
+			// 开发环境使用模拟数据
 			searchResults = fakeResult;
 		}
 
@@ -77,33 +140,13 @@ const search = async (): Promise<void> => {
 };
 
 onMount(() => {
-	const initializeSearch = () => {
-		initialized = true;
-		pagefindLoaded =
-			typeof window !== "undefined" &&
-			!!window.pagefind &&
-			typeof window.pagefind.search === "function";
-		if (keyword) search();
-	};
-
-	if (import.meta.env.DEV) {
-		initializeSearch();
-	} else {
-		document.addEventListener("pagefindready", initializeSearch);
-		document.addEventListener("pagefindloaderror", initializeSearch);
-
-		setTimeout(() => {
-			if (!initialized) initializeSearch();
-		}, 2000);
-	}
-
 	// ESC键关闭面板
 	document.addEventListener("keydown", (e) => {
 		if (e.key === "Escape") closeSearchPanel();
 	});
 });
 
-$: if (initialized && keyword) {
+$: if (keyword) {
 	search();
 }
 </script>
@@ -145,8 +188,12 @@ $: if (initialized && keyword) {
       >
     </div>
     
-    <!-- 搜索结果 -->
-    {#if isSearching}
+    <!-- 搜索状态提示 -->
+    {#if pagefindLoading}
+      <div class="text-sm text-black/50 dark:text-white/50 text-center py-4">
+        正在加载搜索功能...
+      </div>
+    {:else if isSearching}
       <div class="text-sm text-black/50 dark:text-white/50 text-center py-4">
         {i18n(I18nKey.search)}...
       </div>
