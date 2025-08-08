@@ -4,8 +4,7 @@
 // import ScrollToBottom from "@components/control/ScrollToBottom.astro";
 import SmartScrollButton from "@components/control/SmartScrollButton.astro";
 import Footer from "@components/Footer.astro";
-import Live2D from "@components/mine/live2d.astro";
-import Search from "@components/Search.svelte"; // 添加这行导入
+import Search from "@components/Search.svelte";
 import SideNavbar from "@components/SideNavbar.astro"; // 新增
 import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
@@ -279,6 +278,36 @@ const mainPanelTop = siteConfig.banner.enable
                 // 页面切换时关闭搜索面板
                 if (isSearchOpen) {
                     closeSearchPanel();
+                }
+            });
+        }
+    });
+</script>
+</Layout>
+
+
+<!-- 删除原有的搜索面板HTML和JavaScript代码 -->
+<!-- 只保留Search组件，不显示自带按钮 -->
+<Search client:load showSearchButtons={false} />
+
+<script>
+    // 简化的脚本，只处理侧边栏按钮点击
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebarSearchBtn = document.getElementById('sidebar-search-btn');
+        
+        sidebarSearchBtn?.addEventListener('click', () => {
+            // 触发搜索面板打开
+            const panel = document.getElementById('search-panel');
+            panel?.classList.toggle('float-panel-closed');
+        });
+        
+        // SPA导航支持
+        if (window.swup) {
+            window.swup.hooks.on('content:replace', () => {
+                // 页面切换时关闭搜索面板
+                const panel = document.getElementById('search-panel');
+                if (panel && !panel.classList.contains('float-panel-closed')) {
+                    panel.classList.add('float-panel-closed');
                 }
             });
         }
