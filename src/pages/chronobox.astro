@@ -14,5 +14,20 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 <script>
   import { defineCustomElements } from 'bilibili-bangumi-component/loader'
 
-  defineCustomElements()
+  // 确保自定义元素在各种情况下都能正确注册
+  function initBilibiliBangumi() {
+    if (!customElements.get('bilibili-bangumi')) {
+      defineCustomElements()
+    }
+  }
+
+  // 页面加载时注册
+  initBilibiliBangumi()
+
+  // 监听 Astro 页面加载事件
+  document.addEventListener('astro:page-load', initBilibiliBangumi)
+  // 监听 Swup 页面切换事件
+  document.addEventListener('swup:contentReplaced', initBilibiliBangumi)
+  // 监听 DOMContentLoaded 事件
+  document.addEventListener('DOMContentLoaded', initBilibiliBangumi)
 </script>
