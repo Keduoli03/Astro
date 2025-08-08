@@ -1,4 +1,5 @@
 ---
+import Bangumi from "@components/mine/Bangumi.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
@@ -6,28 +7,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 <MainGridLayout title={i18n(I18nKey.chronobox)} description={i18n(I18nKey.chronobox)} >
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full ">
-      <bilibili-bangumi api="https://api.bgm.blueke.top/api"></bilibili-bangumi>
+      <Bangumi client:load />
     </div>
   </div>
 </MainGridLayout>
-
-<script>
-  import { defineCustomElements } from 'bilibili-bangumi-component/loader'
-
-  // 确保自定义元素在各种情况下都能正确注册
-  function initBilibiliBangumi() {
-    if (!customElements.get('bilibili-bangumi')) {
-      defineCustomElements()
-    }
-  }
-
-  // 页面加载时注册
-  initBilibiliBangumi()
-
-  // 监听 Astro 页面加载事件
-  document.addEventListener('astro:page-load', initBilibiliBangumi)
-  // 监听 Swup 页面切换事件
-  document.addEventListener('swup:contentReplaced', initBilibiliBangumi)
-  // 监听 DOMContentLoaded 事件
-  document.addEventListener('DOMContentLoaded', initBilibiliBangumi)
-</script>
