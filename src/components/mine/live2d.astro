@@ -1,321 +1,341 @@
----
-// Live2D组件
-// 用于在网站右下角显示Live2D模型
----
+<!-- oh-my-live2d 看板娘 -->
+<script>
+  import { loadOml2d, type ModelOptions } from "oh-my-live2d";
+  import { siteConfig } from "@/config";
 
-<!-- Live2D容器 -->
-<div id="live2d-widget">
-    <!-- Live2D模型将在这里加载 -->
-</div>
-
-<!-- Live2D脚本加载 -->
-<script src="https://live2d.blueke.top/autoload.js"></script>
-
-<!-- 添加移动端检测脚本 -->
-<script is:inline>
-  // 检测是否为移动设备，如果是则不加载Live2D
-  function isMobileDevice() {
-    return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  }
-  
-  // 如果是移动设备，隐藏Live2D容器
-  if (isMobileDevice()) {
-    const live2dWidget = document.getElementById('live2d-widget');
-    if (live2dWidget) {
-      live2dWidget.style.display = 'none';
+  const modelList: ModelOptions[] = [
+    {
+      path: 'https://model.hacxy.cn/HK416-1-normal/model.json',
+      position: [0, 60],
+      scale: 0.08,
+      stageStyle: {
+        height: 300,
+        width: 250
+      }
     }
-    
-    // 阻止Live2D脚本执行
-    window.addEventListener('DOMContentLoaded', function() {
-      const waifuElements = document.querySelectorAll('#waifu, #waifu-toggle, #waifu-tips');
-      waifuElements.forEach(element => {
-        element.style.display = 'none';
-      });
+  ];
+
+  const oml2d =
+    siteConfig.live2d.enable &&
+    loadOml2d({
+      dockedPosition: "right",
+      models: modelList,
+      mobileDisplay: false,
+      statusBar: {
+        restMessage: '看板娘休息中',
+        loadingIcon: 'icon-loading'
+      },
+      tips: {
+        // 添加样式配置
+        style: {
+          top: '-25px',
+          fontSize: '12px',
+          // 或者使用 transform
+          transform: 'translateY(-10px) translateX(15px)',  // Y轴上移，X轴右移
+          // 或者使用 marginLeft
+          marginLeft: '15px'      // 右边距15px
+        },
+        idleTips: {
+          wordTheDay(wordTheDayData) {
+            return `${wordTheDayData.hitokoto}  by.${wordTheDayData.from}`;
+          }
+        }
+      },
+      // Menu configuration with all items
+      menus: {
+        disable: false,
+        // 添加样式配置，让菜单往右移动
+        style: {
+          transform: 'translateX(10px)',  // 距离右边的距离，可以调整数值
+          // 或者使用 left 属性
+          // left: '300px'  // 距离左边的距离
+        },
+        items: [
+          {
+            id: 'hitokoto',
+            title: '一言',
+            icon: 'icon-like',
+            onClick(oml2d) {
+              // 定义API源配置（按优先级排序）
+              const API_SOURCES = [
+                {
+                  url: 'https://international.v1.hitokoto.cn',
+                  parser: (data: { hitokoto: string; from: string }) => `${data.hitokoto} —— ${data.from}`
+                },
+                {
+                  url: 'https://v1.hitokoto.cn?encode=json&charset=utf-8',
+                  parser: (data: { hitokoto: string; from: string }) => `${data.hitokoto} —— ${data.from}`
+                },
+                {
+                  url: 'https://hitokoto.icodeq.com/api',
+                  parser: (data: { sentence: string; author?: string }) => `${data.sentence} —— ${data.author || '未知'}`
+                },
+                {
+                  url: 'https://api.a632079.me/hitokoto',
+                  parser: (data: { content: string; creator?: string }) => `${data.content} —— ${data.creator || '未知'}`
+                }
+              ];
+      // 显示错误信息的工具函数
+    const showError = () => {
+      oml2d.tipsMessage('所有数据源均请求失败', 3000, 9);
+    };
+
+    // 带降级策略的请求函数
+    const fetchWithFallback = async (index = 0) => {
+      // 所有数据源都尝试过仍失败
+      if (index >= API_SOURCES.length) {
+        showError();
+        return;
+      }
+
+      try {
+        const source = API_SOURCES[index];
+        const response = await fetch(source.url, {
+          headers: { 'Accept': 'application/json' },
+          referrerPolicy: 'no-referrer-when-downgrade'
+        });
+
+        // 检查HTTP响应状态
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        // 解析响应并显示结果
+        const data = await response.json();
+        oml2d.tipsMessage(source.parser(data), 4000, 10);
+      } 
+      // 尝试下一个数据源
+      catch (error) {
+        fetchWithFallback(index + 1);
+      }
+    };
+
+    // 启动请求流程
+    fetchWithFallback();
+  }
+		  },
+          {
+
+            id: 'switch-skin',
+            title: '换衣服',
+            icon: 'icon-skin',
+            onClick(oml2d) {
+              oml2d.loadNextModelClothes();
+            }
+          },
+          {
+            id: 'switch-model',
+            title: '切换模型',
+            icon: 'icon-switch',
+            onClick(oml2d) {
+              oml2d.loadNextModel();
+            }
+          },
+          {
+            id: 'rest',
+            title: '休息',
+            icon: 'icon-rest',
+            onClick(oml2d) {
+              oml2d.stageSlideOut();
+              // 显式设置状态栏消息为休息状态
+              oml2d.statusBarOpen('看板娘休息中');
+              // 设置状态栏点击事件，让模型重新显示
+              oml2d.setStatusBarClickEvent(() => {
+                oml2d.stageSlideIn();
+              });
+            }
+          },
+          {
+            id: 'about',
+            title: 'About',
+            icon: 'icon-about',
+            onClick(oml2d) {
+              window.open('https://github.com/oh-my-live2d/oh-my-live2d', '_blank');
+            }
+          },
+        ]
+      },
+      primaryColor: 'var(--primary)',
+      sayHello: true
+    });
+
+  // 添加事件监听器
+  if (oml2d) {
+    oml2d.onStageSlideIn(() => {
+      oml2d.statusBarClose();
+      // 不要清理事件，保持状态栏点击功能
+    });
+
+    oml2d.onStageSlideOut(() => {
+      oml2d.statusBarOpen();
+      // 不要清理事件，保持状态栏点击功能
     });
   }
 </script>
 
-<style is:global>
-    /* 移动端隐藏Live2D */
-    @media (max-width: 768px) {
-        #live2d-widget,
-        #waifu,
-        #waifu-toggle,
-        #waifu-tips,
-        #waifu-tool {
-            display: none !important;
-        }
+<!-- https://github.com/orgs/swup/discussions/939  暂时固定样式 -->
+<style id="oml2d-global-style" is:global>
+  @keyframes oml2d-shake-tips {
+    0% {
+      transform: translate(-50%, 5%) scale(0.99);
     }
-    
-    #waifu-toggle {
-	background-color: #fa0;
-	border-radius: 5px;
-	bottom: 66px;
-	cursor: pointer;
-	display: flex;
-	justify-content: flex-end;
-	left: 0;
-	margin-left: -100px;
-	padding: 5px;
-	position: fixed;
-	transition: margin-left 1s;
-	width: 60px;
-}
+    50% {
+      transform: translate(-50%, 0%) scale(1);
+    }
+    100% {
+      transform: translate(-50%, 5%) scale(0.99);
+    }
+  }
 
-#waifu-toggle.waifu-toggle-active {
-	margin-left: -50px;
-}
+  @keyframes oml2d-stage-slide-in {
+    from {
+      transform: translateY(130%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
 
-#waifu-toggle.waifu-toggle-active:hover {
-	margin-left: -30px;
-}
+  @keyframes oml2d-stage-slide-out {
+    from {
+      transform: translateY(0%);
+    }
+    to {
+      transform: translateY(130%);
+    }
+  }
 
-#waifu-toggle svg {
-	fill: #fff;
-	height: 25px;
-}
+  @keyframes oml2d-display-tips {
+    0% {
+      opacity: 0;
+      visibility: hidden;
+    }
+    100% {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 
-#waifu {
-	bottom: -500px;
-	left: 44px;
-	position: fixed;
-	transform: translateY(25px);
-	transition: transform .3s ease-in-out, bottom 3s ease-in-out;
-	z-index: 60;
-}
+  @keyframes oml2d-hidden-tips {
+    0% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 
-#waifu.waifu-active {
-	bottom: 0;
-}
+  @keyframes oml2d-loading-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
-#waifu.waifu-hidden {
-	display: none;
-}
+  .oml2d-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
 
-#waifu:hover {
-	transform: translateY(20px);
-}
+  .oml2d-loading {
+    animation-name: oml2d-loading-rotate;
+    animation-duration: 600ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
 
-#waifu-tips {
-	animation: waifu-shake 50s ease-in-out 5s infinite;
-	background-color: rgba(236, 217, 188, .5);
-	border: 1px solid rgba(224, 186, 140, .62);
-	border-radius: 12px;
-	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
-	font-size: 14px;
-	line-height: 24px;
-	margin: -30px 20px;
-	min-height: 70px;
-	opacity: 0;
-	overflow: hidden;
-	padding: 5px 10px;
-	position: absolute;
-	text-overflow: ellipsis;
-	transition: opacity 1s;
-	width: 200px;
-	word-break: break-all;
-	z-index: 60;
-}
+  .oml2d-menus-item {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    align-items: center;
+    transition: all 300ms;
+    color: var(--primary) !important;  /* 使用主题色变量 */
+    cursor: pointer;
+    background-color: #fff;
+  }
 
-#waifu-tips.waifu-tips-active {
-	opacity: 1;
-	transition: opacity .2s;
-}
+  .oml2d-menus-item:hover {
+    background-color: var(--primary) !important;  /* 悬停背景使用主题色 */
+    color: #fff !important;
+    box-shadow: 0 0 5px var(--primary);  /* 阴影也使用主题色 */
+  }
 
-#waifu-tips span {
-	color: #0099cc;
-}
+  /* 确保图标颜色跟随父元素 */
+  .oml2d-menus-item .oml2d-icon {
+    color: inherit !important;
+    fill: currentColor !important;
+  }
 
-#live2d {
-	cursor: grab;
-	height: 300px;
-	position: relative;
-	width: 250px;
-}
+  /* 暗色主题适配 - 增强选择器优先级 */
+  html[data-theme="dark"] .oml2d-menus-item,
+  [data-theme="dark"] .oml2d-menus-item {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: #333 !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
 
-#live2d:active {
-	cursor: grabbing;
-}
+  html[data-theme="dark"] .oml2d-menus-item:hover,
+  [data-theme="dark"] .oml2d-menus-item:hover {
+    background-color: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 0 8px var(--primary) !important;
+  }
 
-#waifu-tool {
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-	opacity: 0;
-	position: absolute;
-	right: 20px;
-	top: 70px;
-	transition: opacity 1s;
-}
+  /* 确保暗色主题下图标颜色正确 */
+  html[data-theme="dark"] .oml2d-menus-item .oml2d-icon,
+  [data-theme="dark"] .oml2d-menus-item .oml2d-icon {
+    color: inherit !important;
+    fill: currentColor !important;
+  }
 
-#waifu:hover #waifu-tool {
-	opacity: 1;
-}
+  #oml2d-menus .oml2d-menus-item:not(:last-child) {
+    margin-bottom: 10px;
+  }
 
-#waifu-tool svg {
-	cursor: pointer;
-	display: block;
-	fill: #7b8c9d;
-	height: 25px;
-	transition: fill .3s;
-}
+  @keyframes oml2d-status-bar-left-slide-out {
+    0% {
+      transform: translateX(-8%);
+    }
+    100% {
+      transform: translateX(-120%);
+    }
+  }
 
-#waifu-tool svg:hover {
-	fill: #0684bd; /* #34495e */
-}
+  @keyframes oml2d-status-bar-left-slide-in {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(-8%);
+    }
+  }
 
-@keyframes waifu-shake {
-	2% {
-		transform: translate(.5px, -1.5px) rotate(-.5deg);
-	}
-	4% {
-		transform: translate(.5px, 1.5px) rotate(1.5deg);
-	}
-	6% {
-		transform: translate(1.5px, 1.5px) rotate(1.5deg);
-	}
-	8% {
-		transform: translate(2.5px, 1.5px) rotate(.5deg);
-	}
-	10% {
-		transform: translate(.5px, 2.5px) rotate(.5deg);
-	}
-	12% {
-		transform: translate(1.5px, 1.5px) rotate(.5deg);
-	}
-	14% {
-		transform: translate(.5px, .5px) rotate(.5deg);
-	}
-	16% {
-		transform: translate(-1.5px, -.5px) rotate(1.5deg);
-	}
-	18% {
-		transform: translate(.5px, .5px) rotate(1.5deg);
-	}
-	20% {
-		transform: translate(2.5px, 2.5px) rotate(1.5deg);
-	}
-	22% {
-		transform: translate(.5px, -1.5px) rotate(1.5deg);
-	}
-	24% {
-		transform: translate(-1.5px, 1.5px) rotate(-.5deg);
-	}
-	26% {
-		transform: translate(1.5px, .5px) rotate(1.5deg);
-	}
-	28% {
-		transform: translate(-.5px, -.5px) rotate(-.5deg);
-	}
-	30% {
-		transform: translate(1.5px, -.5px) rotate(-.5deg);
-	}
-	32% {
-		transform: translate(2.5px, -1.5px) rotate(1.5deg);
-	}
-	34% {
-		transform: translate(2.5px, 2.5px) rotate(-.5deg);
-	}
-	36% {
-		transform: translate(.5px, -1.5px) rotate(.5deg);
-	}
-	38% {
-		transform: translate(2.5px, -.5px) rotate(-.5deg);
-	}
-	40% {
-		transform: translate(-.5px, 2.5px) rotate(.5deg);
-	}
-	42% {
-		transform: translate(-1.5px, 2.5px) rotate(.5deg);
-	}
-	44% {
-		transform: translate(-1.5px, 1.5px) rotate(.5deg);
-	}
-	46% {
-		transform: translate(1.5px, -.5px) rotate(-.5deg);
-	}
-	48% {
-		transform: translate(2.5px, -.5px) rotate(.5deg);
-	}
-	50% {
-		transform: translate(-1.5px, 1.5px) rotate(.5deg);
-	}
-	52% {
-		transform: translate(-.5px, 1.5px) rotate(.5deg);
-	}
-	54% {
-		transform: translate(-1.5px, 1.5px) rotate(.5deg);
-	}
-	56% {
-		transform: translate(.5px, 2.5px) rotate(1.5deg);
-	}
-	58% {
-		transform: translate(2.5px, 2.5px) rotate(.5deg);
-	}
-	60% {
-		transform: translate(2.5px, -1.5px) rotate(1.5deg);
-	}
-	62% {
-		transform: translate(-1.5px, .5px) rotate(1.5deg);
-	}
-	64% {
-		transform: translate(-1.5px, 1.5px) rotate(1.5deg);
-	}
-	66% {
-		transform: translate(.5px, 2.5px) rotate(1.5deg);
-	}
-	68% {
-		transform: translate(2.5px, -1.5px) rotate(1.5deg);
-	}
-	70% {
-		transform: translate(2.5px, 2.5px) rotate(.5deg);
-	}
-	72% {
-		transform: translate(-.5px, -1.5px) rotate(1.5deg);
-	}
-	74% {
-		transform: translate(-1.5px, 2.5px) rotate(1.5deg);
-	}
-	76% {
-		transform: translate(-1.5px, 2.5px) rotate(1.5deg);
-	}
-	78% {
-		transform: translate(-1.5px, 2.5px) rotate(.5deg);
-	}
-	80% {
-		transform: translate(-1.5px, .5px) rotate(-.5deg);
-	}
-	82% {
-		transform: translate(-1.5px, .5px) rotate(-.5deg);
-	}
-	84% {
-		transform: translate(-.5px, .5px) rotate(1.5deg);
-	}
-	86% {
-		transform: translate(2.5px, 1.5px) rotate(.5deg);
-	}
-	88% {
-		transform: translate(-1.5px, .5px) rotate(1.5deg);
-	}
-	90% {
-		transform: translate(-1.5px, -.5px) rotate(-.5deg);
-	}
-	92% {
-		transform: translate(-1.5px, -1.5px) rotate(1.5deg);
-	}
-	94% {
-		transform: translate(.5px, .5px) rotate(-.5deg);
-	}
-	96% {
-		transform: translate(2.5px, -.5px) rotate(-.5deg);
-	}
-	98% {
-		transform: translate(-1.5px, -1.5px) rotate(-.5deg);
-	}
-	0%, 100% {
-		transform: translate(0, 0) rotate(0);
-	}
-}
+  @keyframes oml2d-status-bar-right-slide-out {
+    0% {
+      transform: translateX(8%);
+    }
+    100% {
+      transform: translateX(120%);
+    }
+  }
 
+  @keyframes oml2d-status-bar-right-slide-in {
+    0% {
+      transform: translateX(120%);
+    }
+    100% {
+      transform: translateX(8%);
+    }
+  }
 </style>

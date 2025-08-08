@@ -36,6 +36,9 @@ export const siteConfig: SiteConfig = {
 		// 或者留空使用默认favicon
 		// []
 	],
+	live2d: {
+		enable: true, // 展示live2d
+	},
 };
 
 export const navBarConfig: NavBarConfig = {

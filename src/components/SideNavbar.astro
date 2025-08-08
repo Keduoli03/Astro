@@ -87,7 +87,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
 		
 		<!-- 夜间模式切换 -->
 		<div class="flex justify-center">
-			<LightDarkSwitch client:only="svelte" />
+			<LightDarkSwitch client:load />  <!-- 添加 client:load 指令 -->
 		</div>
 	</div>
 </div>

@@ -13,30 +13,30 @@ import type { LIGHT_DARK_MODE } from "@/types/config.ts";
 
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE];
 let mode: LIGHT_DARK_MODE = $state(LIGHT_MODE);
-let isAnimating = false;
+let isAnimating = $state(false); // 修改这行，添加 $state()
 
 onMount(() => {
 	mode = getStoredTheme();
 	// 如果是AUTO_MODE，默认设置为LIGHT_MODE
-	if (mode === 'auto') {
+	if (mode === "auto") {
 		mode = LIGHT_MODE;
 		setTheme(mode);
 	}
 	applyThemeToDocument(mode);
-	
+
 	// 添加CSS变量用于动画
 	const root = document.documentElement;
-	root.style.setProperty('--theme-transition-duration', '0.5s');
+	root.style.setProperty("--theme-transition-duration", "0.5s");
 });
 
 function createRippleEffect(button: HTMLElement, newMode: LIGHT_DARK_MODE) {
 	const rect = button.getBoundingClientRect();
 	const centerX = rect.left + rect.width / 2;
 	const centerY = rect.top + rect.height / 2;
-	
+
 	// 创建波纹效果
-	const ripple = document.createElement('div');
-	ripple.className = 'theme-ripple';
+	const ripple = document.createElement("div");
+	ripple.className = "theme-ripple";
 	ripple.style.cssText = `
 		position: fixed;
 		top: ${centerY}px;
@@ -44,26 +44,25 @@ function createRippleEffect(button: HTMLElement, newMode: LIGHT_DARK_MODE) {
 		width: 0;
 		height: 0;
 		border-radius: 50%;
-		background: ${newMode === DARK_MODE ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)'};
+		background: ${newMode === DARK_MODE ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)"};
 		pointer-events: none;
 		z-index: 9998;
 		transform: translate(-50%, -50%);
 		transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 	`;
-	
+
 	document.body.appendChild(ripple);
-	
+
 	// 计算覆盖全屏所需的大小
-	const maxSize = Math.sqrt(
-		Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2)
-	) * 2;
-	
+	const maxSize =
+		Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) * 2;
+
 	// 触发波纹动画
 	requestAnimationFrame(() => {
 		ripple.style.width = `${maxSize}px`;
 		ripple.style.height = `${maxSize}px`;
 	});
-	
+
 	// 清理波纹
 	setTimeout(() => {
 		ripple.remove();
@@ -72,22 +71,23 @@ function createRippleEffect(button: HTMLElement, newMode: LIGHT_DARK_MODE) {
 
 function switchScheme(newMode: LIGHT_DARK_MODE): void {
 	if (isAnimating || mode === newMode) return;
-	
+
 	isAnimating = true;
-	
+
 	// 简化切换逻辑，避免多次刷新
 	mode = newMode;
 	setTheme(mode);
 	applyThemeToDocument(mode);
-	
+
 	// 简单的过渡效果
-	document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-	
+	document.documentElement.style.transition =
+		"background-color 0.3s ease, color 0.3s ease";
+
 	setTimeout(() => {
 		isAnimating = false;
-		document.documentElement.style.transition = '';
+		document.documentElement.style.transition = "";
 	}, 300);
-	
+
 	hidePanel();
 }
 

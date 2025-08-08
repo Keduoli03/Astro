@@ -21,6 +21,8 @@ interface Props {
 	description: string;
 	draft: boolean;
 	style: string;
+	// 添加置顶属性
+	pinned?: boolean;
 }
 const {
 	entry,
@@ -33,6 +35,8 @@ const {
 	image,
 	description,
 	style,
+	// 获取置顶状态
+	pinned = false,
 } = Astro.props;
 const className = Astro.props.class;
 
@@ -43,6 +47,14 @@ const coverWidth = "28%";
 const { remarkPluginFrontmatter } = await entry.render();
 ---
 <div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+    <!-- 置顶图标 -->
+    {pinned && (
+        <div class="absolute top-3 right-3 z-10 bg-[var(--primary)] text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
+            <Icon name="material-symbols:push-pin" class="w-3 h-3" />
+            <span>Top</span>
+        </div>
+    )}
+    
     <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", {"w-full md:w-[calc(100%_-_52px_-_12px)]": !hasCover, "w-full md:w-[calc(100%_-_var(--coverWidth)_-_12px)]": hasCover}]}>
         <a href={url}
            class="transition group w-full block font-bold mb-3 text-2xl md:text-3xl text-90
@@ -51,6 +63,7 @@ const { remarkPluginFrontmatter } = await entry.render();
         before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
         before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
         ">
+            <!-- 移除这里的置顶图标，只保留右上角的 -->
             {title}
             <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" ></Icon>
             <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded"></Icon>
