@@ -57,70 +57,48 @@ const loadPagefind = async (): Promise<boolean> => {
 	}
 
 	pagefindLoading = true;
-	console.log("开始加载 Pagefind...");
 
 	try {
-		// 使用动态 import 加载 ES 模块
-		const pagefindModule = await import("/pagefind/pagefind.js");
+		// 创建 script 标签加载 pagefind.js
+		const script = document.createElement("script");
+		script.src = "/pagefind/pagefind.js";
+		script.type = "module"; // 设置为 ES 模块，支持 import.meta 语法
+		script.async = true;
 
-		// 等待 window.pagefind 可用
-		let attempts = 0;
-		const maxAttempts = 50;
+		const loadPromise = new Promise<boolean>((resolve) => {
+			script.onload = async () => {
+				console.log("Pagefind script loaded successfully");
 
-		while (attempts < maxAttempts) {
-			if (window.pagefind) {
-				pagefindLoaded = true;
-				console.log("Pagefind 加载成功!");
-				return true;
-			}
-			await new Promise((resolve) => setTimeout(resolve, 100));
-			attempts++;
-		}
+				// 等待 window.pagefind 初始化
+				let attempts = 0;
+				const maxAttempts = 50;
 
-		console.warn("Pagefind 模块加载后仍不可用");
-		return false;
+				while (attempts < maxAttempts && !window.pagefind) {
+					await new Promise((resolve) => setTimeout(resolve, 100));
+					attempts++;
+				}
+
+				if (window.pagefind) {
+					console.log("Pagefind initialized successfully");
+					pagefindLoaded = true;
+					resolve(true);
+				} else {
+					console.error("Pagefind not available after loading script");
+					resolve(false);
+				}
+			};
+
+			script.onerror = (error) => {
+				console.error("Failed to load pagefind script:", error);
+				resolve(false);
+			};
+		});
+
+		document.head.appendChild(script);
+		return await loadPromise;
 	} catch (error) {
-		console.error("加载 Pagefind 模块时出错:", error);
-
-		// 如果动态 import 失败，尝试传统方式但设置为模块
-		try {
-			const script = document.createElement("script");
-			script.src = "/pagefind/pagefind.js";
-			script.type = "module"; // 关键：设置为模块类型
-
-			const loadPromise = new Promise<boolean>((resolve) => {
-				script.onload = async () => {
-					console.log("脚本模块加载完成");
-
-					let attempts = 0;
-					const maxAttempts = 50;
-
-					while (attempts < maxAttempts) {
-						if (window.pagefind) {
-							pagefindLoaded = true;
-							console.log("Pagefind 初始化成功!");
-							resolve(true);
-							return;
-						}
-						await new Promise((resolve) => setTimeout(resolve, 100));
-						attempts++;
-					}
-
-					resolve(false);
-				};
-
-				script.onerror = (error) => {
-					console.error("加载 Pagefind 脚本模块失败:", error);
-					resolve(false);
-				};
-			});
-
-			document.head.appendChild(script);
-			return await loadPromise;
-		} catch (fallbackError) {
-			console.error("备用加载方式也失败:", fallbackError);
-			return false;
-		}
+		console.error("加载 Pagefind 时出错:", error);
+		return false;
 	} finally {
 		pagefindLoading = false;
 	}
