@@ -146,8 +146,20 @@
 		showSeriesPanel();
 	}
 	
+	// 检查是否应该显示系列面板（基于屏幕尺寸）
+	function shouldShowSeriesPanel(): boolean {
+		// 只在屏幕宽度大于等于 1536px (2xl 断点) 时显示
+		return window.innerWidth >= 1536;
+	}
+
 	// 显示系列面板
 	function showSeriesPanel() {
+		// 检查屏幕尺寸，只在大屏设备上显示
+		if (!shouldShowSeriesPanel()) {
+			hideSeriesPanel();
+			return;
+		}
+		
 		const container = document.getElementById('series-panel-container');
 		if (container) {
 			container.style.display = 'block';
@@ -161,10 +173,22 @@
 			container.style.display = 'none';
 		}
 	}
+
+	// 监听窗口大小变化
+	function handleResize() {
+		if (!shouldShowSeriesPanel()) {
+			hideSeriesPanel();
+		} else {
+			// 如果当前页面有系列内容，重新渲染
+			renderSeriesPanel();
+		}
+	}
 	
 	// 监听页面变化
 	document.addEventListener('DOMContentLoaded', renderSeriesPanel);
 	window.addEventListener('popstate', renderSeriesPanel);
 	document.addEventListener('astro:page-load', renderSeriesPanel);
 	document.addEventListener('swup:contentReplaced', renderSeriesPanel);
+	// 监听窗口大小变化
+	window.addEventListener('resize', handleResize);
 </script>
