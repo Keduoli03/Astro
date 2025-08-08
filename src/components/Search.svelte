@@ -67,13 +67,24 @@ const loadPagefind = async (): Promise<boolean> => {
 		const loadPromise = new Promise<boolean>((resolve) => {
 			script.onload = async () => {
 				try {
-					// 等待Pagefind可用，不需要手动调用init()
-					if (window.pagefind) {
-						pagefindLoaded = true;
-						resolve(true);
-					} else {
-						resolve(false);
+					// 等待Pagefind初始化完成
+					let attempts = 0;
+					const maxAttempts = 50; // 最多等待5秒
+
+					while (attempts < maxAttempts) {
+						if (window.pagefind) {
+							// 再等待一小段时间确保完全初始化
+							await new Promise((resolve) => setTimeout(resolve, 100));
+							pagefindLoaded = true;
+							resolve(true);
+							return;
+						}
+						await new Promise((resolve) => setTimeout(resolve, 100));
+						attempts++;
 					}
+
+					console.warn("Pagefind not available after loading script");
+					resolve(false);
 				} catch (error) {
 					console.error("Pagefind initialization error:", error);
 					resolve(false);
