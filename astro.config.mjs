@@ -57,6 +57,22 @@ export default defineConfig({
 		}),
 		expressiveCode({
 			themes: [expressiveCodeConfig.themes[0], expressiveCodeConfig.themes[1]],
+			langs: [
+				"javascript",
+				"js",
+				"typescript",
+				"ts",
+				"bash",
+				"shell",
+				"npm",
+				"yarn",
+				"pnpm",
+				"html",
+				"css",
+				"json",
+				"markdown",
+				"md",
+			],
 			plugins: [
 				pluginLineNumbers(),
 				pluginCollapsibleSections(),
