@@ -66,7 +66,7 @@ limit 10
 ### 展示含有某个标签的笔记
 上面的细化，比如我就只想看数据库标签的笔记
 
-````JS
+````js
 ```dataview
 table WITHOUT ID "<span style='display:flex; justify-content: left;'>"+tags as "类型",
 file.link as "📜文件",
@@ -130,7 +130,7 @@ dv.paragraph(`==标签== **${i[3]}**个`)
 `dv.paragraph` 与 `dv.list()`。这两种都是输出，前者类似 print 语法，输出结果。list 就是以列表形式展示
 这样也可以实现展示对应的文件， list 和 paragraph 格式可以直接输出，table 要用别的语法格式
 
-````JS
+````js
 ```dataviewjs
 dv.list(dv.pages("#Vue").file.link)
 ```

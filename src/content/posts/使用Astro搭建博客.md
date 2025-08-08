@@ -8,7 +8,7 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
 date: 2025-04-03 11:40
-updated: 2025-06-01 00:02
+updated: 2025-08-08 16:33
 series: 博客
 slug: "107368"
 ---
@@ -34,7 +34,7 @@ slug: "107368"
 
 在 Git 中使用命令部署 astro 
 
-```npm
+```bash
 npm create astro@latest
 ```
 
