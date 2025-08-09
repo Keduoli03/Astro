@@ -10,7 +10,7 @@ series: 博客
 cover: 
 status: 未完成
 date: 2025-04-23 00:47
-updated: 2025-06-14 21:55
+updated: 2025-08-09 22:05
 slug: "303355"
 ---
 
@@ -166,5 +166,3 @@ Astro 主题支持两种写法，推荐第一种
 ## 代码块
 
 通过安装 [Expressive Cod](https://expressive-code.com/installation/#astro) 增强 Astro 的代码块
-
-折叠
