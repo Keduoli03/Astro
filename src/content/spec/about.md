@@ -4,10 +4,10 @@
 >
 
 博客基于 [Astro](https://astro.build/) && [Fuwari](https://github.com/saicaca/fuwari)
-::github{repo="withastro/astro"}
 
-::github{repo="saicaca/fuwari"}
+目前此页未处于维护状态,计划年底前进行维护更新
 
+::aplayer{title="半岛铁盒" author="周杰伦" url="https://echeverra.cn/wp-content/uploads/2022/05/周杰伦-半岛铁盒.mp3" pic="https://echeverra.cn/wp-content/uploads/2022/05/周杰伦-半岛铁盒-mp3-image.png"}
 
 ### 其他支持
 <!-- 社交 -->

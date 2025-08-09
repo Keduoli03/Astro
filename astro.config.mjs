@@ -19,6 +19,7 @@ import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
+import { APlayerComponent } from "./src/plugins/rehype-component-aplayer.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
@@ -135,6 +136,7 @@ export default defineConfig({
 				{
 					components: {
 						github: GithubCardComponent,
+						aplayer: APlayerComponent, // 添加这一行
 						note: (x, y) => AdmonitionComponent(x, y, "note"),
 						tip: (x, y) => AdmonitionComponent(x, y, "tip"),
 						important: (x, y) => AdmonitionComponent(x, y, "important"),

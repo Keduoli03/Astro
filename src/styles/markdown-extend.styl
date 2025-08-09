@@ -243,3 +243,72 @@ a.card-github.fetch-error
   transition-property: all
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
   transition-duration: 0.15s
+
+// APlayer 组件样式
+.aplayer-wrapper
+  display: block
+  margin: 1rem auto  // 改为 auto 实现居中
+  border-radius: var(--radius-large)
+  overflow: hidden
+  background: var(--card-bg)
+  border: 1px solid var(--line-divider)
+  max-width: 500px  // 添加最大宽度限制
+  width: 100%       // 保持响应式
+  
+  // 在小屏幕上保持全宽
+  @media (max-width: 640px)
+    max-width: none
+    margin: 1rem 0
+  
+  .aplayer-container
+    min-height: 66px
+    
+  // 自定义 APlayer 主题以匹配网站样式
+  .aplayer
+    background: var(--card-bg)
+    color: var(--tw-prose-body)
+    box-shadow: none
+    border-radius: 0
+    margin: 0
+    
+    .aplayer-info
+      background: var(--card-bg)
+      
+    .aplayer-music
+      .aplayer-title
+        color: var(--tw-prose-headings)
+        
+      .aplayer-author
+        color: var(--tw-prose-body)
+        
+    .aplayer-controller
+      .aplayer-bar-wrap
+        .aplayer-bar
+          background: var(--btn-regular-bg)
+          
+          .aplayer-loaded
+            background: var(--btn-regular-bg-hover)
+            
+          .aplayer-played
+            background: var(--primary)
+            
+            .aplayer-thumb
+              background: var(--primary)
+              
+      .aplayer-time
+        color: var(--tw-prose-body)
+        
+    .aplayer-list
+      background: var(--card-bg)
+      border-top: 1px solid var(--line-divider)
+      
+      li
+        background: var(--card-bg)
+        color: var(--tw-prose-body)
+        border-bottom: 1px solid var(--line-divider)
+        
+        &:hover
+          background: var(--btn-regular-bg-hover)
+          
+        &.aplayer-list-light
+          background: var(--btn-regular-bg-active)
