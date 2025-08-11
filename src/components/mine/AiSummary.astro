@@ -4,13 +4,13 @@ const apiBaseUrl =
 	"https://summary.blueke.top/https/ai-blog-summary-test.lwz2801429414.workers.dev";
 ---
 
-<div id={`ai-summary-${slug}`} class="mb-6 p-4 bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)]">
-  <b class="block mb-2 text-[var(--primary)]">AI摘要</b>
-  <p id={`ai-summary-text-${slug}`} class="text-75">正在生成中...</p>
+<div id={`ai-summary-${slug}`} class="mb-6 p-4 bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] transition">
+  <b class="block mb-2 text-[var(--primary)] transition">AI摘要</b>
+  <p id={`ai-summary-text-${slug}`} class="text-75 transition">正在生成中...</p>
 </div>
 
 <!-- 分割线 -->
-<div class="border-[var(--line-divider)] border-dashed border-b-[3px] mb-6"></div>
+<div class="border-[var(--line-divider)] border-dashed border-b-[3px] mb-6 transition"></div>
 
 <script is:inline define:vars={{ slug, title, body, apiBaseUrl }}>
 // SHA256 哈希函数
