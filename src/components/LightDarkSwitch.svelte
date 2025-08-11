@@ -13,87 +13,94 @@ import type { LIGHT_DARK_MODE } from "@/types/config.ts";
 
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE];
 let mode: LIGHT_DARK_MODE = $state(LIGHT_MODE);
-let isAnimating = $state(false); // 修改这行，添加 $state()
+let isAnimating = $state(false);
 
 onMount(() => {
 	mode = getStoredTheme();
-	// 如果是AUTO_MODE，默认设置为LIGHT_MODE
 	if (mode === "auto") {
 		mode = LIGHT_MODE;
 		setTheme(mode);
 	}
 	applyThemeToDocument(mode);
-
-	// 添加CSS变量用于动画
-	const root = document.documentElement;
-	root.style.setProperty("--theme-transition-duration", "0.5s");
 });
 
-function createRippleEffect(button: HTMLElement, newMode: LIGHT_DARK_MODE) {
-	const rect = button.getBoundingClientRect();
-	const centerX = rect.left + rect.width / 2;
-	const centerY = rect.top + rect.height / 2;
-
-	// 创建波纹效果
-	const ripple = document.createElement("div");
-	ripple.className = "theme-ripple";
-	ripple.style.cssText = `
-		position: fixed;
-		top: ${centerY}px;
-		left: ${centerX}px;
-		width: 0;
-		height: 0;
-		border-radius: 50%;
-		background: ${newMode === DARK_MODE ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)"};
-		pointer-events: none;
-		z-index: 9998;
-		transform: translate(-50%, -50%);
-		transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-	`;
-
-	document.body.appendChild(ripple);
-
-	// 计算覆盖全屏所需的大小
-	const maxSize =
-		Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) * 2;
-
-	// 触发波纹动画
-	requestAnimationFrame(() => {
-		ripple.style.width = `${maxSize}px`;
-		ripple.style.height = `${maxSize}px`;
-	});
-
-	// 清理波纹
-	setTimeout(() => {
-		ripple.remove();
-	}, 600);
-}
-
-function switchScheme(newMode: LIGHT_DARK_MODE): void {
+/**
+ * Handle theme toggle with smooth animated transition effect
+ * @param event Mouse event for click coordinates
+ * @param newMode The target theme mode
+ */
+function triggerThemeTransition(event: MouseEvent, newMode: LIGHT_DARK_MODE) {
 	if (isAnimating || mode === newMode) return;
 
 	isAnimating = true;
 
-	// 简化切换逻辑，避免多次刷新
-	mode = newMode;
-	setTheme(mode);
-	applyThemeToDocument(mode);
+	const trigger = () => {
+		mode = newMode;
+		setTheme(mode);
+		applyThemeToDocument(mode);
+	};
 
-	// 简单的过渡效果
-	document.documentElement.style.transition =
-		"background-color 0.3s ease, color 0.3s ease";
-
-	setTimeout(() => {
+	let transition: ViewTransition;
+	transition = document.startViewTransition?.(trigger);
+	if (!transition) {
+		// 降级处理：如果不支持 View Transition API
+		trigger();
 		isAnimating = false;
-		document.documentElement.style.transition = "";
-	}, 300);
+		return;
+	}
 
+	// 获取点击坐标用于径向动画起点
+	const x = event.clientX;
+	const y = event.clientY;
+
+	transition.ready.then(() => {
+		// 使用更大的半径和更平滑的缓动函数
+		const endRadius = Math.hypot(
+			Math.max(x, innerWidth - x),
+			Math.max(y, innerHeight - y),
+		);
+
+		// 创建更平滑的圆形扩散动画
+		const clipPath = [
+			`circle(0px at ${x}px ${y}px)`,
+			`circle(${endRadius}px at ${x}px ${y}px)`,
+		];
+
+		document.documentElement.animate(
+			{
+				clipPath: newMode === DARK_MODE ? clipPath : [...clipPath].reverse(),
+			},
+			{
+				duration: 600,
+				easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)", // 更平滑的缓动
+				pseudoElement:
+					newMode === DARK_MODE
+						? "::view-transition-new(root)"
+						: "::view-transition-old(root)",
+			},
+		);
+	});
+
+	transition.finished.then(() => {
+		isAnimating = false;
+	});
+}
+
+function switchScheme(newMode: LIGHT_DARK_MODE, event?: MouseEvent): void {
+	if (event) {
+		triggerThemeTransition(event, newMode);
+	} else {
+		// 如果没有事件对象，使用默认切换
+		mode = newMode;
+		setTheme(mode);
+		applyThemeToDocument(mode);
+	}
 	hidePanel();
 }
 
-function toggleScheme(): void {
+function toggleScheme(event: MouseEvent): void {
 	const newMode = mode === LIGHT_MODE ? DARK_MODE : LIGHT_MODE;
-	switchScheme(newMode);
+	triggerThemeTransition(event, newMode);
 }
 
 function showPanel(): void {
@@ -130,14 +137,14 @@ function hidePanel(): void {
         <div class="flex flex-col">
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"
                     class:current-theme-btn={mode === LIGHT_MODE}
-                    onclick={() => switchScheme(LIGHT_MODE)}
+                    onclick={(e) => switchScheme(LIGHT_MODE, e)}
             >
                 <Icon icon="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
                 {i18n(I18nKey.lightMode)}
             </button>
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
                     class:current-theme-btn={mode === DARK_MODE}
-                    onclick={() => switchScheme(DARK_MODE)}
+                    onclick={(e) => switchScheme(DARK_MODE, e)}
             >
                 <Icon icon="material-symbols:dark-mode-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
                 {i18n(I18nKey.darkMode)}
@@ -151,36 +158,33 @@ function hidePanel(): void {
     @apply bg-[var(--btn-plain-bg-hover)];
 }
 
-:global(.theme-transitioning *) {
-    transition: background-color var(--theme-transition-duration, 0.5s) ease,
-                color var(--theme-transition-duration, 0.5s) ease,
-                border-color var(--theme-transition-duration, 0.5s) ease,
-                box-shadow var(--theme-transition-duration, 0.5s) ease !important;
-}
-
-/* View Transitions API 样式 */
+/* 优化 View Transitions 样式，减少阴影效果 */
 :global(::view-transition-old(root)),
 :global(::view-transition-new(root)) {
-  animation-duration: 0.5s;
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* 移除可能产生阴影的样式 */
+  box-shadow: none;
+  filter: none;
 }
 
+/* 确保过渡期间层级正确，避免阴影重叠 */
 :global(::view-transition-old(root)) {
-  animation-name: fade-out;
+  z-index: 1;
 }
 
 :global(::view-transition-new(root)) {
-  animation-name: fade-in;
+  z-index: 2;
 }
 
-@keyframes fade-out {
-  to {
-    opacity: 0;
-  }
+/* 确保过渡容器没有额外的阴影或边框 */
+:global(::view-transition-group(root)) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
+/* 移除可能的默认过渡效果 */
+:global(html) {
+  view-transition-name: root;
 }
 </style>
