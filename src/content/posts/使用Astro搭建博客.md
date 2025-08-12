@@ -8,7 +8,7 @@ tags:
 cover: http://www.98qy.com/sjbz/api.php
 status: 已完成
 date: 2025-04-03 11:40
-updated: 2025-08-08 16:33
+updated: 2025-08-12 13:30
 series: 博客
 slug: "107368"
 ---
@@ -191,7 +191,7 @@ export const collections = {
 
 参考于[伊卡-增强Fuwari的代码块功能]( https://ikamusume7.org/posts/frontend/code_block_ex/ )
 
-### 添加 Waline 评论
+### 添加 Waline 评论（归档）
 
 #### 组件导入
 
@@ -200,7 +200,6 @@ export const collections = {
 ```html title="src/components/Waline.astro"
 
 <!-- 1. 先静态显示阅读量/评论数的骨架屏 -->
-<!-- 可选，不需要可以直接删掉下面的-->
 <div id="waline-info">
   <div style="display: flex; align-items: center;">
     阅读量: <span class="waline-pageview-count"  style="margin-left: 5px;">--</span>
