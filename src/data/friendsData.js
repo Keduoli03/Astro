@@ -15,8 +15,15 @@ export const items = [
 		tags: ["主题"],
 	},
 	{
+		title: "开往",
+		imgurl: "https://www.travellings.cn/assets/travelling.png",
+		desc: "让传统友链“活跃”，让网页相互接力，让流量相互流动，让网络开放起来",
+		siteurl: "https://www.travellings.cn/",
+		tags: ["组织"],
+	},
+	{
 		title: "笔墨迹",
-		imgurl: "https://photo.xiangming.site/img/blogscn_icon.png",
+		imgurl: "https://gcore.jsdelivr.net/gh/Keduoli03/My_img@img/bimoji.webp",
 		desc: "致敬还在写博客的我们！",
 		siteurl: "https://blogscn.fun/",
 		tags: ["组织"],
@@ -62,7 +69,7 @@ export const items = [
 		imgurl: "https://jipa.moe/static/avatar.jpg",
 		desc: "Deed divides beings into lower and higher ones.",
 		siteurl: "https://jipa.moe",
-		tags: ["友链"],
+		tags: ["友链", "已失联"],
 	},
 	{
 		title: "岚天小窝",
@@ -90,7 +97,7 @@ export const items = [
 		title: "記緒漂流",
 		imgurl: "https://ttio.cc/apple-touch-icon.png",
 		desc: "記憶の川に、思いで漂う",
-		siteurl: "https://ttio.cc/info",
+		siteurl: "https://ttio.cc",
 		tags: ["友链"],
 	},
 	{
@@ -101,10 +108,10 @@ export const items = [
 		tags: ["友链"],
 	},
 	{
-		title: 'Pinpe 的云端',
-        imgurl: 'https://pinpe.top/head.jpg',
-        desc: '	一个属于自己的云朵。',
-        siteurl: 'https://pinpe.top/',
+		title: "Pinpe 的云端",
+		imgurl: "https://pinpe.top/head.jpg",
+		desc: "	一个属于自己的云朵。",
+		siteurl: "https://pinpe.top/",
 		tags: ["友链"],
-	}
+	},
 ];

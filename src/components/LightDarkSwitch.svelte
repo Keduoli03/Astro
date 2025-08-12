@@ -155,7 +155,7 @@ function hidePanel(): void {
 
 <style>
 .current-theme-btn {
-    @apply bg-[var(--btn-plain-bg-hover)];
+    background-color: var(--btn-plain-bg-hover);
 }
 
 /* 优化 View Transitions 样式，减少阴影效果 */

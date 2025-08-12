@@ -1,14 +1,13 @@
 ---
 
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
-
 import { getEntry } from "astro:content";
+import ArtalkComment from "@components/mine/ArtalkComment.astro";
+import WalineComment from "@components/mine/WalineComment.astro";
+import Markdown from "@components/misc/Markdown.astro";
 import { items } from "@/data/friendsData.js";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
-import WalineComment from "@components/mine/WalineComment.astro";
-import Markdown from "@components/misc/Markdown.astro";
-import ArtalkComment from "@components/mine/ArtalkComment.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 const friendsPost = await getEntry("spec", "friends");
 
@@ -52,6 +51,5 @@ const { Content } = await friendsPost.render();
             </Markdown>
         </div>
     </div>
-    <!-- <WalineComment /> -->
     <ArtalkComment />
 </MainGridLayout>
