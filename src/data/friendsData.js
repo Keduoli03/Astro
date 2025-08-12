@@ -114,4 +114,11 @@ export const items = [
 		siteurl: "https://pinpe.top/",
 		tags: ["友链"],
 	},
+	{
+		title: "wuxian's web",
+		imgurl: "",
+		desc: "你喜欢吃青椒吗？",
+		siteurl: "https://alxian.cn/",
+		tags: ["友链"],
+	},
 ];
