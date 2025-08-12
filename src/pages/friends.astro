@@ -19,8 +19,16 @@ const { Content } = await friendsPost.render();
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 my-4">
                 {items.map((item) => (   
                     <div class="flex flex-nowrap items-stretch h-28 gap-4 rounded-[var(--radius-large)]">
-                        <div class="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-200 dark:bg-zinc-900">
-                            <img src={item.imgurl} alt="站点头像" class="w-full h-full object-cover">
+                        <div class="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-200 dark:bg-zinc-900 relative">
+                            {item.imgurl ? (
+                                <img src={item.imgurl} alt="站点头像" class="w-full h-full object-cover">
+                            ) : (
+                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--primary)] to-[var(--primary)]/70">
+                                    <div class="text-white text-2xl font-bold">
+                                        {item.title.charAt(0).toUpperCase()}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div class="grow w-full">
                             <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 mb-1">{item.title}</div>
