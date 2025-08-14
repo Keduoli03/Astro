@@ -31,28 +31,34 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	switch (theme) {
 		case LIGHT_MODE:
 			document.documentElement.classList.remove("dark");
-			document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[0],);
+			document.documentElement.setAttribute(
+				"data-theme",
+				expressiveCodeConfig.themes[0],
+			);
 			break;
 		case DARK_MODE:
 			document.documentElement.classList.add("dark");
-			document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[1],);
+			document.documentElement.setAttribute(
+				"data-theme",
+				expressiveCodeConfig.themes[1],
+			);
 			break;
 		case AUTO_MODE:
 			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
 				document.documentElement.classList.add("dark");
-				document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[1],);
+				document.documentElement.setAttribute(
+					"data-theme",
+					expressiveCodeConfig.themes[1],
+				);
 			} else {
 				document.documentElement.classList.remove("dark");
-				document.documentElement.setAttribute("data-theme",expressiveCodeConfig.themes[0],);
+				document.documentElement.setAttribute(
+					"data-theme",
+					expressiveCodeConfig.themes[0],
+				);
 			}
 			break;
 	}
-
-	// Set the theme for Expressive Code
-	// document.documentElement.setAttribute(
-	// 	"data-theme",
-	// 	expressiveCodeConfig.theme,
-	// );
 }
 
 export function setTheme(theme: LIGHT_DARK_MODE): void {
