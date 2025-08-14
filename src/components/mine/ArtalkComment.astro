@@ -36,6 +36,13 @@
         locale: 'zh-CN',
         noComment: '快来评论吧！',
         darkMode: isDark,
+        // 添加默认头像配置
+        avatar: {
+          default: '/favicon/logo.png', // 使用你现有的logo作为默认头像
+          gravatar: {
+            mirror: 'https://cravatar.cn/avatar/'
+          }
+        }
       });
     };
 
