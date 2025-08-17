@@ -48,7 +48,7 @@ const jsonLd = {
 };
 ---
 <MainGridLayout 
-    banner={entry.data.image} 
+    banner={entry.data.image || undefined}
     title={entry.data.title} 
     description={entry.data.description} 
     lang={entry.data.lang} 
@@ -110,8 +110,31 @@ const jsonLd = {
             <!-- always show cover as long as it has one -->
 
             {entry.data.image &&
-                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation max-h-96 md:max-h-[28rem]"/>
-            }
+                <div class="mb-8 relative rounded-xl overflow-hidden">
+                    <!-- 模糊背景 -->
+                    <div class="absolute inset-0">
+                        <ImageWrapper 
+                            src={entry.data.image} 
+                            basePath={path.join("content/posts/", getDir(entry.id))} 
+                            class="w-full h-full blur-2xl scale-110 opacity-20" 
+                            fitMode="cover"
+                            maxWidth="100%"
+                            maxHeight="100%"
+                        />
+                    </div>
+                    <!-- 前景图片 -->
+                    <div class="relative p-6">
+                        <ImageWrapper 
+                            id="post-cover" 
+                            src={entry.data.image} 
+                            basePath={path.join("content/posts/", getDir(entry.id))} 
+                            class="rounded-xl banner-container onload-animation mx-auto shadow-2xl" 
+                            fitMode="contain"
+                            maxWidth="600px"
+                            maxHeight="500px"
+                        />
+                    </div>
+                }
             <!-- AI summary -->
             <AiSummary 
   slug={entry.slug} 
