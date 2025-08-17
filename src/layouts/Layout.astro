@@ -2,8 +2,6 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
-import { ViewTransitions } from "astro:transitions";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -161,7 +159,6 @@ const bannerOffset =
 		</style>
 
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
-		<ViewTransitions />
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
@@ -218,7 +215,7 @@ import {
 	// SizeObserverPlugin,
 	// ClickScrollPlugin
 } from 'overlayscrollbars';
-import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
+import {getHue, getStoredTheme, setHue, setTheme, getDefaultHue} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -470,10 +467,20 @@ const setup = () => {
 			navbar.classList.add('navbar-hidden')
 		}
 	})
-	window.swup.hooks.on('content:replace', () => {
-		initCustomScrollbar();
-		initScrollButtons();
-	})
+	// 删除这个重复的钩子 - 从这里开始删除
+	// window.swup.hooks.on('content:replace', () => {
+	// 	initCustomScrollbar();
+	// 	initScrollButtons();
+	// 	
+	// 	// 重新加载主题设置（仅用于 Swup 导航）
+	// 	loadTheme();
+	// 	loadHue();
+	// 	
+	// 	// 重新设置CSS变量
+	// 	const hue = localStorage.getItem('hue') || getDefaultHue();
+	// 	document.documentElement.style.setProperty('--hue', hue);
+	// })
+	// 删除到这里结束
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
@@ -517,6 +524,30 @@ const setup = () => {
         }, 200)
 	});
 }
+// 添加一个标志来避免重复执行
+let themeInitialized = false;
+
+function ensureThemeLoaded() {
+	const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+	const storedTheme = getStoredTheme();
+	const currentHue = document.documentElement.style.getPropertyValue('--hue');
+	const storedHue = localStorage.getItem('hue') || String(getDefaultHue());
+	
+	if (currentTheme !== storedTheme || currentHue !== storedHue) {
+		loadTheme();
+		loadHue();
+		document.documentElement.style.setProperty('--hue', storedHue);
+	}
+}
+
+// 只使用 Astro 事件监听器
+document.addEventListener('astro:page-load', ensureThemeLoaded);
+
+// 简化 Swup 钩子，移除主题加载
+window.swup.hooks.on('content:replace', () => {
+	initCustomScrollbar();
+	initScrollButtons();
+})
 
 // 事件监听器
 window.onscroll = scrollFunction;

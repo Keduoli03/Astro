@@ -139,3 +139,14 @@
 .collapsed {
     height: var(--collapsedHeight);
 }
+
+/* 隐藏无障碍路由提示 */
+.astro-route-announcer {
+	position: absolute !important;
+	left: -10000px !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+	clip: rect(1px, 1px, 1px, 1px) !important;
+	white-space: nowrap !important;
+}
