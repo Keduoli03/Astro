@@ -121,4 +121,12 @@ export const items = [
 		siteurl: "https://alxian.cn/",
 		tags: ["友链"],
 	},
+	{
+		title: "酥米的小站",
+		imgurl:
+			"https://cdn.jsdmirror.com/gh/huang233893/blog-image-bed/top/huang233893/imgs/blog/userfb6a1018b84ce485.jpg",
+		desc: "有朝一日，寻见梦中人✨",
+		siteurl: "https://www.sumi233.top/",
+		tags: ["友链"],
+	},
 ];
