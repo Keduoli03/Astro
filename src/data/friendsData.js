@@ -52,7 +52,8 @@ export const items = [
 	},
 	{
 		title: "M次元",
-		imgurl: "https://mmxza.com/usr/uploads/2025/03/2201968370.gif",
+		imgurl:
+			"https://cravatar.com/avatar/e067b11317af75ad0eff9db62d927096?s=80&d=blank",
 		desc: "小声记录小事",
 		siteurl: "https://mmxza.com/",
 		tags: ["友链"],
