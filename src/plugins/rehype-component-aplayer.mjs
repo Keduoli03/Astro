@@ -15,12 +15,7 @@ import { h } from "hastscript";
  * @param {import('mdast').RootContent[]} children - The children elements of the component.
  * @returns {import('mdast').Parent} The created APlayer component.
  */
-export function APlayerComponent(properties, children) {
-	if (Array.isArray(children) && children.length !== 0)
-		return h("div", { class: "hidden" }, [
-			'Invalid directive. ("aplayer" directive must be leaf type "::aplayer{title="..." author="..." url="..." pic="..."}")',
-		]);
-
+export function APlayerComponent(properties) {
 	if (!properties.title || !properties.author || !properties.url)
 		return h(
 			"div",
