@@ -20,11 +20,12 @@
     }
 
     a:not(.no-styling) {
-        @apply relative bg-none link font-medium text-[var(--primary)]
+        /* postcss-ignore-start */
+        @apply relative bg-none font-medium text-[var(--primary)] link
         underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4;
+        /* postcss-ignore-end */
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
-        display: inline-block;
     
         &:hover, &:active {
             @apply decoration-transparent;
