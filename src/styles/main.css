@@ -1,11 +1,10 @@
 /* 使用 @import 替代 @tailwind 以避免未知规则错误 */
-@import 'tailwindcss/components';
+@import 'rehype-callouts/theme/github';
+@tailwind components;
+
 @layer components {
     .card-base {
-        border-radius: var(--radius-large);
-        overflow: hidden;
-        background-color: var(--card-bg);
-        transition: all 0.3s;
+        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
     }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
@@ -142,7 +141,6 @@
 .collapsed {
     height: var(--collapsedHeight);
 }
-@import 'rehype-callouts/theme/github';
 
 /* 自定义 callout 标题样式 */
 /* 调整图标和标题的对齐 */
