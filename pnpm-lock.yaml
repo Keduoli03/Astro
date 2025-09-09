@@ -7,6 +7,7 @@ settings:
 overrides:
   strip-ansi: 7.1.0
   ansi-styles: 6.2.1
+  wrap-ansi: 9.0.0
 
 importers:
 
@@ -5244,12 +5245,8 @@ packages:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
 
-  wrap-ansi@8.1.0:
-    resolution: {integrity: sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==}
-    engines: {node: '>=12'}
-
-  wrap-ansi@9.0.1:
-    resolution: {integrity: sha512-n84lsZmcV2vUTRThlsxQhujZcDja2KIPCsEKZYP04cGtceS1vXTCboD7/zIJcZgEL9r3PdYrIX5KqX/DDWyMKw==}
+  wrap-ansi@9.0.0:
+    resolution: {integrity: sha512-G8ura3S+3Z2G+mkgNRq8dqaFZAuxfsxpBB8OCTGRTCtp+l/v9nbFNmCUP1BZMts3G1142MsZfn6eeUKrr4PD1Q==}
     engines: {node: '>=18'}
 
   wrappy@1.0.2:
@@ -6641,7 +6638,7 @@ snapshots:
       string-width-cjs: string-width@4.2.3
       strip-ansi: 7.1.0
       strip-ansi-cjs: strip-ansi@6.0.1
-      wrap-ansi: 8.1.0
+      wrap-ansi: 9.0.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
   '@jridgewell/gen-mapping@0.3.13':
@@ -7543,7 +7540,7 @@ snapshots:
       string-width: 7.2.0
       type-fest: 4.41.0
       widest-line: 5.0.0
-      wrap-ansi: 9.0.1
+      wrap-ansi: 9.0.0
 
   brace-expansion@1.1.12:
     dependencies:
@@ -7687,7 +7684,7 @@ snapshots:
     dependencies:
       string-width: 4.2.3
       strip-ansi: 7.1.0
-      wrap-ansi: 7.0.0
+      wrap-ansi: 9.0.0
 
   clone@2.1.2: {}
 
@@ -11287,13 +11284,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 7.1.0
 
-  wrap-ansi@8.1.0:
-    dependencies:
-      ansi-styles: 6.2.1
-      string-width: 5.1.2
-      strip-ansi: 7.1.0
-
-  wrap-ansi@9.0.1:
+  wrap-ansi@9.0.0:
     dependencies:
       ansi-styles: 6.2.1
       string-width: 7.2.0
