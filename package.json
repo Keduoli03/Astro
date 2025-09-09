@@ -81,7 +81,8 @@
 	"pnpm": {
 		"overrides": {
 			"strip-ansi": "7.1.0",
-			"ansi-styles": "6.2.1"
+			"ansi-styles": "6.2.1",
+			"wrap-ansi": "9.0.0"
 		}
 	}
 }
