@@ -99,18 +99,9 @@
 
 ## 🌾 爱好分享 | Hobby Share
 
-### 🎼 音乐
-
-
-
-
-:::meting{server="netease" type="song" id="33894312"}
-
-
 
 
 ## 📮 联系方式 | Contact
-
 
 <table>
 <tr>

@@ -10,6 +10,8 @@ const postsCollection = defineCollection({
 			draft: z.boolean().optional().default(false),
 			// 添加置顶字段
 			pinned: z.boolean().optional().default(false),
+			// 添加 AI 摘要控制字段
+			aiSummary: z.boolean().optional().default(true),
 			tags: z
 				.union([z.string().transform((val) => [val]), z.array(z.string())])
 				.optional()

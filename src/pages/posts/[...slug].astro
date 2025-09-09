@@ -137,11 +137,13 @@ const jsonLd = {
                 </div>
             }
             <!-- AI summary -->
-            <AiSummary 
-  slug={entry.slug} 
-  title={entry.data.title} 
-  body={entry.body} 
-/>
+            {entry.data.aiSummary && (
+                <AiSummary 
+                    slug={entry.slug} 
+                    title={entry.data.title} 
+                    body={entry.body} 
+                    />
+            )}
 
             <Markdown class="mb-6 markdown-content onload-animation">
                 <Content />
