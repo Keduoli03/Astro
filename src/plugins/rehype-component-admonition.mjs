@@ -11,23 +11,16 @@ import { h } from "hastscript";
  * @returns {import('mdast').Parent} The created admonition component.
  */
 export function AdmonitionComponent(properties, children, type) {
-	if (!Array.isArray(children) || children.length === 0)
-		return h(
-			"div",
-			{ class: "hidden" },
-			'Invalid admonition directive. (Admonition directives must be of block type ":::note{name="name"} <content> :::")',
-		);
+	// 统一将 type 转换为小写，这样 IMPORTANT 和 important 都会被处理为 important
+	const normalizedType = type.toLowerCase();
+	const label = properties?.title;
 
-	let label = null;
-	if (properties?.["has-directive-label"]) {
-		label = children[0]; // The first child is the label
-		// biome-ignore lint/style/noParameterAssign: <check later>
-		children = children.slice(1);
-		label.tagName = "div"; // Change the tag <p> to <div>
-	}
-
-	return h("blockquote", { class: `admonition bdm-${type}` }, [
-		h("span", { class: "bdm-title" }, label ? label : type.toUpperCase()),
+	return h("blockquote", { class: `admonition bdm-${normalizedType}` }, [
+		h(
+			"span",
+			{ class: "bdm-title" },
+			label ? label : normalizedType.toUpperCase(),
+		),
 		...children,
 	]);
 }

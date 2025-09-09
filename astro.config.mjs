@@ -9,10 +9,10 @@ import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeComponents from "rehype-components"; /* Render the custom directive content */
+import rehypeComponents from "rehype-components";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
-import remarkDirective from "remark-directive"; /* Handle directives */
+import remarkDirective from "remark-directive";
 import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
@@ -100,7 +100,18 @@ export default defineConfig({
 			remarkMath,
 			remarkReadingTime,
 			remarkExcerpt,
-			remarkGithubAdmonitionsToDirectives,
+			[
+				remarkGithubAdmonitionsToDirectives,
+				{
+					mapping: {
+						NOTE: "note",
+						TIP: "tip",
+						IMPORTANT: "important",
+						WARNING: "warning",
+						CAUTION: "caution",
+					},
+				},
+			],
 			remarkDirective,
 			remarkSectionize,
 			parseDirectiveNode,
@@ -123,6 +134,7 @@ export default defineConfig({
 						important: (x, y) => AdmonitionComponent(x, y, "important"),
 						caution: (x, y) => AdmonitionComponent(x, y, "caution"),
 						warning: (x, y) => AdmonitionComponent(x, y, "warning"),
+						// 移除 info 和 danger 映射，因为不再需要
 					},
 				},
 			],
