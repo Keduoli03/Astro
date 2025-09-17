@@ -24,7 +24,7 @@ const postsCollection = defineCollection({
 			prevSlug: z.string().default(""),
 			nextTitle: z.string().default(""),
 			nextSlug: z.string().default(""),
-			// 你实际使用的字段
+			// 实际使用的字段
 			date: z.coerce.date().optional(),
 			cover: z.string().nullable().optional(),
 			categories: z.string().or(z.array(z.string())).optional(),

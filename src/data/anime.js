@@ -1,5 +1,5 @@
 export const animeData = [
-  {
+	{
 		type: "anime",
 		title: "薇薇 -萤石眼之歌",
 		cover:

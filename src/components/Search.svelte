@@ -162,7 +162,7 @@ $: if (keyword) {
 <!-- 搜索面板 -->
 <div 
   id="search-panel" 
-  class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm transition-opacity duration-300" 
+  class="hidden fixed inset-0 z-[60] items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm transition-opacity duration-300" 
   on:click={handlePanelClick}
   on:keydown={(e) => {
     if (e.key === 'Enter' || e.key === ' ') {

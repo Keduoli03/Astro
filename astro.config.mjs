@@ -151,6 +151,9 @@ export default defineConfig({
 		],
 	},
 	vite: {
+		optimizeDeps: {
+			exclude: ["@swup/astro"],
+		},
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {
@@ -165,5 +168,24 @@ export default defineConfig({
 				},
 			},
 		},
+	},
+	// 添加或修改 experimental 块
+	experimental: {
+		viewTransitions: true,
+		fonts: [
+			{
+				provider: "local",
+				name: "LXGW WenKai",
+				variants: [
+					{
+						weight: "500",
+						style: "normal",
+						src: ["./src/assets/fonts/lxgw-wenkai-latin-500-normal.woff2"],
+					},
+				],
+				cssVariable: "--font-lxgw",
+				fallbacks: ["sans-serif"],
+			},
+		],
 	},
 });

@@ -2,6 +2,13 @@
 @import 'rehype-callouts/theme/github';
 @tailwind components;
 
+
+html,
+body {
+	/* ... other styles ... */
+	/* 使用 CSS 变量来应用字体 */
+	font-family: var(--font-lxgw), sans-serif;
+}
 @layer components {
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;

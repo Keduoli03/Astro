@@ -2,6 +2,7 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { Font } from "astro:assets";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -100,6 +101,7 @@ const bannerOffset =
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<Font cssVariable="--font-lxgw" preload />
 		{favicons.map(favicon => (
 			<link rel="icon"
 				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
@@ -150,13 +152,13 @@ const bannerOffset =
 		<script defer src="https://umami.blueke.top/script.js" data-website-id="58051142-b09c-4ef4-aec9-dfb223ff631b"></script>
 
 		<!-- 自定义字体 -->
-		<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" />
+		<!-- <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" />
 		<style>
 			body {
 				/* 屏幕优化版 */
 				font-family: "LXGW WenKai Screen", sans-serif;
 			}
-		</style>
+		</style> -->
 
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 	</head>

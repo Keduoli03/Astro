@@ -20,7 +20,7 @@ const series = await getPostSeries(seriesName);
 
 const isCollapsed = series.length >= 10;
 ---
-<WidgetLayout name={i18n(I18nKey.series) + " - " + series[0].data.series} id="series" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
+<WidgetLayout name={i18n(I18nKey.series)} id="series" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
     <div class="flex flex-col gap-1">
         {series.map(t => (
             <a href={getPostUrlBySlug(t.slug)}
